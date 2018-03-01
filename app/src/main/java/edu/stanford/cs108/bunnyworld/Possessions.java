@@ -4,13 +4,7 @@ import java.util.HashSet;
 //
 public class Possessions {
 
-
-    // TODO: REMOVE temp class
-    // temp class shape to test it
-    class Shape {}
-
     private HashSet<Shape> allPossessions;
-
     public Possessions (){
         allPossessions = new HashSet<Shape>();
     }

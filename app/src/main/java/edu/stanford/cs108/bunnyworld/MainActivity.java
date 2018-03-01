@@ -13,18 +13,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    //TODO: Check if this is what create and edit should do (both go to the same activity because they both need the same functionality/options)
     public void createClicked(View view) {
         Intent intent = new Intent(this, NewGame.class);
         startActivity(intent);
     }
 
     public void editClicked(View view) {
-        Intent intent = new Intent(this, EditOptions.class);
-        startActivity(intent);
-    }
-
-    public void playGame(View view) {
-        Intent intent = new Intent(this, PlayGame.class);
+        Intent intent = new Intent(this, NewGame.class);
         startActivity(intent);
     }
 }
