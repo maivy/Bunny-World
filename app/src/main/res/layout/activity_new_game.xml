@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.stanford.cs108.bunnyworld.NewGame">
+
+    <Button
+        android:onClick="createNewPage"
+        android:text="ADD PAGE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:onClick="goToEdit"
+        android:text="EDIT PAGE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:onClick="displayAllPages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SEE GAME'S PAGES"/>
+    <Button
+        android:text="SAVE GAME ON ANDROID"
+        android:onClick="saveGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:onClick="finishCreatingGame"
+        android:text="Finished Creating Game"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/pagesTitleInNewGame"
+        android:layout_marginTop="5sp"
+        android:text="Names of All Pages :"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <ListView
+        android:visibility="gone"
+        android:id="@+id/pagesInNewGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+</LinearLayout>
