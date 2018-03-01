@@ -2,32 +2,18 @@ package edu.stanford.cs108.bunnyworld;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
-
-import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * Custom View for Bunny World
  */
 
 public class Screen extends View {
-    boolean dragging = false;
-    Script script;
     private String currPage;
-    private float x;
-    private float y;
-    private Shape dragShape;
-    private AllShapes allShapes;
-    private HashMap<String, Shape> shapes;
-    private HashMap<String, Shape> testShapes;
-    private AllPages allPages;
-    private HashMap<String, Page> pages;
 
     public class Script {
         // ACTION KEYWORDS
@@ -52,12 +38,12 @@ public class Screen extends View {
             if (!script.contains(event)) return null;
 
             int start = script.indexOf(event);
-            String rest = script.substring(start + event.length() + 1);
+            script = script.substring(start + event.length() + 1);
 
-            int end = rest.indexOf(";");
-            rest = rest.substring(0,end);
-            System.out.println(rest);
-            return rest;
+            int end = script.indexOf(";");
+            script = script.substring(0,end);
+            System.out.println(script);
+            return script;
         }
 
         /**
@@ -190,83 +176,11 @@ public class Screen extends View {
 
     public Screen(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        script = new Script();
-        currPage = "page1";
-        allShapes = AllShapes.getInstance();
-        shapes = allShapes.getAllShapes();
-        allPages = AllPages.getInstance();
-        testMethod();
-    }
-
-    public void drawShapes(Canvas canvas) {
-        HashSet<Shape> shapes = new HashSet<>(this.shapes.values());
-        for(Shape shape : shapes) {
-            if(shape.getAssociatedPage().equals(currPage)) {
-                shape.draw(canvas, dragging);
-            }
-        }
-    }
-
-    private void testMethod() {
-        BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.flower);
-        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "flower", draw, "", "on drop carrot hide shape1;", 0));
-        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 500.0f, 40.0f, 20.0f, false, false, "flower", draw, "hi there", "on drop shape1 goto page2;", 48));
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        drawShapes(canvas);
-    }
-
-    //returns a shape at a point if it's not hidden
-    private Shape getShape() {
-        Shape result = null;
-        HashSet<Shape> shapes = new HashSet<>(this.shapes.values());
-        for(Shape shape : shapes) {
-            float leftX = shape.getX();
-            float rightX = leftX + shape.getWidth();
-            float topY = shape.getY();
-            float bottomY = topY + shape.getHeight();
-            if(x >= leftX && x <= rightX && y >= topY && y <= bottomY) {
-                if(!shape.isHidden() && shape.associatedPage.equals(currPage)) {
-                    result = shape;
-                }
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                dragging = false;
-                x = event.getX();
-                y = event.getY();
-                Shape shape = getShape();
-                script.clickHappened(shape);
-                invalidate();
-            case MotionEvent.ACTION_MOVE:
-                dragShape = getShape();
-                if(dragShape != null) {
-                    dragging = true;
-                    x = event.getX();
-                    y = event.getY();
-                    dragShape.setX(x);
-                    dragShape.setY(y);
-                    invalidate();
-                }
-            case MotionEvent.ACTION_UP:
-                dragging = false;
-                x = event.getX();
-                y = event.getY();
-                Shape receivingShape = getShape();
-                if(receivingShape != null && receivingShape.isReceiving()) {
-                    script.shapeDropped(dragShape, receivingShape);
-                }
-                invalidate();
-        }
-        return true;
+        super.onDraw(canvas);
     }
 
     // TODO when creating the event handler, remember to invalidate() to update screen

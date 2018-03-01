@@ -6,7 +6,7 @@ class AllShapes {
     private static final AllShapes ourInstance = new AllShapes();
     private HashMap<String, Shape> currShapes;
     private int currShapeNumber;
-    public static AllShapes getInstance() {
+    static AllShapes getInstance() {
         return ourInstance;
     }
 
@@ -17,10 +17,6 @@ class AllShapes {
 
     public HashMap<String, Shape> getAllShapes () {
         return currShapes;
-    }
-
-    public void addShape(Shape shape) {
-        currShapes.put(shape.getName(), shape);
     }
 
     public void updateCurrShapeNumber (){

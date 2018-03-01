@@ -45,7 +45,6 @@ public class NewPage extends AppCompatActivity {
             seeShapes.setVisibility(View.VISIBLE);
             currPageName = intent.getStringExtra("pageName");
             currPage = AllPages.getInstance().getAllPages().get(currPageName);
-
         }
 
         // Display the Name of the current page
@@ -64,6 +63,10 @@ public class NewPage extends AppCompatActivity {
     }
 
 
+    /**
+     * Adds a new shape to the current page.
+     * @param view
+     */
     public void addNewShape(View view) {
         Intent intent = new Intent(this, NewShape.class);
         intent.putExtra("Page", currPage.getPageName());
@@ -71,6 +74,10 @@ public class NewPage extends AppCompatActivity {
     }
 
 
+    /**
+     * Renames the page, if the name the user gave is not already used by another page.
+     * @param view
+     */
     public void renamePage(View view) {
         EditText newName = findViewById(R.id.pageNameByUser);
         String newNameString = newName.getText().toString();
@@ -79,24 +86,56 @@ public class NewPage extends AppCompatActivity {
         if (newNameString.equals(MAIN_PAGE) || pages.containsKey(newNameString)) {
             Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
         } else {
+            String currName = currPage.getPageName();
+            pages.remove(currName);
+
             currPage.setPageName(newNameString);
+            pages.put(newNameString, currPage);
+
             TextView pageName = findViewById(R.id.nameOfNewPage);
             pageName.setText(newNameString);
             newName.setText("");
         }
     }
 
+    /**
+     * Deletes the page and all the shapes associated with it.
+     * @param view
+     */
     public void deleteCurrPage(View view) {
-        AllPages.getInstance().getAllPages().remove(currPage.getPageName());
-        // TODO : go through shapes and remove the ones that belonged on this page
-        Intent intent = new Intent(this, EditOptions.class);
+        String pageName = currPage.getPageName();
+
+        //deletes the page from AllPages
+        AllPages.getInstance().getAllPages().remove(pageName);
+
+        final HashMap<String, Shape> allShapes = AllShapes.getInstance().getAllShapes();
+        for (String key : allShapes.keySet()) {
+           Shape currShape = allShapes.get(key);
+           String currShapePage = currShape.getAssociatedPage();
+           if(currShapePage.equals(pageName)) allShapes.remove(currShape.getName());
+        }
+        Intent intent = new Intent(this, NewGame.class);
         startActivity(intent);
     }
 
-
+    /**
+     * Goes to an Activity that displays all the shapes associted with the page, which the user
+     * can also edit.
+     * @param view
+     */
     public void displayPageShapes(View view) {
         Intent intent = new Intent(this, ViewAllShapes.class);
         intent.putExtra("Page", currPage.getPageName());
+        startActivity(intent);
+    }
+
+    /**
+     * Goes back to the NewGame Activity, which contains the menu to edit pages, save the game
+     * permanently or stop working on the ga,e.
+     * @param view
+     */
+    public void returnToMenu(View view) {
+        Intent intent = new Intent(this, NewGame.class);
         startActivity(intent);
     }
 }

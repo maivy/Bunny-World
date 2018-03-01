@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:layout_margin="10sp"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.stanford.cs108.bunnyworld.NewShape">
+    tools:context="edu.stanford.cs108.bunnyworld.EditShape">
 
-
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -18,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="Current Page : "/>
         <TextView
-            android:id="@+id/currPage"
+            android:id="@+id/currPageEditShape"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -36,7 +39,7 @@
 
         <EditText
             android:layout_weight="1"
-            android:id="@+id/currentShapeName"
+            android:id="@+id/currentShapeNameEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -57,85 +60,84 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-                <TextView
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Start X :"/>
-                <TextView
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Width :"/>
-            </LinearLayout>
-
-
-            <LinearLayout
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:gravity="center_vertical"
                 android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-                <EditText
-                    android:id="@+id/startX"
-                    android:layout_weight= "1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
-                <EditText
-                    android:id="@+id/shapeWidth"
-                    android:layout_weight= "1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_marginLeft="5sp"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-                <TextView
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Start Y:"/>
-                <TextView
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Height:"/>
-            </LinearLayout>
-
-
-            <LinearLayout
+                android:layout_height="wrap_content"
+                android:text="Start X :"/>
+            <TextView
+                android:gravity="center_vertical"
                 android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/startY"
-                    android:layout_weight= "1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
-                <EditText
-                    android:id="@+id/shapeHeight"
-                    android:layout_weight= "1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:text="Width :"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <EditText
+                android:id="@+id/startXEdit"
+                android:layout_weight= "1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"/>
+            <EditText
+                android:id="@+id/shapeWidthEdit"
+                android:layout_weight= "1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginLeft="5sp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Y:"/>
+            <TextView
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Height:"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/startYEdit"
+                android:layout_weight= "1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"/>
+            <EditText
+                android:id="@+id/shapeHeightEdit"
+                android:layout_weight= "1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"/>
+        </LinearLayout>
     </LinearLayout>
-
 
     // Moveable and Hidden
     <LinearLayout
@@ -160,17 +162,17 @@
             <RadioGroup
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:id="@+id/moveableGroup"
+                android:id="@+id/moveableGroupEdit"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <RadioButton
-                    android:id="@+id/moveableYes"
+                    android:id="@+id/moveableYesEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Yes"/>
                 <RadioButton
-                    android:id="@+id/moveableNo"
+                    android:id="@+id/moveableNoEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="No"/>
@@ -193,17 +195,17 @@
             <RadioGroup
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:id="@+id/hiddenGroup"
+                android:id="@+id/hiddenGroupEdit"
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <RadioButton
-                    android:id="@+id/hiddenYes"
+                    android:id="@+id/hiddenYesEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Yes"/>
                 <RadioButton
-                    android:id="@+id/hiddenNo"
+                    android:id="@+id/hiddenNoEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="No"/>
@@ -224,7 +226,7 @@
             android:text="Image Name : "/>
         <Spinner
             android:layout_gravity="center_vertical"
-            android:id="@+id/imageNameSpin"
+            android:id="@+id/imageNameSpinEdit"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -268,70 +270,22 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/textString"
+                android:id="@+id/textStringEdit"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <EditText
                 android:inputType="numberDecimal"
-                android:id="@+id/textSize"
+                android:id="@+id/textSizeEdit"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </LinearLayout>
-
-
-    // Script
-    <TextView
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Script : "/>
-
-    <LinearLayout
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Spinner
-            android:id="@+id/scriptFirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Spinner>
-        <Spinner
-            android:id="@+id/scriptSecond"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Spinner>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Spinner
-            android:id="@+id/scriptThird"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Spinner>
-        <Spinner
-            android:id="@+id/scriptFourth"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Spinner>
-    </LinearLayout>
-
     <Button
-        android:onClick="createNewShape"
-        android:id="@+id/createButton"
+        android:onClick="updateTheShape"
+        android:text="Update Shape"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CREATE">
-    </Button>
+        android:layout_height="wrap_content" />
 </LinearLayout>
