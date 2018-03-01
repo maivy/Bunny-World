@@ -6,6 +6,7 @@ package edu.stanford.cs108.bunnyworld;
 
 public class Page {
     private String pageName;
+    private String random;
 
 
     // Initializes a page with a given name.
