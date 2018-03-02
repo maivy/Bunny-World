@@ -15,7 +15,6 @@ public class Shape {
     String name;
     String associatedPage;
     String script;
-    String imageName;
     BitmapDrawable image;
     String text;
     int fontSize;
@@ -30,7 +29,7 @@ public class Shape {
     float width;
     float height;
 
-    public Shape(String page, String name, float x, float y, float width, float height, boolean hidden, boolean movable, String imageName, BitmapDrawable image, String text, String script, int fontSize){
+    public Shape(String page, String name,float x, float y, float width, float height, boolean hidden, boolean movable, BitmapDrawable image, String text, String script, int fontSize){
         associatedPage = page;
         this.name = name;
         this.x = x;
@@ -40,7 +39,6 @@ public class Shape {
         this.script = script;
         this.isHidden = hidden;
         this.isMovable = movable;
-        this.imageName = imageName;
         this.image = image;
         this.text = text;
         this.fontSize = fontSize;
@@ -188,7 +186,6 @@ public class Shape {
         if(script != null && !script.equals("")) {
             if(script.substring(0, 7).indexOf("drop") != -1) {
                 isReceiving = true;
-                return;
             }
         }
         isReceiving = false;

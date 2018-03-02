@@ -14,14 +14,9 @@
         android:layout_height="wrap_content" />
     <Button
         android:onClick="goToEdit"
-        android:text="EDIT PAGE"
+        android:text="SEE AND EDIT PAGES"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <Button
-        android:onClick="displayAllPages"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SEE GAME'S PAGES"/>
     <Button
         android:text="SAVE GAME ON ANDROID"
         android:onClick="saveGame"
@@ -29,7 +24,7 @@
         android:layout_height="wrap_content" />
     <Button
         android:onClick="finishCreatingGame"
-        android:text="Finished Creating Game"
+        android:text="Finished WITH Game"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
@@ -40,7 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
-
     <ListView
         android:visibility="gone"
         android:id="@+id/pagesInNewGame"
