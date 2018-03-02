@@ -2,18 +2,32 @@ package edu.stanford.cs108.bunnyworld;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Custom View for Bunny World
  */
 
 public class Screen extends View {
+    boolean dragging = false;
+    Script script;
     private String currPage;
+    private float x;
+    private float y;
+    private Shape dragShape;
+    private AllShapes allShapes;
+    private HashMap<String, Shape> shapes;
+    private HashMap<String, Shape> testShapes;
+    private AllPages allPages;
+    private HashMap<String, Page> pages;
 
     public class Script {
         // ACTION KEYWORDS
@@ -38,12 +52,12 @@ public class Screen extends View {
             if (!script.contains(event)) return null;
 
             int start = script.indexOf(event);
-            script = script.substring(start + event.length() + 1);
+            String rest = script.substring(start + event.length() + 1);
 
-            int end = script.indexOf(";");
-            script = script.substring(0,end);
-            System.out.println(script);
-            return script;
+            int end = rest.indexOf(";");
+            rest = rest.substring(0,end);
+            System.out.println(rest);
+            return rest;
         }
 
         /**
@@ -197,6 +211,7 @@ public class Screen extends View {
         shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "flower", draw, "", "on click hide shape2;", 0));
         shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, false, "flower", draw, "hi there", "on click goto page2 show shape3;", 48));
         shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot;", 48));
+
     }
 
     @Override
@@ -238,3 +253,4 @@ public class Screen extends View {
 
     // TODO when creating the event handler, remember to invalidate() to update screen
 }
+
