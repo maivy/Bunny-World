@@ -146,7 +146,6 @@ public class Screen extends View {
             else if (sound_name.equals("woof")) sound = R.raw.woof;
             MediaPlayer mp = MediaPlayer.create(getContext(),sound);
             mp.start();
-            mp.stop(); // TODO play only once???
             System.out.printf("play(%s) called\n",sound_name);
         }
 
@@ -176,11 +175,65 @@ public class Screen extends View {
 
     public Screen(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        script = new Script();
+        currPage = "page1";
+        allShapes = AllShapes.getInstance();
+        shapes = allShapes.getAllShapes();
+        allPages = AllPages.getInstance();
+        testMethod();
+    }
+
+    public void drawShapes(Canvas canvas) {
+        HashSet<Shape> shapes = new HashSet<>(this.shapes.values());
+        for(Shape shape : shapes) {
+            if(shape.getAssociatedPage().equals(currPage)) {
+                shape.draw(canvas, dragging);
+            }
+        }
+    }
+
+    private void testMethod() {
+        BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.flower);
+        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "flower", draw, "", "on click hide shape2;", 0));
+        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, false, "flower", draw, "hi there", "on click goto page2 show shape3;", 48));
+        shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot;", 48));
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+        drawShapes(canvas);
+    }
+
+    //returns a shape at a point if it's not hidden
+    private Shape getShape() {
+        Shape result = null;
+        HashSet<Shape> shapes = new HashSet<>(this.shapes.values());
+        for(Shape shape : shapes) {
+            float leftX = shape.getX();
+            float rightX = leftX + shape.getWidth();
+            float topY = shape.getY();
+            float bottomY = topY + shape.getHeight();
+            if(x >= leftX && x <= rightX && y >= topY && y <= bottomY) {
+                if(!shape.isHidden() && shape.associatedPage.equals(currPage)) {
+                    result = shape;
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                dragging = false;
+                x = event.getX();
+                y = event.getY();
+                Shape shape = getShape();
+                script.clickHappened(shape);
+                invalidate();
+        }
+        return true;
     }
 
     // TODO when creating the event handler, remember to invalidate() to update screen

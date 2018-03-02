@@ -174,8 +174,16 @@ public class Shape {
         return isReceiving;
     }
 
+    public int getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+    }
+
     public void setReceiving() {
-        if(script != null) {
+        if(script != null && !script.equals("")) {
             if(script.substring(0, 7).indexOf("drop") != -1) {
                 isReceiving = true;
             }
