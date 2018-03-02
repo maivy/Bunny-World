@@ -20,6 +20,7 @@ public class Screen extends View {
     boolean dragging = false;
     Script script;
     private String currPage;
+    private String prevPage;
     private float x;
     private float y;
     private Shape dragShape;
@@ -103,14 +104,10 @@ public class Screen extends View {
             runClause(clause);
         }
 
-        public void enteredPage(Page page) {
-            if (page == null) return;
-
-            String page_name = page.getPageName();
-
+        public void enteredPage(String page) {
             // looping through shapes and checking for page matches
             for (Shape shape: AllShapes.getInstance().getAllShapes().values()) {
-                if (shape.getAssociatedPage() == page_name) {
+                if (shape.getAssociatedPage().equals(page)) {
                     String clause = getClause(ON_ENTER, shape.getScript());
                     runClause(clause);
                 }
@@ -129,7 +126,7 @@ public class Screen extends View {
             if (droppedShape == null || shapeDroppedOnto == null) return;
 
             String script = shapeDroppedOnto.getScript();
-            String onDrop = ON_DROP + " " + droppedShape.getName() + " ";
+            String onDrop = ON_DROP + " " + droppedShape.getName();
             String clause = getClause(onDrop, script);
 
             runClause(clause);
@@ -140,7 +137,11 @@ public class Screen extends View {
          * @param page_name
          */
         private void goTo(String page_name) {
+            prevPage = currPage;
             currPage = page_name;
+            if(!prevPage.equals(currPage)){
+                enteredPage(currPage);
+            }
             System.out.printf("goto(%s) called\n",page_name);
         }
 
@@ -191,6 +192,7 @@ public class Screen extends View {
         super(context, attrs);
         script = new Script();
         currPage = "page1";
+        script.enteredPage(currPage);
         allShapes = AllShapes.getInstance();
         shapes = allShapes.getAllShapes();
         allPages = AllPages.getInstance();
@@ -206,11 +208,12 @@ public class Screen extends View {
         }
     }
 
+    //method I have been using to create test objects
     private void testMethod() {
         BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.carrot);
-        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "carrot", draw, "", "on click hide shape2;", 0));
-        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, false, "carrot", draw, "hi there", "on click goto page2 show shape3;", 48));
-        shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot;", 48));
+        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "carrot", draw, "", "on enter play munching;", 0));
+        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, true, "carrot", draw, "hi there", "on drop shape1 play hooray hide shape2; on click goto page2;", 48));
+        shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot; on enter play fire;", 48));
 
     }
 
@@ -220,22 +223,38 @@ public class Screen extends View {
     }
 
     //returns a shape at a point if it's not hidden
-    private Shape getShape() {
+    //if dropEvent is true, it means a shape was dropped, so we want to ignore that shape when iterating
+    //through the shapes that lie at a x and y
+    private Shape getShape(boolean dropEvent) {
         Shape result = null;
         HashSet<Shape> shapes = new HashSet<>(this.shapes.values());
+        float leftX;
+        float rightX;
+        float topY;
+        float bottomY;
         for(Shape shape : shapes) {
-            float leftX = shape.getX();
-            float rightX = leftX + shape.getWidth();
-            float topY = shape.getY();
-            float bottomY = topY + shape.getHeight();
+                leftX = shape.getX();
+                //need to check bounds differently depending on the type of shape
+            if(shape.getText().equals("")) {
+                topY = shape.getY();
+                rightX = leftX + shape.getWidth();
+                bottomY = topY + shape.getHeight();
+            } else {
+                topY = shape.getY() + shape.getTextPaint().ascent();
+                rightX = leftX + shape.getTextPaint().measureText(shape.getText());
+                bottomY = shape.getY() + shape.getTextPaint().descent();
+            }
             if(x >= leftX && x <= rightX && y >= topY && y <= bottomY) {
                 if(!shape.isHidden() && shape.associatedPage.equals(currPage)) {
-                    result = shape;
+                    if(!dropEvent || shape != dragShape) {
+                        result = shape;
+                    }
                 }
             }
         }
         return result;
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -244,8 +263,37 @@ public class Screen extends View {
                 dragging = false;
                 x = event.getX();
                 y = event.getY();
-                Shape shape = getShape();
+                Shape shape = getShape(false);
+                if(shape != null && shape.isMovable()) {
+                    dragShape = shape;
+                }
                 script.clickHappened(shape);
+                invalidate();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                //makes sure that if I am dragging a shape and it clicks to another page, that shape
+                //isn't considered to be dragging anymore
+                if(dragShape != null && dragShape.associatedPage.equals(currPage)) {
+                    dragging = true;
+                }
+                x = event.getX();
+                y = event.getY();
+                //drags shape in the middle
+                if(dragShape != null) {
+                    if(dragShape.getText().equals("")) {
+                        dragShape.setX(x - dragShape.getWidth() * .5f);
+                        dragShape.setY(y - dragShape.getHeight() * .5f);
+                    } else {
+                        dragShape.setX(x - dragShape.getTextPaint().measureText(dragShape.getText()) * .5f);
+                        dragShape.setY(y);
+                    }
+                }
+                invalidate();
+                break;
+            case MotionEvent.ACTION_UP:
+                script.shapeDropped(getShape(true), dragShape);
+                dragShape = null;
+                dragging = false;
                 invalidate();
         }
         return true;

@@ -62,8 +62,10 @@ public class Shape {
         }
     }
 
+    //text shapes ignore the width and height given by the user and is only as wide and high as the text
     private void drawText(Canvas canvas, boolean withBorder) {
         textPaint.setTextSize(fontSize);
+        float width = textPaint.measureText(text);
         canvas.drawText(text, x, y, textPaint);
     }
 
@@ -186,11 +188,15 @@ public class Shape {
 
     public void setReceiving() {
         if(script != null && !script.equals("")) {
-            if(script.substring(0, 7).indexOf("drop") != -1) {
+            if(script.indexOf("on drop ") != -1) {
                 isReceiving = true;
                 return;
             }
         }
         isReceiving = false;
+    }
+
+    public Paint getTextPaint() {
+        return textPaint;
     }
 }
