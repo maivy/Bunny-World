@@ -160,7 +160,6 @@ public class Screen extends View {
             else if (sound_name.equals("woof")) sound = R.raw.woof;
             MediaPlayer mp = MediaPlayer.create(getContext(),sound);
             mp.start();
-            mp.stop(); // TODO play only once???
             System.out.printf("play(%s) called\n",sound_name);
         }
 
@@ -209,8 +208,10 @@ public class Screen extends View {
 
     private void testMethod() {
         BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.flower);
-        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "flower", draw, "", "on drop carrot hide shape1;", 0));
-        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 500.0f, 40.0f, 20.0f, false, false, "flower", draw, "hi there", "on drop shape1 goto page2;", 48));
+        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "flower", draw, "", "on click hide shape2;", 0));
+        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, false, "flower", draw, "hi there", "on click goto page2 show shape3;", 48));
+        shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot;", 48));
+
     }
 
     @Override
@@ -245,25 +246,6 @@ public class Screen extends View {
                 y = event.getY();
                 Shape shape = getShape();
                 script.clickHappened(shape);
-                invalidate();
-            case MotionEvent.ACTION_MOVE:
-                dragShape = getShape();
-                if(dragShape != null) {
-                    dragging = true;
-                    x = event.getX();
-                    y = event.getY();
-                    dragShape.setX(x);
-                    dragShape.setY(y);
-                    invalidate();
-                }
-            case MotionEvent.ACTION_UP:
-                dragging = false;
-                x = event.getX();
-                y = event.getY();
-                Shape receivingShape = getShape();
-                if(receivingShape != null && receivingShape.isReceiving()) {
-                    script.shapeDropped(dragShape, receivingShape);
-                }
                 invalidate();
         }
         return true;
