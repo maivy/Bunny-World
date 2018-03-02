@@ -207,9 +207,9 @@ public class Screen extends View {
     }
 
     private void testMethod() {
-        BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.flower);
-        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "flower", draw, "", "on click hide shape2;", 0));
-        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, false, "flower", draw, "hi there", "on click goto page2 show shape3;", 48));
+        BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.carrot);
+        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "carrot", draw, "", "on click hide shape2;", 0));
+        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, false, "carrot", draw, "hi there", "on click goto page2 show shape3;", 48));
         shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot;", 48));
 
     }

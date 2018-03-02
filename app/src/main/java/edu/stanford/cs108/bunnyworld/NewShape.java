@@ -325,8 +325,7 @@ public class NewShape extends AppCompatActivity {
             }
         }
         Toast.makeText(getApplicationContext(), script, Toast.LENGTH_SHORT).show();
-        Shape currShape = new Shape(currPageName, shapeName, x, y, width, height, hidden,
-                                moveable, imageDrawable, textString, script, textSize);
+        Shape currShape = new Shape(currPageName, shapeName, x, y, width, height, hidden, moveable, imageName, imageDrawable, textString, script, textSize);
         return currShape;
     }
 

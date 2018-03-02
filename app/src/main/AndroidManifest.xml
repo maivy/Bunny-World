@@ -23,7 +23,8 @@
         <activity android:name=".ViewAllShapes" />
         <activity android:name=".EditShape" />
         <activity android:name=".EditShapeOptions" />
-        <activity android:name=".EditScript"></activity>
+        <activity android:name=".EditScript" />
+        <activity android:name=".PlayGame"></activity>
     </application>
 
 </manifest>
