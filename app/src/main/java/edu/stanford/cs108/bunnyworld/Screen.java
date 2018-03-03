@@ -23,10 +23,11 @@ public class Screen extends View {
     private String prevPage;
     private float x;
     private float y;
+    private float prevX;
+    private float prevY;
     private Shape dragShape;
     private AllShapes allShapes;
     private HashMap<String, Shape> shapes;
-    private HashMap<String, Shape> testShapes;
     private AllPages allPages;
     private HashMap<String, Page> pages;
 
@@ -128,7 +129,12 @@ public class Screen extends View {
             String script = shapeDroppedOnto.getScript();
             String onDrop = ON_DROP + " " + droppedShape.getName();
             String clause = getClause(onDrop, script);
-
+            //snaps back if the shape was dropped on something that it doesn't interact with
+            if(clause == null) {
+                dragShape.setX(prevX);
+                dragShape.setY(prevY);
+                return;
+            }
             runClause(clause);
         }
 
@@ -211,8 +217,8 @@ public class Screen extends View {
     //method I have been using to create test objects
     private void testMethod() {
         BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.carrot);
-        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "carrot", draw, "", "on enter play munching;", 0));
-        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, true, "carrot", draw, "hi there", "on drop shape1 play hooray hide shape2; on click goto page2;", 48));
+        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, true, "carrot", draw, "", "on enter play munching; on drop shape3 hide shape2", 0));
+        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, true, "carrot", draw, "hi there", "on drop shape1 play hooray hide shape2;", 48));
         shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot; on enter play fire;", 48));
 
     }
@@ -266,6 +272,9 @@ public class Screen extends View {
                 Shape shape = getShape(false);
                 if(shape != null && shape.isMovable()) {
                     dragShape = shape;
+                    //allows us to snap back later
+                    prevX = dragShape.getX();
+                    prevY = dragShape.getY();
                 }
                 script.clickHappened(shape);
                 invalidate();
@@ -291,7 +300,14 @@ public class Screen extends View {
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                script.shapeDropped(getShape(true), dragShape);
+                Shape receiver = getShape(true);
+                if(receiver != null) {
+                    script.shapeDropped(receiver, dragShape);
+                } else {
+                    //shape snaps back to where it was before
+                    dragShape.setX(prevX);
+                    dragShape.setY(prevY);
+                }
                 dragShape = null;
                 dragging = false;
                 invalidate();
