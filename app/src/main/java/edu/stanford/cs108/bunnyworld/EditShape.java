@@ -5,16 +5,21 @@ import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class EditShape extends AppCompatActivity {
     private String currShapeName;
+    private final ArrayList<String> allImages = new ArrayList<>(Arrays.asList("", "carrot", "carrot2", "death", "duck",
+            "fire", "mystic"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,22 +76,22 @@ public class EditShape extends AppCompatActivity {
         }
 
         //Image
-        //TODO: display the currently selected image for the shape
-       // BitmapDrawable selectedImage = currShape.getImage();
-        //selectedImage.ge
-//        Spinner imageSpinner = findViewById(R.id.imageNameSpin);
-//        String imageName = imageSpinner.getSelectedItem().toString();
-//        int imageID = getResources().getIdentifier(imageName,"drawable", getPackageName());
-//        BitmapDrawable imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
-//
+        String imgName = currShape.imageName;
+        Spinner imageSpinner = findViewById(R.id.imageNameSpinEdit);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_spinner_item,allImages);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        imageSpinner.setAdapter(adapter);
+        imageSpinner.setSelection(allImages.indexOf(imgName));
+
+
         // text
         EditText textInput = findViewById(R.id.textStringEdit);
         textInput.setText(currShape.getText());
 
         // text Size
         EditText textSizeInput = findViewById(R.id.textSizeEdit);
-        //TODO: maybe make a getter for the font size
-        textSizeInput.setText(Integer.toString(currShape.fontSize));
+        textSizeInput.setText(Integer.toString(currShape.getFontSize()));
     }
 
     public void updateTheShape(View view) {
@@ -137,11 +142,10 @@ public class EditShape extends AppCompatActivity {
             boolean moveable = yesMove.isChecked();
             currShape.setMovable(moveable);
 
-//        //Image
-//        Spinner imageSpinner = findViewById(R.id.imageNameSpinEdit);
-//        String imageName = imageSpinner.getSelectedItem().toString();
-//        int imageID = getResources().getIdentifier(imageName,"drawable", getPackageName());
-//        BitmapDrawable imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
+            //Image
+            Spinner imageSpinner = findViewById(R.id.imageNameSpinEdit);
+            String imageName = imageSpinner.getSelectedItem().toString();
+            currShape.imageName = imageName;
 
             // text
             EditText textInput = findViewById(R.id.textStringEdit);

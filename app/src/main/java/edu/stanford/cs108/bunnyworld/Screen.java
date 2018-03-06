@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.support.annotation.Nullable;
@@ -13,24 +16,36 @@ import android.view.View;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Custom View for Bunny World
  */
 
 public class Screen extends View {
+    public static final String INVENTORY = "inventory";
+
     boolean dragging = false;
     Script script;
     private String currPage;
     private String prevPage;
     private float x;
     private float y;
+    private float prevX;
+    private float prevY;
+    private int viewHeight;
+    private int viewWidth;
+    private float inventoryHeight;
+    private float inventoryMin;
     private Shape dragShape;
     private AllShapes allShapes;
     private HashMap<String, Shape> shapes;
-    private HashMap<String, Shape> testShapes;
     private AllPages allPages;
     private HashMap<String, Page> pages;
+    private Possessions allPossessions;
+    private HashSet<Shape> possessions;
+    Paint inventoryPaint;
+    Paint inventoryTextPaint;
 
     public class Script {
         // ACTION KEYWORDS
@@ -130,7 +145,12 @@ public class Screen extends View {
             String script = shapeDroppedOnto.getScript();
             String onDrop = ON_DROP + " " + droppedShape.getName();
             String clause = getClause(onDrop, script);
-
+            //snaps back if the shape was dropped on something that it doesn't interact with
+            if(clause == null) {
+                dragShape.setX(prevX);
+                dragShape.setY(prevY);
+                return;
+            }
             runClause(clause);
         }
 
@@ -198,7 +218,13 @@ public class Screen extends View {
         allShapes = AllShapes.getInstance();
         shapes = allShapes.getAllShapes();
         allPages = AllPages.getInstance();
-        testMethod();
+        Possessions allPossessions = Possessions.getInstance();
+        possessions = allPossessions.getAllPossessions();
+        inventoryPaint = new Paint();
+        inventoryPaint.setColor(Color.GRAY);
+        inventoryTextPaint = new Paint();
+        inventoryTextPaint.setTextSize(60);
+//        testMethod();
     }
 
     public void drawShapes(Canvas canvas) {
@@ -212,22 +238,64 @@ public class Screen extends View {
 
     //method I have been using to create test objects
     private void testMethod() {
-        BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.carrot);
-        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, false, "carrot", draw, "", "on enter play munching;", 0));
-        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, true, "carrot", draw, "hi there", "on drop shape1 play hooray hide shape2; on click goto page2;", 48));
-        shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot; on enter play fire;", 48));
+        if(shapes.size() != 3) {
+            BitmapDrawable carrot = (BitmapDrawable) getResources().getDrawable(R.drawable.carrot);
+            BitmapDrawable mystic = (BitmapDrawable) getResources().getDrawable(R.drawable.mystic);
+            BitmapDrawable fire = (BitmapDrawable) getResources().getDrawable(R.drawable.fire);
+            BitmapDrawable evil = (BitmapDrawable) getResources().getDrawable(R.drawable.death);
 
+            shapes.put("text0", new Shape("page1", "text0", 50.0f, 100.0f, 150.0f, 150.0f, false, false, "", null, "Bunny World!", "", 60));
+            shapes.put("door1", new Shape("page1", "door1", 30.0f, 600.0f, 150.0f, 150.0f, false, false, "", null, "", "on click goto page2;", 0));
+            shapes.put("door2", new Shape("page1", "door2", 250.0f, 600.0f, 150.0f, 150.0f, true, false, "", null, "", "on click goto page3;", 48));
+            shapes.put("door3", new Shape("page1", "door3", 500.0f, 600.0f, 150.0f, 150.0f, false, false, "", null, "", "on click goto page4;", 48));
+            shapes.put("text1", new Shape("page1", "text1", 0.0f, 300.0f, 150.0f, 150.0f, false, false, "", null, "You are in a maze of twisty little passages, all alike", "", 30));
+            shapes.put("shape1", new Shape("page2", "shape1", 250.0f, viewHeight/2, 200.0f, 300.0f, false, false, "mystic", mystic, "", "on click hide carrot play munching; on enter show door2;", 48));
+            shapes.put("text2", new Shape("page2", "text2", 0.0f, 400.0f, 150.0f, 150.0f, false, false, "", null, "Mystic Bunny- Rub my tummy for a big surprise!", "", 30));
+            shapes.put("door4", new Shape("page2", "door4", 30.0f, 600.0f, 150.0f, 150.0f, false, false, "", null, "", "on click goto page1;", 0));
+            shapes.put("carrot", new Shape("page3", "carrot", 500f, 500f, 200.0f, 200.0f, false, true, "carrot", carrot, "", "", 48));
+            shapes.put("fire", new Shape("page3", "fire", 250.0f, viewHeight/2 + 100, 300.0f, 200.0f, false, false, "fire", fire, "", "on enter play fire;", 48));
+            shapes.put("door5", new Shape("page3", "door5", 250.0f, 600.0f, 150.0f, 150.0f, false, false, "", null, "", "on click goto page2;", 48));
+            shapes.put("text3", new Shape("page3", "text3", 0.0f, 500.0f, 150.0f, 150.0f, false, false, "", null, "Eek! Fire-Room. Run away!", "", 30));
+            shapes.put("death", new Shape("page4", "death", 250.0f, 350, 300.0f, 200.0f, false, false, "death", evil, "", "on enter play evillaugh; on drop carrot hide carrot play munching hide death show door6; on click play evillaugh;", 48));
+            shapes.put("door6", new Shape("page4", "door6", 550.0f, 600.0f, 150.0f, 150.0f, true, false, "", null, "", "on click goto page5;", 48));
+            shapes.put("text4", new Shape("page4", "text4", 0.0f, 700.0f, 150.0f, 150.0f, false, false, "", null, "You must appease the Bunny of Death!", "", 30));
+            shapes.put("carrot1", new Shape("page5", "carrot1", 30.0f, 600.0f, 150.0f, 150.0f, false, false, "carrot", carrot, "", "", 0));
+            shapes.put("carrot2", new Shape("page5", "carrot2", 250.0f, 600.0f, 150.0f, 150.0f, false, false, "carrot", carrot, "", "", 48));
+            shapes.put("carrot3", new Shape("page5", "carrot3", 500.0f, 600.0f, 150.0f, 150.0f, false, false, "carrot", carrot, "", "", 48));
+            shapes.put("text5", new Shape("page5", "text5", 0.0f, 700.0f, 150.0f, 150.0f, false, false, "", null, "You Win! Yay!", "on enter play hooray;", 60));
+        }
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        viewHeight = h;
+        viewWidth = w;
+        inventoryHeight = viewHeight * 0.75f;
+        inventoryMin = inventoryHeight + 60;
+    }
+
+    private void drawInventory(Canvas canvas) {
+        RectF rect = new RectF(0f, inventoryHeight, viewWidth, viewHeight);
+        canvas.drawRect(rect, inventoryPaint);
+        canvas.drawText("Inventory", 0, inventoryHeight + 45, inventoryTextPaint);
+        Iterator<Shape> it = possessions.iterator();
+        while(it.hasNext()){
+            Shape shape = it.next();
+            shape.draw(canvas, false);
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         drawShapes(canvas);
+        drawInventory(canvas);
     }
 
     //returns a shape at a point if it's not hidden
     //if dropEvent is true, it means a shape was dropped, so we want to ignore that shape when iterating
     //through the shapes that lie at a x and y
-    private Shape getShape(boolean dropEvent) {
+    public Shape getShape(boolean dropEvent) {
         Shape result = null;
         HashSet<Shape> shapes = new HashSet<>(this.shapes.values());
         float leftX;
@@ -247,7 +315,7 @@ public class Screen extends View {
                 bottomY = shape.getY() + shape.getTextPaint().descent();
             }
             if(x >= leftX && x <= rightX && y >= topY && y <= bottomY) {
-                if(!shape.isHidden() && shape.associatedPage.equals(currPage)) {
+                if(!shape.isHidden() && shape.associatedPage.equals(currPage) || shape.associatedPage.equals(INVENTORY)) {
                     if(!dropEvent || shape != dragShape) {
                         result = shape;
                     }
@@ -268,39 +336,68 @@ public class Screen extends View {
                 Shape shape = getShape(false);
                 if(shape != null && shape.isMovable()) {
                     dragShape = shape;
+                    //allows us to snap back later
+                    prevX = dragShape.getX();
+                    prevY = dragShape.getY();
                 }
                 script.clickHappened(shape);
                 invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
-                //makes sure that if I am dragging a shape and it clicks to another page, that shape
-                //isn't considered to be dragging anymore
-                if(dragShape != null && dragShape.associatedPage.equals(currPage)) {
-                    dragging = true;
-                }
-                x = event.getX();
-                y = event.getY();
-                //drags shape in the middle
-                if(dragShape != null) {
-                    if(dragShape.getText().equals("")) {
-                        dragShape.setX(x - dragShape.getWidth() * .5f);
-                        dragShape.setY(y - dragShape.getHeight() * .5f);
+                if (dragShape != null) {
+                    //makes sure that if I am dragging a shape and it clicks to another page, that shape
+                    //isn't considered to be dragging anymore
+                    if (dragShape.associatedPage.equals(currPage) || dragShape.associatedPage.equals(INVENTORY)) {
+                        dragging = true;
                     } else {
-                        dragShape.setX(x - dragShape.getTextPaint().measureText(dragShape.getText()) * .5f);
-                        dragShape.setY(y);
+                        dragShape = null;
                     }
+                    if(dragShape != null) {
+                        x = event.getX();
+                        y = event.getY();
+                        //drags shape in the middle
+                        if (dragShape.getText().equals("")) {
+                            dragShape.setX(x - dragShape.getWidth() * .5f);
+                            dragShape.setY(y - dragShape.getHeight() * .5f);
+                        } else {
+                            dragShape.setX(x - dragShape.getTextPaint().measureText(dragShape.getText()) * .5f);
+                            dragShape.setY(y);
+                        }
+                    }
+                        invalidate();
                 }
-                invalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                script.shapeDropped(getShape(true), dragShape);
-                dragShape = null;
-                dragging = false;
-                invalidate();
+                if(dragShape != null) {
+                    if(y > inventoryHeight) {
+                        dragShape.setAssociatedPage(INVENTORY);
+                        if(dragShape.getText().equals("")) {
+                            dragShape.setX(x - dragShape.getWidth() * .5f);
+                            //lies well within the inventory box
+                            dragShape.setY(Math.max(y - dragShape.getHeight() * .5f, inventoryMin));
+                        } else {
+                            dragShape.setX(x - dragShape.getTextPaint().measureText(dragShape.getText()) * .5f);
+                            dragShape.setY(Math.max(y, inventoryMin + 30));
+                        }
+                        possessions.add(dragShape);
+                    } else {
+                        Shape receiver = getShape(true);
+                        if (receiver != null) {
+                            script.shapeDropped(receiver, dragShape);
+                        } else {
+                            //shape snaps back to where it was before
+                            dragShape.setX(prevX);
+                            dragShape.setY(prevY);
+                        }
+                    }
+                        dragShape = null;
+                        dragging = false;
+
+                    invalidate();
+
+                }
         }
         return true;
     }
-
-    // TODO when creating the event handler, remember to invalidate() to update screen
 }
 

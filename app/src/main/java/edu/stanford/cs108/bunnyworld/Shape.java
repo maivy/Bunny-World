@@ -54,6 +54,10 @@ public class Shape {
         textPaint = new Paint();
     }
 
+    public void addToScript (String newScript) {
+        script += newScript;
+    }
+
     public void draw(Canvas canvas, boolean withBorder) {
         if(!isHidden) {
             if (!text.equals("")) drawText(canvas, withBorder);
@@ -79,7 +83,7 @@ public class Shape {
 
     private void drawRect(Canvas canvas, boolean withBorder) {
         RectF rect = new RectF(x, y, x + width, y + height);
-        if(withBorder) {
+        if(withBorder && isReceiving) {
             canvas.drawRect(rect, greenBorder);
         }
         canvas.drawRect(rect, lightGrey);
