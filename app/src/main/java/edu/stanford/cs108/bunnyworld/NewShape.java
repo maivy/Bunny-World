@@ -31,10 +31,10 @@ public class NewShape extends AppCompatActivity {
     private final ArrayList<String> initialTriggers = new ArrayList<>(Arrays.asList("Select One", ON_CLICK, ON_ENTER, ON_DROP));
     private final ArrayList<String> allActions = new ArrayList<>(Arrays.asList("Select One", GOTO, PLAY, HIDE, SHOW));
     private final ArrayList<String> allSounds = new ArrayList<>(Arrays.asList("Select One", "carrotcarrotcarrot", "evillaugh", "fire",
-                                                                "hooray", "munch", "munching", "woof"));
+            "hooray", "munch", "munching", "woof"));
 
     private final ArrayList<String> allImages = new ArrayList<>(Arrays.asList("carrot", "carrot2", "death", "duck",
-                                                                "fire", "mystic"));
+            "fire", "mystic"));
 
     private String currPageName;
 
@@ -107,9 +107,9 @@ public class NewShape extends AppCompatActivity {
             setSpinnerListToAllShapes(secondSpin);
             setUpSpinnerTwoListener(secondSpin);
         } else if (selected.equals(ON_ENTER) || selected.equals(ON_CLICK)){
-           setSpinnerListToAllActions(secondSpin);
-           setUpSpinnerTwoListener(secondSpin);
-           findViewById(R.id.scriptFourth).setVisibility(View.INVISIBLE);
+            setSpinnerListToAllActions(secondSpin);
+            setUpSpinnerTwoListener(secondSpin);
+            findViewById(R.id.scriptFourth).setVisibility(View.INVISIBLE);
             findViewById(R.id.scriptThird).setVisibility(View.INVISIBLE);
         }
     }
@@ -199,7 +199,7 @@ public class NewShape extends AppCompatActivity {
     // to be a list of all the actions available in the game (4 actions)
     private void setSpinnerListToAllActions (Spinner currSpinner) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
-                    android.R.layout.simple_spinner_item,allActions);
+                android.R.layout.simple_spinner_item,allActions);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         currSpinner.setAdapter(adapter);
     }
@@ -207,7 +207,7 @@ public class NewShape extends AppCompatActivity {
 
     // Sets the ArrayList of items the currSpinner is displaying to be all the available sounds
     private void setSpinnerListToAllSounds (Spinner currSpinner) {
-              ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_spinner_item,allSounds);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         currSpinner.setAdapter(adapter);
@@ -307,8 +307,7 @@ public class NewShape extends AppCompatActivity {
         Spinner script2 = findViewById(R.id.scriptSecond);
         Spinner script3 = findViewById(R.id.scriptThird);
         Spinner script4 = findViewById(R.id.scriptFourth);
-        // TODO: change script back to begin with an empty string once Shape can handle an empty string
-        String script = "tests text";
+        String script = "";
 
         // Makes sure to only make a script when something is selected
         if (!script1.getSelectedItem().equals("Select One")) {
@@ -324,7 +323,9 @@ public class NewShape extends AppCompatActivity {
                 }
             }
         }
-        Toast.makeText(getApplicationContext(), script, Toast.LENGTH_SHORT).show();
+
+        if (!script.equals("")) script += " ; ";
+
         Shape currShape = new Shape(currPageName, shapeName, x, y, width, height, hidden, moveable, imageName, imageDrawable, textString, script, textSize);
         return currShape;
     }

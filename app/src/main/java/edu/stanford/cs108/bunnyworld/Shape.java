@@ -54,6 +54,10 @@ public class Shape {
         textPaint = new Paint();
     }
 
+    public void addToScript (String newScript) {
+        script += newScript;
+    }
+
     public void draw(Canvas canvas, boolean withBorder) {
         if(!isHidden) {
             if (!text.equals("")) drawText(canvas, withBorder);

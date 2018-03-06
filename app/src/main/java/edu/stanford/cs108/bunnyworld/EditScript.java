@@ -242,8 +242,8 @@ public class EditScript extends AppCompatActivity {
      * @param view
      */
     public void deleteScript(View view) {
-        // TODO: deal with empty script/no script
-        //currShape.setScript(" ");
+        currScript.setText("");
+        currShape.setScript("");
     }
 
     /**
@@ -254,5 +254,42 @@ public class EditScript extends AppCompatActivity {
         Intent intent = new Intent(this, EditShapeOptions.class);
         intent.putExtra("shape", currShape.getName());
         startActivity(intent);
+    }
+
+
+    public void addToScript(View view) {
+        //Script
+        Spinner script1 = findViewById(R.id.scriptFirstEdit);
+        Spinner script2 = findViewById(R.id.scriptSecondEdit);
+        Spinner script3 = findViewById(R.id.scriptThirdEdit);
+        Spinner script4 = findViewById(R.id.scriptFourthEdit);
+        String script = "";
+
+        // Makes sure to only make a script when something is selected
+        if (!script1.getSelectedItem().equals("Select One")) {
+            script += script1.getSelectedItem().toString();
+            if (script2.getSelectedItem() != null && !script2.getSelectedItem().equals("Select One")) {
+                script += " " + script2.getSelectedItem().toString();
+                if (script3.getVisibility() != View.INVISIBLE && script3.getSelectedItem() != null
+                        && !script3.getSelectedItem().equals("Select One")) {
+                    script += " " + script3.getSelectedItem().toString();
+                    if (script4.getVisibility() != View.INVISIBLE && script4.getSelectedItem() != null
+                            && !script4.getSelectedItem().equals("Select One"))
+                        script += " " + script4.getSelectedItem().toString();
+                }
+            }
+        }
+
+        if(!script.equals(""))  {
+            script += " ; ";
+            currShape.addToScript(script);
+            currScript.setText(currShape.getScript());
+
+        }
+
+        script1.setSelection(0);
+        script2.setVisibility(View.INVISIBLE);
+        script3.setVisibility(View.INVISIBLE);
+        script4.setVisibility(View.INVISIBLE);
     }
 }
