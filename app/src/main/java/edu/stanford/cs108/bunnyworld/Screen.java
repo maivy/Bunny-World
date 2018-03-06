@@ -236,11 +236,12 @@ public class Screen extends View {
 
     //method I have been using to create test objects
     private void testMethod() {
-        BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.carrot);
-        shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, true, "carrot", draw, "", "on enter play munching; on drop shape3 hide shape2", 0));
-        shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, true, "carrot", draw, "hi there", "on drop shape1 play hooray hide shape2;", 48));
-        shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot; on enter play fire;", 48));
-
+        if(shapes.size() != 3) {
+            BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.carrot);
+            shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, true, "carrot", draw, "", "on enter play munching; on click play hooray;", 0));
+            shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, true, "carrot", draw, "hi there", "on click show shape3 goto page2; on drop shape1 play woof;", 48));
+            shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot; on enter play fire;", 48));
+        }
     }
 
     @Override
@@ -324,26 +325,30 @@ public class Screen extends View {
                 if (dragShape != null) {
                     //makes sure that if I am dragging a shape and it clicks to another page, that shape
                     //isn't considered to be dragging anymore
-                    if (dragShape.associatedPage.equals(currPage)) {
+                    if (dragShape.associatedPage.equals(currPage) || dragShape.associatedPage.equals(INVENTORY)) {
                         dragging = true;
-                    }
-                    x = event.getX();
-                    y = event.getY();
-                    //drags shape in the middle
-                    if (dragShape.getText().equals("")) {
-                        dragShape.setX(x - dragShape.getWidth() * .5f);
-                        dragShape.setY(y - dragShape.getHeight() * .5f);
                     } else {
-                        dragShape.setX(x - dragShape.getTextPaint().measureText(dragShape.getText()) * .5f);
-                        dragShape.setY(y);
+                        dragShape = null;
                     }
-                    invalidate();
+                    if(dragShape != null) {
+                        x = event.getX();
+                        y = event.getY();
+                        //drags shape in the middle
+                        if (dragShape.getText().equals("")) {
+                            dragShape.setX(x - dragShape.getWidth() * .5f);
+                            dragShape.setY(y - dragShape.getHeight() * .5f);
+                        } else {
+                            dragShape.setX(x - dragShape.getTextPaint().measureText(dragShape.getText()) * .5f);
+                            dragShape.setY(y);
+                        }
+                    }
+                        invalidate();
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 if(dragShape != null) {
                     if(y > inventoryHeight) {
-                        dragShape.setAssociatedPage("inventory");
+                        dragShape.setAssociatedPage(INVENTORY);
                         if(dragShape.getText().equals("")) {
                             dragShape.setX(x - dragShape.getWidth() * .5f);
                             //lies well within the inventory box
@@ -354,7 +359,6 @@ public class Screen extends View {
                         }
                         possessions.add(dragShape);
                     } else {
-                        dragShape.setAssociatedPage(currPage);
                         Shape receiver = getShape(true);
                         if (receiver != null) {
                             script.shapeDropped(receiver, dragShape);
@@ -363,9 +367,10 @@ public class Screen extends View {
                             dragShape.setX(prevX);
                             dragShape.setY(prevY);
                         }
+                    }
                         dragShape = null;
                         dragging = false;
-                    }
+
                     invalidate();
 
                 }
