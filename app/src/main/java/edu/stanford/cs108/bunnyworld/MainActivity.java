@@ -28,4 +28,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PlayGame.class);
         startActivity(intent);
     }
+
+    // TODO: erase
+    public void gotoDB(View view) {
+        Intent intent = new Intent(this, DatabaseDebug.class);
+        startActivity(intent);
+    }
 }

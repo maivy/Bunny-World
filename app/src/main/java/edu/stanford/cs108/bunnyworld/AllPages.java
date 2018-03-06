@@ -26,4 +26,8 @@ class AllPages {
     public void updateCurrPageNumber () {
         currPageNumber++;
     }
+
+    public void setAllCurrPages(String game_name) {
+
+    }
 }

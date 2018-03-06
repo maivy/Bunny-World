@@ -1,6 +1,8 @@
 package edu.stanford.cs108.bunnyworld;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;

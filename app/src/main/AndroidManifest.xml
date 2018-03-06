@@ -24,7 +24,8 @@
         <activity android:name=".EditShape" />
         <activity android:name=".EditShapeOptions" />
         <activity android:name=".EditScript" />
-        <activity android:name=".PlayGame"></activity>
+        <activity android:name=".PlayGame" />
+        <activity android:name=".DatabaseDebug"></activity>
     </application>
 
 </manifest>
