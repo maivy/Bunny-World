@@ -222,7 +222,7 @@ public class Screen extends View {
         inventoryPaint.setColor(Color.GRAY);
         inventoryTextPaint = new Paint();
         inventoryTextPaint.setTextSize(60);
-        testMethod();
+//        testMethod();
     }
 
     public void drawShapes(Canvas canvas) {
@@ -237,10 +237,30 @@ public class Screen extends View {
     //method I have been using to create test objects
     private void testMethod() {
         if(shapes.size() != 3) {
-            BitmapDrawable draw = (BitmapDrawable) getResources().getDrawable(R.drawable.carrot);
-            shapes.put("shape1", new Shape("page1", "shape1", 30.0f, 30.0f, 600.0f, 492.0f, false, true, "carrot", draw, "", "on enter play munching; on click play hooray;", 0));
-            shapes.put("shape2", new Shape("page1", "shape2", 30.0f, 600.0f, 600.0f, 220.0f, false, true, "carrot", draw, "hi there", "on click show shape3 goto page2; on drop shape1 play woof;", 48));
-            shapes.put("shape3", new Shape("page2", "shape3", 30.0f, 30.0f, 40.0f, 20.0f, true, false, "", null, "", "on click goto page1 play carrotcarrotcarrot; on enter play fire;", 48));
+            BitmapDrawable carrot = (BitmapDrawable) getResources().getDrawable(R.drawable.carrot);
+            BitmapDrawable mystic = (BitmapDrawable) getResources().getDrawable(R.drawable.mystic);
+            BitmapDrawable fire = (BitmapDrawable) getResources().getDrawable(R.drawable.fire);
+            BitmapDrawable evil = (BitmapDrawable) getResources().getDrawable(R.drawable.death);
+
+            shapes.put("text0", new Shape("page1", "text0", 50.0f, 100.0f, 150.0f, 150.0f, false, false, "", null, "Bunny World!", "", 60));
+            shapes.put("door1", new Shape("page1", "door1", 30.0f, 600.0f, 150.0f, 150.0f, false, false, "", null, "", "on click goto page2;", 0));
+            shapes.put("door2", new Shape("page1", "door2", 250.0f, 600.0f, 150.0f, 150.0f, true, false, "", null, "", "on click goto page3;", 48));
+            shapes.put("door3", new Shape("page1", "door3", 500.0f, 600.0f, 150.0f, 150.0f, false, false, "", null, "", "on click goto page4;", 48));
+            shapes.put("text1", new Shape("page1", "text1", 0.0f, 300.0f, 150.0f, 150.0f, false, false, "", null, "You are in a maze of twisty little passages, all alike", "", 30));
+            shapes.put("shape1", new Shape("page2", "shape1", 250.0f, viewHeight/2, 200.0f, 300.0f, false, false, "mystic", mystic, "", "on click hide carrot play munching; on enter show door2;", 48));
+            shapes.put("text2", new Shape("page2", "text2", 0.0f, 400.0f, 150.0f, 150.0f, false, false, "", null, "Mystic Bunny- Rub my tummy for a big surprise!", "", 30));
+            shapes.put("door4", new Shape("page2", "door4", 30.0f, 600.0f, 150.0f, 150.0f, false, false, "", null, "", "on click goto page1;", 0));
+            shapes.put("carrot", new Shape("page3", "carrot", 500f, 500f, 200.0f, 200.0f, false, true, "carrot", carrot, "", "", 48));
+            shapes.put("fire", new Shape("page3", "fire", 250.0f, viewHeight/2 + 100, 300.0f, 200.0f, false, false, "fire", fire, "", "on enter play fire;", 48));
+            shapes.put("door5", new Shape("page3", "door5", 250.0f, 600.0f, 150.0f, 150.0f, false, false, "", null, "", "on click goto page2;", 48));
+            shapes.put("text3", new Shape("page3", "text3", 0.0f, 500.0f, 150.0f, 150.0f, false, false, "", null, "Eek! Fire-Room. Run away!", "", 30));
+            shapes.put("death", new Shape("page4", "death", 250.0f, 350, 300.0f, 200.0f, false, false, "death", evil, "", "on enter play evillaugh; on drop carrot hide carrot play munching hide death show door6; on click play evillaugh;", 48));
+            shapes.put("door6", new Shape("page4", "door6", 550.0f, 600.0f, 150.0f, 150.0f, true, false, "", null, "", "on click goto page5;", 48));
+            shapes.put("text4", new Shape("page4", "text4", 0.0f, 700.0f, 150.0f, 150.0f, false, false, "", null, "You must appease the Bunny of Death!", "", 30));
+            shapes.put("carrot1", new Shape("page5", "carrot1", 30.0f, 600.0f, 150.0f, 150.0f, false, false, "carrot", carrot, "", "", 0));
+            shapes.put("carrot2", new Shape("page5", "carrot2", 250.0f, 600.0f, 150.0f, 150.0f, false, false, "carrot", carrot, "", "", 48));
+            shapes.put("carrot3", new Shape("page5", "carrot3", 500.0f, 600.0f, 150.0f, 150.0f, false, false, "carrot", carrot, "", "", 48));
+            shapes.put("text5", new Shape("page5", "text5", 0.0f, 700.0f, 150.0f, 150.0f, false, false, "", null, "You Win! Yay!", "on enter play hooray;", 60));
         }
     }
 

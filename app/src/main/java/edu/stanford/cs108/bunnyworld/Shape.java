@@ -79,7 +79,7 @@ public class Shape {
 
     private void drawRect(Canvas canvas, boolean withBorder) {
         RectF rect = new RectF(x, y, x + width, y + height);
-        if(withBorder) {
+        if(withBorder && isReceiving) {
             canvas.drawRect(rect, greenBorder);
         }
         canvas.drawRect(rect, lightGrey);
