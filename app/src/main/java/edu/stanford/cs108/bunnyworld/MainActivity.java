@@ -28,4 +28,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PlayGame.class);
         startActivity(intent);
     }
+
+    /**
+     * Uncomment to allow option to debug database
+     */
+//    public void gotoDB(View view) {
+//        Intent intent = new Intent(this, DatabaseDebug.class);
+//        startActivity(intent);
+//    }
 }
