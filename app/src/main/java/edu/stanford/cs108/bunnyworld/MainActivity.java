@@ -29,9 +29,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // TODO: erase
-    public void gotoDB(View view) {
-        Intent intent = new Intent(this, DatabaseDebug.class);
-        startActivity(intent);
-    }
+    /**
+     * Uncomment to allow option to debug database
+     */
+//    public void gotoDB(View view) {
+//        Intent intent = new Intent(this, DatabaseDebug.class);
+//        startActivity(intent);
+//    }
 }

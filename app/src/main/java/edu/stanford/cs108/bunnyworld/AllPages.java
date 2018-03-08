@@ -27,7 +27,10 @@ class AllPages {
         currPageNumber++;
     }
 
-    public void setAllCurrPages(String game_name) {
-
+    public void setCurrPageNumber(int currPageNumber) {
+        this.currPageNumber = currPageNumber;
+    }
+    public void setAllCurrPages(HashMap<String, Page> allCurrPages) {
+        this.allCurrPages = allCurrPages;
     }
 }

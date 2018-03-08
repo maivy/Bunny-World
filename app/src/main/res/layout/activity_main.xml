@@ -29,10 +29,12 @@
         android:text="PLAY GAME "
         android:onClick="playGame"/>
 
-    <Button
-        android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Database debug"
-        android:onClick="gotoDB"/>
+    <!--Uncomment to allow database debug option-->
+    <!--Must uncomment gotoDB function in MainActivity.java as well-->
+    <!--<Button-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Database debug"-->
+        <!--android:onClick="gotoDB"/>-->
 </LinearLayout>
