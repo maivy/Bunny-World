@@ -25,13 +25,10 @@ public class NewGame extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void finishCreatingGame(View view) {
+    public void saveGame(View view) {
+        //TODO: save game on android
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        // TODO : anything necessary to finish building the game
-    }
-
-    public void saveGame(View view) {
     }
 
     /**
