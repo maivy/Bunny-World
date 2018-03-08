@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class NewGame extends AppCompatActivity {
 
     @Override
@@ -30,7 +32,6 @@ public class NewGame extends AppCompatActivity {
     }
 
     public void saveGame(View view) {
-        //TODO: save game on android
     }
 
     /**
