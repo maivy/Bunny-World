@@ -25,7 +25,7 @@ public class NewShape extends AppCompatActivity {
     private static final String ON_CLICK = "on click";
     private static final String ON_ENTER = "on enter";
     private static final String ON_DROP = "on drop";
-
+    private static final String NO_IMG = "No Image";
 
     // made the first entry in the list Select One So That's what Appears at the start
     private final ArrayList<String> initialTriggers = new ArrayList<>(Arrays.asList("Select One", ON_CLICK, ON_ENTER, ON_DROP));
@@ -33,7 +33,7 @@ public class NewShape extends AppCompatActivity {
     private final ArrayList<String> allSounds = new ArrayList<>(Arrays.asList("Select One", "carrotcarrotcarrot", "evillaugh", "fire",
             "hooray", "munch", "munching", "woof"));
 
-    private final ArrayList<String> allImages = new ArrayList<>(Arrays.asList("carrot", "carrot2", "death", "duck",
+    private final ArrayList<String> allImages = new ArrayList<>(Arrays.asList(NO_IMG,"carrot", "carrot2", "death", "duck",
             "fire", "mystic"));
 
     private String currPageName;
@@ -289,8 +289,14 @@ public class NewShape extends AppCompatActivity {
         //Image
         Spinner imageSpinner = findViewById(R.id.imageNameSpin);
         String imageName = imageSpinner.getSelectedItem().toString();
-        int imageID = getResources().getIdentifier(imageName,"drawable", getPackageName());
-        BitmapDrawable imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
+        BitmapDrawable imageDrawable;
+        if (!imageName.equals(NO_IMG)) {
+            int imageID = getResources().getIdentifier(imageName,"drawable", getPackageName());
+            imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
+        } else {
+           imageDrawable = null;
+        }
+
 
         // text
         EditText textInput = findViewById(R.id.textString);
@@ -336,7 +342,7 @@ public class NewShape extends AppCompatActivity {
      */
     public void createNewShape(View view) {
         EditText shapeName = findViewById(R.id.currentShapeName);
-        String shapeNameString = shapeName.getText().toString();
+        String shapeNameString = shapeName.getText().toString().toLowerCase();
 
         // If a Shape with that name doesn't already exist
         if (!AllShapes.getInstance().getAllShapes().containsKey(shapeNameString)) {
