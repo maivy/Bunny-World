@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,19 +14,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    //TODO: Check if this is what create and edit should do (both go to the same activity because they both need the same functionality/options)
     public void createClicked(View view) {
-        Intent intent = new Intent(this, NewGame.class);
+        Intent intent = new Intent(this, NameNewGame.class);
         startActivity(intent);
     }
 
     public void editClicked(View view) {
-        Intent intent = new Intent(this, NewGame.class);
+        Intent intent = new Intent(this, GameToEdit.class);
         startActivity(intent);
     }
 
     public void playGame(View view) {
-        Intent intent = new Intent(this, PlayGame.class);
+        Intent intent = new Intent(this, GameToPlay.class);
         startActivity(intent);
     }
 
