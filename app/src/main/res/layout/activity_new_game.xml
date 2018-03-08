@@ -22,11 +22,6 @@
         android:onClick="saveGame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <Button
-        android:onClick="finishCreatingGame"
-        android:text="Finished WITH Game"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/pagesTitleInNewGame"
         android:layout_marginTop="5sp"
