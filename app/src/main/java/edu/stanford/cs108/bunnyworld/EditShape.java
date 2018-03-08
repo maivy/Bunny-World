@@ -18,7 +18,9 @@ import java.util.HashMap;
 
 public class EditShape extends AppCompatActivity {
     private String currShapeName;
-    private final ArrayList<String> allImages = new ArrayList<>(Arrays.asList("", "carrot", "carrot2", "death", "duck",
+    private static final String NO_IMG = "No Image";
+
+    private final ArrayList<String> allImages = new ArrayList<>(Arrays.asList(NO_IMG, "carrot", "carrot2", "death", "duck",
             "fire", "mystic"));
 
     @Override
@@ -98,7 +100,7 @@ public class EditShape extends AppCompatActivity {
         HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
         Shape currShape = currShapes.get(currShapeName);
         EditText nameBox = findViewById(R.id.currentShapeNameEdit);
-        String newName = nameBox.getText().toString();
+        String newName = nameBox.getText().toString().toLowerCase();
         currShape.setName(newName);
 
 
@@ -146,6 +148,15 @@ public class EditShape extends AppCompatActivity {
             Spinner imageSpinner = findViewById(R.id.imageNameSpinEdit);
             String imageName = imageSpinner.getSelectedItem().toString();
             currShape.imageName = imageName;
+            BitmapDrawable imageDrawable;
+            if (!imageName.equals(NO_IMG)) {
+                int imageID = getResources().getIdentifier(imageName,"drawable", getPackageName());
+                imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
+            } else {
+                imageDrawable = null;
+            }
+            currShape.setImage(imageDrawable);
+
 
             // text
             EditText textInput = findViewById(R.id.textStringEdit);
@@ -168,7 +179,7 @@ public class EditShape extends AppCompatActivity {
             intent.putExtra("shape", currShapeName);
             startActivity(intent);
         } else {
-            Toast.makeText(getApplicationContext(), "INVALID NAME", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "SHAPE NAME ALREADY EXISTS", Toast.LENGTH_SHORT).show();
         }
     }
 }
