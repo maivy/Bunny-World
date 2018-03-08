@@ -30,4 +30,11 @@ class AllPages {
     public void updateCurrPageNumber () {
         currPageNumber++;
     }
+
+    public void setCurrPageNumber(int currPageNumber) {
+        this.currPageNumber = currPageNumber;
+    }
+    public void setAllCurrPages(HashMap<String, Page> allCurrPages) {
+        this.allCurrPages = allCurrPages;
+    }
 }
