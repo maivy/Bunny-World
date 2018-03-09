@@ -99,7 +99,7 @@ public class Script {
      * Defines actions for shapeDroppedOnto when droppedShape is dropped
      * onto shapeDroppedOnto.
      * Assumes that there is only one on-drop clause for each possible
-     * dropped shape. TODO check if this is okay with group
+     * dropped shape.
      * @param shapeDroppedOnto
      * @param droppedShape
      */
