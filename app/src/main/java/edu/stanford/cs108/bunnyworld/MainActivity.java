@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createClicked(View view) {
+        AllPages.getInstance().clearAllPages();
+        AllShapes.getInstance().clearAllShapes();
         Intent intent = new Intent(this, NameNewGame.class);
         startActivity(intent);
     }

@@ -178,8 +178,6 @@ public class BunnyWorldDB {
         String script = cursor.getString(SHAPE_SCRIPT_COL);
         String imageText = cursor.getString(SHAPE_IMAGE_COL);
         BitmapDrawable image = getBitmapDrawable(imageText);
-//        if (image == null) System.out.println("IMAGE NOT FOUND");
-//        else System.out.println(image);
         String text = cursor.getString(SHAPE_TEXT_COL);
         int fontSize = cursor.getInt(SHAPE_FONT_SIZE);
         boolean isHidden = cursor.getInt(SHAPE_IS_HIDDEN) > 0;
@@ -242,6 +240,13 @@ public class BunnyWorldDB {
         return currShapeNumber;
     }
 
+//    private String getGameName(long gameId) {
+//        Cursor cursor = getGameCursor(gameId);
+//        String gameName = cursor.getString(GAME_NAME_COL);
+//        cursor.close();
+//        return gameName;
+//    }
+
 
     /**
      * Sets all pages and shapes singletons to data
@@ -253,6 +258,7 @@ public class BunnyWorldDB {
         long gameId = getId("games", gameName);
         if (gameId == -1) return;
         AllPages allPages = AllPages.getInstance();
+        allPages.nameGame(gameName);
         allPages.setCurrPageNumber(getCurrPageNumber(gameId));
         allPages.setAllCurrPages(getGamePages(gameId));
         AllShapes allShapes = AllShapes.getInstance();
