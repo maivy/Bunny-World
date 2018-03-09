@@ -186,9 +186,6 @@ public class BunnyWorldDB {
         float y = cursor.getFloat(SHAPE_Y);
         float width = cursor.getFloat(SHAPE_WIDTH);
         float height = cursor.getFloat(SHAPE_HEIGHT);
-//        Shape shape = new Shape(pageName,name,x,y,width,height,isHidden,isMovable,imageText,image,text,script,fontSize);
-//        System.out.println("Image: " + shape.getImage());
-//        return shape;
         return new Shape(pageName,name,x,y,width,height,isHidden,isMovable,imageText,image,text,script,fontSize);
     }
 
@@ -199,10 +196,7 @@ public class BunnyWorldDB {
         Cursor cursor = bWDB.rawQuery(shapeQuery,null);
         while(cursor.moveToNext()) {
             String shapeName = cursor.getString(SHAPE_NAME_COL);
-            Shape shape = getShapeFromCursor(cursor,shapeName);
-//            System.out.println("Image: " + shape.getImage());
-            shapes.put(shapeName,shape);
-//            shapes.put(shapeName,getShapeFromCursor(cursor,shapeName));
+            shapes.put(shapeName,getShapeFromCursor(cursor,shapeName));
         }
         cursor.close();
 
@@ -239,14 +233,6 @@ public class BunnyWorldDB {
         cursor.close();
         return currShapeNumber;
     }
-
-//    private String getGameName(long gameId) {
-//        Cursor cursor = getGameCursor(gameId);
-//        String gameName = cursor.getString(GAME_NAME_COL);
-//        cursor.close();
-//        return gameName;
-//    }
-
 
     /**
      * Sets all pages and shapes singletons to data
