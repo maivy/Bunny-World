@@ -42,14 +42,46 @@
     </LinearLayout>
 
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Image Name : "/>
+        <Spinner
+            android:layout_gravity="center_vertical"
+            android:id="@+id/imageNameSpin"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Spinner>
+    </LinearLayout>
 
     // All Shape Geometry
-    <TextView
-        android:layout_marginTop="5sp"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="Shape Geometry " />
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:layout_marginTop="5sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Image Geometry " />
+
+        <Button
+            android:id="@+id/defaultDim"
+            android:onClick="setDefaultDim"
+            android:visibility="invisible"
+            android:text="DEFAULT IMAGE DIMENSIONS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 
     <LinearLayout
@@ -57,84 +89,110 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-                <TextView
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Start X :"/>
-                <TextView
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Width :"/>
-            </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
-
-            <LinearLayout
+            <TextView
+                android:gravity="center_vertical"
                 android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-                <EditText
-                    android:id="@+id/startX"
-                    android:layout_weight= "1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
-                <EditText
-                    android:id="@+id/shapeWidth"
-                    android:layout_weight= "1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:text="Width :"/>
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_marginLeft="5sp"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-                <TextView
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Start Y:"/>
-                <TextView
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Height:"/>
-            </LinearLayout>
+            <EditText
+                android:id="@+id/shapeWidth"
+                android:layout_weight= "1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"/>
+        </LinearLayout>
 
-
-            <LinearLayout
+        <LinearLayout
+            android:layout_marginLeft="5sp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:gravity="center_vertical"
                 android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:id="@+id/startY"
-                    android:layout_weight= "1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
-                <EditText
-                    android:id="@+id/shapeHeight"
-                    android:layout_weight= "1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:text="Height:"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/shapeHeight"
+                android:layout_weight= "1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"/>
+        </LinearLayout>
     </LinearLayout>
+
+    // Text and Text Size
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <TextView
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Text : "/>
+        <TextView
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Text Size: "/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/textString"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:inputType="numberDecimal"
+            android:id="@+id/textSize"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>
+
+
+
 
 
     // Moveable and Hidden
@@ -212,74 +270,6 @@
     </LinearLayout>
 
     // Image Name
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Image Name : "/>
-        <Spinner
-            android:layout_gravity="center_vertical"
-            android:id="@+id/imageNameSpin"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Spinner>
-    </LinearLayout>
-
-
-    // Text and Text Size
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            <TextView
-                android:gravity="center_vertical"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="Text : "/>
-            <TextView
-                android:gravity="center_vertical"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="Text Size: "/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/textString"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <EditText
-                android:inputType="numberDecimal"
-                android:id="@+id/textSize"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-    </LinearLayout>
 
 
     // Script
