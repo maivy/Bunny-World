@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -57,23 +58,31 @@ public class Screen extends View {
         public static final String ON_ENTER = "on enter";
 
         /**
-         * Finds the trigger clause for specified event in given
-         * Script. Returns null if trigger clause does not exist
-         * in Script.
+         * Finds multiple trigger clauses for specified event in given
+         * script. Returns null if trigger clause does not exist
+         * in script.
          * @param event
          * @param script
          * @return Script
          */
-        private String getClause(String event, String script) {
+        private ArrayList<String> getClauses(String event, String script) {
             if (!script.contains(event)) return null;
 
-            int start = script.indexOf(event);
-            String rest = script.substring(start + event.length() + 1);
+            ArrayList<String> clauses = new ArrayList<String>();
 
-            int end = rest.indexOf(";");
-            rest = rest.substring(0,end);
-            System.out.println(rest);
-            return rest;
+            while(script.contains(event)) {
+                int start = script.indexOf(event);
+                String rest = script.substring(start + event.length() + 1);
+
+                int end = rest.indexOf(";");
+                String newClause = rest.substring(0,end);
+
+                clauses.add(newClause);
+
+                script = rest;
+            }
+
+            return clauses;
         }
 
         /**
@@ -106,6 +115,17 @@ public class Screen extends View {
         }
 
         /**
+         * Given a list of clauses, runs clauses in succession
+         * @param clauses
+         */
+        private void runClauses(ArrayList<String> clauses) {
+            if (clauses == null) return;
+            for (String clause: clauses) {
+                runClause(clause);
+            }
+        }
+
+        /**
          * Defines actions when shape is clicked. Only executes
          * first on-click clause, as mentioned in spec.
          * @param shape
@@ -114,17 +134,17 @@ public class Screen extends View {
             if (shape == null) return;
 
             String script = shape.getScript();
-            String clause = getClause(ON_CLICK,script);
+            ArrayList<String> clauses = getClauses(ON_CLICK,script);
 
-            runClause(clause);
+            runClauses(clauses);
         }
 
         public void enteredPage(String page) {
             // looping through shapes and checking for page matches
             for (Shape shape: AllShapes.getInstance().getAllShapes().values()) {
                 if (shape.getAssociatedPage().equals(page)) {
-                    String clause = getClause(ON_ENTER, shape.getScript());
-                    runClause(clause);
+                    ArrayList<String> clauses = getClauses(ON_ENTER, shape.getScript());
+                    runClauses(clauses);
                 }
             }
         }
@@ -133,7 +153,7 @@ public class Screen extends View {
          * Defines actions for shapeDroppedOnto when droppedShape is dropped
          * onto shapeDroppedOnto.
          * Assumes that there is only one on-drop clause for each possible
-         * dropped shape. TODO check if this is okay with group
+         * dropped shape.
          * @param shapeDroppedOnto
          * @param droppedShape
          */
@@ -142,14 +162,14 @@ public class Screen extends View {
 
             String script = shapeDroppedOnto.getScript();
             String onDrop = ON_DROP + " " + droppedShape.getName();
-            String clause = getClause(onDrop, script);
+            ArrayList<String> clauses = getClauses(onDrop, script);
             //snaps back if the shape was dropped on something that it doesn't interact with
-            if(clause == null) {
+            if(clauses == null) {
                 dragShape.setX(prevX);
                 dragShape.setY(prevY);
                 return;
             }
-            runClause(clause);
+            runClauses(clauses);
         }
 
         /**

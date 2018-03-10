@@ -134,6 +134,8 @@ public class Shape {
         return image;
     }
 
+    public String getImageName() { return imageName; }
+
     public void setImage(BitmapDrawable image) {
         this.image = image;
     }

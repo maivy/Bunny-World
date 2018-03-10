@@ -80,10 +80,10 @@ public class NewPage extends AppCompatActivity {
      */
     public void renamePage(View view) {
         EditText newName = findViewById(R.id.pageNameByUser);
-        String newNameString = newName.getText().toString();
+        String newNameString = newName.getText().toString().toLowerCase();
         HashMap<String, Page> pages = AllPages.getInstance().getAllPages();
 
-        if (newNameString.equals(MAIN_PAGE) || pages.containsKey(newNameString)) {
+        if ((newNameString.equals(MAIN_PAGE) || pages.containsKey(newNameString)) && !newNameString.equals(currPage.getPageName())) {
             Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
         } else {
             String currName = currPage.getPageName();

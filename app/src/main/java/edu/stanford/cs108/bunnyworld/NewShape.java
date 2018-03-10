@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -25,7 +26,7 @@ public class NewShape extends AppCompatActivity {
     private static final String ON_CLICK = "on click";
     private static final String ON_ENTER = "on enter";
     private static final String ON_DROP = "on drop";
-
+    private static final String NO_IMG = "No Image";
 
     // made the first entry in the list Select One So That's what Appears at the start
     private final ArrayList<String> initialTriggers = new ArrayList<>(Arrays.asList("Select One", ON_CLICK, ON_ENTER, ON_DROP));
@@ -33,7 +34,7 @@ public class NewShape extends AppCompatActivity {
     private final ArrayList<String> allSounds = new ArrayList<>(Arrays.asList("Select One", "carrotcarrotcarrot", "evillaugh", "fire",
             "hooray", "munch", "munching", "woof"));
 
-    private final ArrayList<String> allImages = new ArrayList<>(Arrays.asList("carrot", "carrot2", "death", "duck",
+    private final ArrayList<String> allImages = new ArrayList<>(Arrays.asList(NO_IMG,"carrot", "carrot2", "death", "duck",
             "fire", "mystic"));
 
     private String currPageName;
@@ -67,11 +68,29 @@ public class NewShape extends AppCompatActivity {
         hiddenNo.setChecked(true);
 
         //Set up list of possible images
-        Spinner imageSpinner = findViewById(R.id.imageNameSpin);
+        final Spinner imageSpinner = findViewById(R.id.imageNameSpin);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_spinner_item,allImages);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         imageSpinner.setAdapter(adapter);
+        imageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Button imgDim = findViewById(R.id.defaultDim);
+                String selected = imageSpinner.getSelectedItem().toString();
+                if (selected.equals(NO_IMG)) {
+                    imgDim.setVisibility(View.INVISIBLE);
+                } else {
+                    imgDim.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
         setUpFirstSpinner();
     }
 
@@ -254,27 +273,23 @@ public class NewShape extends AppCompatActivity {
      * @param shapeName
      */
     private Shape buildNewShape (String shapeName) {
-        //startX
-        EditText xLoc = findViewById(R.id.startX);
-        String xString = xLoc.getText().toString();
-        float x = 0f;
-        if (!xString.isEmpty()) x = Float.parseFloat(xString);
-
-        //startY
-        EditText yLoc = findViewById(R.id.startY);
-        String yString = yLoc.getText().toString();
-        float y = 0f;
-        if (!yString.isEmpty())  y = Float.parseFloat(yString);
-
-        //Width
         EditText shapeWidth = findViewById(R.id.shapeWidth);
         String widthString = shapeWidth.getText().toString();
+
+        EditText shapeHeight = findViewById(R.id.shapeHeight);
+        String heightString = shapeHeight.getText().toString();
+
+        EditText textInput = findViewById(R.id.textString);
+        String textString = textInput.getText().toString();
+
+        EditText textSizeInput = findViewById(R.id.textSize);
+        String textSizeString = textSizeInput.getText().toString();
+        
+        //Width
         float width = 0f;
         if (!widthString.isEmpty()) width = Float.parseFloat(widthString);
 
         //Height
-        EditText shapeHeight = findViewById(R.id.shapeHeight);
-        String heightString = shapeHeight.getText().toString();
         float height = 0f;
         if (!heightString.isEmpty()) height = Float.parseFloat(heightString);
 
@@ -289,16 +304,15 @@ public class NewShape extends AppCompatActivity {
         //Image
         Spinner imageSpinner = findViewById(R.id.imageNameSpin);
         String imageName = imageSpinner.getSelectedItem().toString();
-        int imageID = getResources().getIdentifier(imageName,"drawable", getPackageName());
-        BitmapDrawable imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
-
-        // text
-        EditText textInput = findViewById(R.id.textString);
-        String textString = textInput.getText().toString();
+        BitmapDrawable imageDrawable;
+        if (!imageName.equals(NO_IMG)) {
+            int imageID = getResources().getIdentifier(imageName,"drawable", getPackageName());
+            imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
+        } else {
+           imageDrawable = null;
+        }
 
         // text Size
-        EditText textSizeInput = findViewById(R.id.textSize);
-        String textSizeString = textSizeInput.getText().toString();
         int textSize = 0;
         if (!textSizeString.isEmpty()) textSize = Integer.parseInt(textSizeString);
 
@@ -309,6 +323,7 @@ public class NewShape extends AppCompatActivity {
         Spinner script4 = findViewById(R.id.scriptFourth);
         String script = "";
 
+        //TODO: Change Script
         // Makes sure to only make a script when something is selected
         if (!script1.getSelectedItem().equals("Select One")) {
             script += script1.getSelectedItem().toString();
@@ -326,7 +341,7 @@ public class NewShape extends AppCompatActivity {
 
         if (!script.equals("")) script += " ; ";
 
-        Shape currShape = new Shape(currPageName, shapeName, x, y, width, height, hidden, moveable, imageName, imageDrawable, textString, script, textSize);
+        Shape currShape = new Shape(currPageName, shapeName, 0, 0, width, height, hidden, moveable, imageName, imageDrawable, textString, script, textSize);
         return currShape;
     }
 
@@ -336,25 +351,62 @@ public class NewShape extends AppCompatActivity {
      */
     public void createNewShape(View view) {
         EditText shapeName = findViewById(R.id.currentShapeName);
-        String shapeNameString = shapeName.getText().toString();
+        String shapeNameString = shapeName.getText().toString().toLowerCase();
 
         // If a Shape with that name doesn't already exist
-        if (!AllShapes.getInstance().getAllShapes().containsKey(shapeNameString)) {
-            Shape newShape = buildNewShape(shapeNameString);
-            buildNewShape(shapeNameString);
-            AllShapes.getInstance().getAllShapes().put(shapeNameString, newShape);
-
-            // adds one to the total number of shapes ever created so we know what to name future Shapes
-            AllShapes.getInstance().updateCurrShapeNumber();
-            Toast.makeText(getApplicationContext(), shapeNameString +" CREATED", Toast.LENGTH_SHORT).show();
-
-            // Goes back to the page, does not create new page
-            Intent intent = new Intent(this, NewPage.class);
-            intent.putExtra("NEW_PAGE", false);
-            intent.putExtra("pageName", currPageName);
-            startActivity(intent);
-        } else {
+        if (AllShapes.getInstance().getAllShapes().containsKey(shapeNameString)) {
             Toast.makeText(getApplicationContext(), shapeNameString +" ALREADY EXISTS", Toast.LENGTH_SHORT).show();
+        } else if (shapeNameString.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "MUST PROVIDE SHAPE NAME", Toast.LENGTH_SHORT).show();
+        } else {
+            EditText shapeWidth = findViewById(R.id.shapeWidth);
+            String widthString = shapeWidth.getText().toString();
+
+            EditText shapeHeight = findViewById(R.id.shapeHeight);
+            String heightString = shapeHeight.getText().toString();
+
+            EditText textInput = findViewById(R.id.textString);
+            String textString = textInput.getText().toString();
+
+            EditText textSizeInput = findViewById(R.id.textSize);
+            String textSizeString = textSizeInput.getText().toString();
+
+            if (textString.isEmpty() && (heightString.isEmpty() || widthString.isEmpty())) {
+                Toast.makeText(getApplicationContext(), "MUST PROVIDE DIMENSIONS FOR IMAGE", Toast.LENGTH_SHORT).show();
+            } else if (!textString.isEmpty() && textSizeString.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "MUST GIVE FONT SIZE FOR TEXT", Toast.LENGTH_SHORT).show();
+            } else {
+                Shape newShape = buildNewShape(shapeNameString);
+                AllShapes.getInstance().getAllShapes().put(shapeNameString, newShape);
+
+                // adds one to the total number of shapes ever created so we know what to name future Shapes
+                AllShapes.getInstance().updateCurrShapeNumber();
+                Toast.makeText(getApplicationContext(), shapeNameString +" CREATED", Toast.LENGTH_SHORT).show();
+
+                // Goes back to the page, does not create new page
+                Intent intent = new Intent(this, NewPage.class);
+                intent.putExtra("NEW_PAGE", false);
+                intent.putExtra("pageName", currPageName);
+                startActivity(intent);
+            }
+        }
+    }
+
+
+    // Gets the default dimensions of the image selected
+    public void setDefaultDim(View view) {
+        Spinner imageSpin = findViewById(R.id.imageNameSpin);
+        String image = imageSpin.getSelectedItem().toString();
+
+        if(!image.equals(NO_IMG)){
+            int imageID = getResources().getIdentifier(image,"drawable", getPackageName());
+            BitmapDrawable imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
+            float height = imageDrawable.getIntrinsicHeight();
+            float width = imageDrawable.getIntrinsicWidth();
+            EditText shapeHeight = findViewById(R.id.shapeHeight);
+            shapeHeight.setText(Float.toString(height));
+            EditText shapeWidth = findViewById(R.id.shapeWidth);
+            shapeWidth.setText(Float.toString(width));
         }
     }
 }

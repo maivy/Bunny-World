@@ -3,6 +3,7 @@
     package="edu.stanford.cs108.bunnyworld">
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -24,7 +25,12 @@
         <activity android:name=".EditShape" />
         <activity android:name=".EditShapeOptions" />
         <activity android:name=".EditScript" />
-        <activity android:name=".PlayGame"></activity>
+        <activity android:name=".PlayGame" />
+        <activity android:name=".NameNewGame" />
+        <activity android:name=".GameToEdit" />
+        <activity android:name=".GameToPlay"></activity>
+        <activity android:name=".DatabaseDebug"></activity>
+
     </application>
 
 </manifest>

@@ -26,4 +26,17 @@ class AllShapes {
     public int getCurrShapeNumber () {
         return currShapeNumber;
     }
+
+    public void setCurrShapeNumber(int currShapeNumber) {
+        this.currShapeNumber = currShapeNumber;
+    }
+
+    public void setCurrShapes(HashMap<String, Shape> currShapes) {
+        this.currShapes = currShapes;
+    }
+
+    public void clearAllShapes() {
+        currShapes.clear();
+        currShapeNumber = 1;
+    }
 }
