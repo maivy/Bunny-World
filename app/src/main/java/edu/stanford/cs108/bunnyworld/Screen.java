@@ -238,8 +238,6 @@ public class Screen extends View {
         allPages = AllPages.getInstance();
         Possessions allPossessions = Possessions.getInstance();
         possessions = allPossessions.getAllPossessions();
-        //remove all shapes from possessions
-        possessions.clear();
         inventoryPaint = new Paint();
         inventoryPaint.setColor(Color.GRAY);
         inventoryTextPaint = new Paint();
@@ -250,7 +248,7 @@ public class Screen extends View {
     public void drawShapes(Canvas canvas) {
         HashSet<Shape> shapes = new HashSet<>(this.shapes.values());
         for(Shape shape : shapes) {
-            if(shape.getAssociatedPage().equals(currPage) && !possessions.contains(shape) && !shape.isHidden()) {
+            if(shape.getAssociatedPage().equals(currPage)) {
                 shape.draw(canvas, dragging);
             }
         }
@@ -258,7 +256,7 @@ public class Screen extends View {
 
     //method I have been using to create test objects
     private void testMethod() {
-        if(shapes.size() != 19) {
+        if(shapes.size() != 3) {
             BitmapDrawable carrot = (BitmapDrawable) getResources().getDrawable(R.drawable.carrot);
             BitmapDrawable mystic = (BitmapDrawable) getResources().getDrawable(R.drawable.mystic);
             BitmapDrawable fire = (BitmapDrawable) getResources().getDrawable(R.drawable.fire);
@@ -276,7 +274,7 @@ public class Screen extends View {
             shapes.put("fire", new Shape("page3", "fire", 250.0f, viewHeight/2 + 100, 300.0f, 200.0f, false, false, "fire", fire, "", "on enter play fire;", 48));
             shapes.put("door5", new Shape("page3", "door5", 250.0f, 600.0f, 150.0f, 150.0f, false, false, "", null, "", "on click goto page2;", 48));
             shapes.put("text3", new Shape("page3", "text3", 0.0f, 500.0f, 150.0f, 150.0f, false, false, "", null, "Eek! Fire-Room. Run away!", "", 30));
-            shapes.put("death", new Shape("page4", "death", 250.0f, 350, 300.0f, 200.0f, false, false, "death", evil, "", "on enter play evillaugh; on drop carrot play munching hide death show door6; on click play evillaugh;", 48));
+            shapes.put("death", new Shape("page4", "death", 250.0f, 350, 300.0f, 200.0f, false, false, "death", evil, "", "on enter play evillaugh; on drop carrot hide carrot play munching hide death show door6; on click play evillaugh;", 48));
             shapes.put("door6", new Shape("page4", "door6", 550.0f, 600.0f, 150.0f, 150.0f, true, false, "", null, "", "on click goto page5;", 48));
             shapes.put("text4", new Shape("page4", "text4", 0.0f, 700.0f, 150.0f, 150.0f, false, false, "", null, "You must appease the Bunny of Death!", "", 30));
             shapes.put("carrot1", new Shape("page5", "carrot1", 30.0f, 600.0f, 150.0f, 150.0f, false, false, "carrot", carrot, "", "", 0));
@@ -335,7 +333,7 @@ public class Screen extends View {
                 bottomY = shape.getY() + shape.getTextPaint().descent();
             }
             if(x >= leftX && x <= rightX && y >= topY && y <= bottomY) {
-                if(!shape.isHidden() && shape.associatedPage.equals(currPage) || possessions.contains(shape)) {
+                if(!shape.isHidden() && shape.associatedPage.equals(currPage) || shape.associatedPage.equals(INVENTORY)) {
                     if(!dropEvent || shape != dragShape) {
                         result = shape;
                     }
@@ -367,7 +365,7 @@ public class Screen extends View {
                 if (dragShape != null) {
                     //makes sure that if I am dragging a shape and it clicks to another page, that shape
                     //isn't considered to be dragging anymore
-                    if (dragShape.associatedPage.equals(currPage) || possessions.contains(dragShape)) {
+                    if (dragShape.associatedPage.equals(currPage) || dragShape.associatedPage.equals(INVENTORY)) {
                         dragging = true;
                     } else {
                         dragShape = null;
@@ -390,6 +388,7 @@ public class Screen extends View {
             case MotionEvent.ACTION_UP:
                 if(dragShape != null) {
                     if(y > inventoryHeight) {
+                        dragShape.setAssociatedPage(INVENTORY);
                         if(dragShape.getText().equals("")) {
                             dragShape.setX(x - dragShape.getWidth() * .5f);
                             //lies well within the inventory box
