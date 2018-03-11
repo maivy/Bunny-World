@@ -39,9 +39,11 @@ public class PlaceShape extends AppCompatActivity {
         EditText fontSize = (EditText) findViewById(R.id.fontSize);
         if(!fontSize.equals("") && PlaceScreen.selectedShape != null){
             int size = Integer.parseInt(fontSize.getText().toString());
-            PlaceScreen.selectedShape.setFontSize(size);
-            PlaceScreen screen = (PlaceScreen) findViewById(R.id.screen);
-            screen.refresh();
+            if(size > 0) {
+                PlaceScreen.selectedShape.setFontSize(size);
+                PlaceScreen screen = (PlaceScreen) findViewById(R.id.screen);
+                screen.refresh();
+            }
         }
     }
 }

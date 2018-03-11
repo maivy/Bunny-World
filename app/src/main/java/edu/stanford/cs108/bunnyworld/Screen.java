@@ -238,6 +238,8 @@ public class Screen extends View {
         allPages = AllPages.getInstance();
         Possessions allPossessions = Possessions.getInstance();
         possessions = allPossessions.getAllPossessions();
+        //remove all shapes from possessions
+        possessions.clear();
         inventoryPaint = new Paint();
         inventoryPaint.setColor(Color.GRAY);
         inventoryTextPaint = new Paint();
