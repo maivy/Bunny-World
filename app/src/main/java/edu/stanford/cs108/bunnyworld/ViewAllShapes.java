@@ -31,7 +31,7 @@ public class ViewAllShapes extends AppCompatActivity {
     }
 
     private void init () {
-        TextView currPage = findViewById(R.id.allShapesCurrPage);
+        final TextView currPage = findViewById(R.id.allShapesCurrPage);
         currPage.setText(currPageName);
 
         HashMap<String, Shape> allPageShapes = AllShapes.getInstance().getAllShapes();
@@ -45,7 +45,6 @@ public class ViewAllShapes extends AppCompatActivity {
                 allShapeNames.add(key);
             }
         }
-
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, allShapeNames);
         currPagesView.setAdapter(adapter);
         currPagesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -60,5 +59,13 @@ public class ViewAllShapes extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    //
+    public void returnToPage(View view) {
+        Intent intent = new Intent(this, NewPage.class);
+        intent.putExtra("NEW_PAGE", false);
+        intent.putExtra("pageName", currPageName);
+        startActivity(intent);
     }
 }

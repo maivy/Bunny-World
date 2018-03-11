@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:layout_margin="5sp"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.stanford.cs108.bunnyworld.EditShapeOptions">
 
+   <LinearLayout
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <TextView
+           android:textStyle="bold"
+           android:text="Current Shape : "
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" />
+       <TextView
+           android:id="@+id/currPageEditOptions"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" />
+   </LinearLayout>
     <Button
         android:text="Edit Shape"
         android:onClick="editTheShape"
@@ -21,6 +35,11 @@
     <Button
         android:onClick="deleteShape"
         android:text="Delete Shape"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:onClick="returnToAllShapes"
+        android:text="RETURN TO PAGE'S SHAPES "
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

@@ -284,7 +284,7 @@ public class NewShape extends AppCompatActivity {
 
         EditText textSizeInput = findViewById(R.id.textSize);
         String textSizeString = textSizeInput.getText().toString();
-        
+
         //Width
         float width = 0f;
         if (!widthString.isEmpty()) width = Float.parseFloat(widthString);
