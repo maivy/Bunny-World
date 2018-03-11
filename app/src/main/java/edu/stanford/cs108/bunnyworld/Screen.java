@@ -248,7 +248,7 @@ public class Screen extends View {
     public void drawShapes(Canvas canvas) {
         HashSet<Shape> shapes = new HashSet<>(this.shapes.values());
         for(Shape shape : shapes) {
-            if(shape.getAssociatedPage().equals(currPage) && !possessions.contains(shape)) {
+            if(shape.getAssociatedPage().equals(currPage) && !possessions.contains(shape) && !shape.isHidden()) {
                 shape.draw(canvas, dragging);
             }
         }
