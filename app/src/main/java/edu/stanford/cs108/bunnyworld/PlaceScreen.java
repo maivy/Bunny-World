@@ -1,5 +1,6 @@
 package edu.stanford.cs108.bunnyworld;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,12 +33,11 @@ public class PlaceScreen extends View {
     boolean resizingBottom = false;
     boolean resizingSide = false;
     Shape resizeShape;
-    private Shape selectedShape;
+    public static Shape selectedShape;
     private String currPage;
     int viewHeight;
     int viewWidth;
     float inventoryHeight;
-    float inventoryMin;
     float x;
     float y;
     float prevX;
@@ -64,14 +65,11 @@ public class PlaceScreen extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         viewHeight = h;
         viewWidth = w;
-        inventoryHeight = viewHeight * 0.75f;
-        inventoryMin = inventoryHeight + 60;
+        inventoryHeight = viewHeight;
     }
 
-    private void drawInventory(Canvas canvas) {
-        RectF rect = new RectF(0f, inventoryHeight, viewWidth, viewHeight);
-        canvas.drawRect(rect, inventoryPaint);
-        canvas.drawText("Inventory", 0, inventoryHeight + 45, inventoryTextPaint);
+    public void refresh() {
+        invalidate();
     }
 
     public void drawShapes(Canvas canvas) {
@@ -79,7 +77,8 @@ public class PlaceScreen extends View {
         for(Shape shape : shapes) {
             if(shape.getAssociatedPage().equals(currPage)) {
                 shape.draw(canvas, false);
-                if(shape == selectedShape) {
+                //cannot resize text this way
+                if(shape == selectedShape && shape.getText().equals("")) {
                     addCircles(shape, canvas);
                 }
             }
@@ -105,7 +104,6 @@ public class PlaceScreen extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         drawShapes(canvas);
-        drawInventory(canvas);
     }
 
     public Shape getShape() {
@@ -160,6 +158,12 @@ public class PlaceScreen extends View {
                 prevY = y;
                 Shape shape = getShape();
                 selectedShape = shape;
+                EditText fontSize = (EditText) ((Activity) getContext()).findViewById(R.id.fontSize);
+                if(selectedShape != null && !selectedShape.getText().equals("")){
+                    fontSize.setText("" + selectedShape.getFontSize());
+                } else {
+                    fontSize.setText("");
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
                 x = event.getX();
@@ -167,10 +171,11 @@ public class PlaceScreen extends View {
                 if(selectedShape != null) {
                     if (selectedShape.getText().equals("")) {
                         selectedShape.setX(x - selectedShape.getWidth() * .5f);
-                        selectedShape.setY(y - selectedShape.getHeight() * .5f);
+                        //min to prevent people from putting stuff in inventory
+                        selectedShape.setY(Math.min(y - selectedShape.getHeight() * .5f, inventoryHeight - selectedShape.getHeight()));
                     } else {
                         selectedShape.setX(x - selectedShape.getTextPaint().measureText(selectedShape.getText()) * .5f);
-                        selectedShape.setY(y);
+                        selectedShape.setY(Math.min(y, inventoryHeight - selectedShape.getTextPaint().descent()));
                     }
                 }
                 if(resizingBottom) {

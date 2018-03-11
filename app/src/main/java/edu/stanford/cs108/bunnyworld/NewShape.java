@@ -391,6 +391,7 @@ public class NewShape extends AppCompatActivity {
 
                 Intent intent = new Intent(this, PlaceShape.class);
                 intent.putExtra("pageName", currPageName);
+                intent.putExtra("editing", false);
                 startActivity(intent);
             }
         }
