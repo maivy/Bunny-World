@@ -178,8 +178,6 @@ public class BunnyWorldDB {
         String script = cursor.getString(SHAPE_SCRIPT_COL);
         String imageText = cursor.getString(SHAPE_IMAGE_COL);
         BitmapDrawable image = getBitmapDrawable(imageText);
-//        if (image == null) System.out.println("IMAGE NOT FOUND");
-//        else System.out.println(image);
         String text = cursor.getString(SHAPE_TEXT_COL);
         int fontSize = cursor.getInt(SHAPE_FONT_SIZE);
         boolean isHidden = cursor.getInt(SHAPE_IS_HIDDEN) > 0;
@@ -188,9 +186,6 @@ public class BunnyWorldDB {
         float y = cursor.getFloat(SHAPE_Y);
         float width = cursor.getFloat(SHAPE_WIDTH);
         float height = cursor.getFloat(SHAPE_HEIGHT);
-//        Shape shape = new Shape(pageName,name,x,y,width,height,isHidden,isMovable,imageText,image,text,script,fontSize);
-//        System.out.println("Image: " + shape.getImage());
-//        return shape;
         return new Shape(pageName,name,x,y,width,height,isHidden,isMovable,imageText,image,text,script,fontSize);
     }
 
@@ -201,10 +196,7 @@ public class BunnyWorldDB {
         Cursor cursor = bWDB.rawQuery(shapeQuery,null);
         while(cursor.moveToNext()) {
             String shapeName = cursor.getString(SHAPE_NAME_COL);
-            Shape shape = getShapeFromCursor(cursor,shapeName);
-//            System.out.println("Image: " + shape.getImage());
-            shapes.put(shapeName,shape);
-//            shapes.put(shapeName,getShapeFromCursor(cursor,shapeName));
+            shapes.put(shapeName,getShapeFromCursor(cursor,shapeName));
         }
         cursor.close();
 
@@ -242,7 +234,6 @@ public class BunnyWorldDB {
         return currShapeNumber;
     }
 
-
     /**
      * Sets all pages and shapes singletons to data
      * of specified game. Nothing happens if game does
@@ -253,6 +244,7 @@ public class BunnyWorldDB {
         long gameId = getId("games", gameName);
         if (gameId == -1) return;
         AllPages allPages = AllPages.getInstance();
+        allPages.nameGame(gameName);
         allPages.setCurrPageNumber(getCurrPageNumber(gameId));
         allPages.setAllCurrPages(getGamePages(gameId));
         AllShapes allShapes = AllShapes.getInstance();

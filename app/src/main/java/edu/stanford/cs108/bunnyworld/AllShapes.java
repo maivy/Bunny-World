@@ -34,4 +34,9 @@ class AllShapes {
     public void setCurrShapes(HashMap<String, Shape> currShapes) {
         this.currShapes = currShapes;
     }
+
+    public void clearAllShapes() {
+        currShapes.clear();
+        currShapeNumber = 1;
+    }
 }

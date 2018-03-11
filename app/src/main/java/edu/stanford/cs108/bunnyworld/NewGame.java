@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class NewGame extends AppCompatActivity {
 
     @Override
@@ -24,7 +26,11 @@ public class NewGame extends AppCompatActivity {
     }
 
     public void saveGame(View view) {
-        //TODO: save game on android
+        BunnyWorldDB bunnyWorldDB = BunnyWorldDB.getInstance();
+        ArrayList<String> gameNames = bunnyWorldDB.getGameNames();
+        String gameName = AllPages.getInstance().getGameName();
+        if (!gameNames.contains(gameName)) bunnyWorldDB.addCurrentGame(gameName);
+        else bunnyWorldDB.updateGame(gameName);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

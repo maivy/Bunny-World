@@ -17,7 +17,7 @@ class AllPages {
         gameName = "";
     }
 
-    public void nameGame (String newName) {gameName = newName;}
+    public void nameGame (String newName) { gameName = newName; }
     public String getGameName () {return gameName;}
     public HashMap<String, Page> getAllPages() {
         return allCurrPages;
@@ -36,5 +36,10 @@ class AllPages {
     }
     public void setAllCurrPages(HashMap<String, Page> allCurrPages) {
         this.allCurrPages = allCurrPages;
+    }
+
+    public void clearAllPages() {
+        allCurrPages.clear();
+        currPageNumber = 1;
     }
 }
