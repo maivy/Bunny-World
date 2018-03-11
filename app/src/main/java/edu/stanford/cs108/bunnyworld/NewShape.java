@@ -341,7 +341,7 @@ public class NewShape extends AppCompatActivity {
 
         if (!script.equals("")) script += " ; ";
 
-        Shape currShape = new Shape(currPageName, shapeName, 200, 200, width, height, hidden, moveable, imageName, imageDrawable, textString, script, textSize);
+        Shape currShape = new Shape(currPageName, shapeName, 0, 0, width, height, hidden, moveable, imageName, imageDrawable, textString, script, textSize);
         return currShape;
     }
 
@@ -384,14 +384,9 @@ public class NewShape extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), shapeNameString +" CREATED", Toast.LENGTH_SHORT).show();
 
                 // Goes back to the page, does not create new page
-//                Intent intent = new Intent(this, NewPage.class);
-//                intent.putExtra("NEW_PAGE", false);
-//                intent.putExtra("pageName", currPageName);
-//                startActivity(intent);
-
-                Intent intent = new Intent(this, PlaceShape.class);
+                Intent intent = new Intent(this, NewPage.class);
+                intent.putExtra("NEW_PAGE", false);
                 intent.putExtra("pageName", currPageName);
-                intent.putExtra("editing", false);
                 startActivity(intent);
             }
         }

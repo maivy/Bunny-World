@@ -28,9 +28,9 @@
         <activity android:name=".PlayGame" />
         <activity android:name=".NameNewGame" />
         <activity android:name=".GameToEdit" />
-        <activity android:name=".GameToPlay" />
-        <activity android:name=".DatabaseDebug" />
-        <activity android:name=".PlaceShape"></activity>
+        <activity android:name=".GameToPlay"></activity>
+        <activity android:name=".DatabaseDebug"></activity>
+
     </application>
 
 </manifest>
