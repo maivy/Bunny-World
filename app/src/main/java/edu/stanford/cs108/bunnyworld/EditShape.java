@@ -107,6 +107,15 @@ public class EditShape extends AppCompatActivity {
         textSizeInput.setText(Integer.toString(currShape.getFontSize()));
     }
 
+    public void moveShape(View view) {
+        Intent intent = new Intent(this, PlaceShape.class);
+        Shape currShape = AllShapes.getInstance().getAllShapes().get(currShapeName);
+        intent.putExtra("pageName", currShape.getAssociatedPage());
+        intent.putExtra("editing", true);
+        intent.putExtra("shape", currShapeName);
+        startActivity(intent);
+    }
+
     public void updateTheShape(View view) {
         HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
         Shape currShape = currShapes.get(currShapeName);
