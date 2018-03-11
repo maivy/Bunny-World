@@ -15,6 +15,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
 public class NewPage extends AppCompatActivity {
     private static final String MAIN_PAGE = "page1";
@@ -105,14 +107,19 @@ public class NewPage extends AppCompatActivity {
     public void deleteCurrPage(View view) {
         String pageName = currPage.getPageName();
 
+
         //deletes the page from AllPages
         AllPages.getInstance().getAllPages().remove(pageName);
 
         final HashMap<String, Shape> allShapes = AllShapes.getInstance().getAllShapes();
-        for (String key : allShapes.keySet()) {
-           Shape currShape = allShapes.get(key);
-           String currShapePage = currShape.getAssociatedPage();
-           if(currShapePage.equals(pageName)) allShapes.remove(currShape.getName());
+        Iterator<String> it = allShapes.keySet().iterator();
+
+        while (it.hasNext()) {
+            String shapeName = it.next();
+            if (allShapes.get(shapeName).getAssociatedPage().equals(pageName)) {
+                it.remove();
+            }
+
         }
         Intent intent = new Intent(this, NewGame.class);
         startActivity(intent);
