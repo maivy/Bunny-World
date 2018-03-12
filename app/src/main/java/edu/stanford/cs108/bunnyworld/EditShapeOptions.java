@@ -46,6 +46,7 @@ public class EditShapeOptions extends AppCompatActivity {
     public void deleteOrAddToScript(View view) {
         Intent intent = new Intent(getApplicationContext(), EditScript.class);
         intent.putExtra("shape", shapeName);
+        intent.putExtra("editing", true);
         startActivity(intent);
     }
 

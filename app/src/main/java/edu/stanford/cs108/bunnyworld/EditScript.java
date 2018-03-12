@@ -346,9 +346,18 @@ public class EditScript extends AppCompatActivity {
      * @param view
      */
     public void doneWithScript(View view) {
-        Intent intent = new Intent(this, EditShapeOptions.class);
-        intent.putExtra("shape", currShape.getName());
-        startActivity(intent);
+        if(!getIntent().getBooleanExtra("editing", false)) {
+            Intent intent = new Intent(this, PlaceShape.class);
+            intent.putExtra("pageName", currShape.getAssociatedPage());
+            intent.putExtra("shape", currShape.getName());
+            intent.putExtra("editing", false);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(this, EditShapeOptions.class);
+            intent.putExtra("shape", currShape.getName());
+            intent.putExtra("pageName", currShape.getAssociatedPage());
+            startActivity(intent);
+        }
     }
 
 
