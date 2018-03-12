@@ -27,6 +27,8 @@ public class NewShape extends AppCompatActivity {
     private static final String ON_ENTER = "on enter";
     private static final String ON_DROP = "on drop";
     private static final String NO_IMG = "No Image";
+    private static final String CREATE = "create";
+    private static final String COPY = "copy";
 
     // made the first entry in the list Select One So That's what Appears at the start
     private final ArrayList<String> initialTriggers = new ArrayList<>(Arrays.asList("Select One", ON_CLICK, ON_ENTER, ON_DROP));
@@ -49,6 +51,11 @@ public class NewShape extends AppCompatActivity {
 
 
     private void init (Intent intent) {
+
+        if(AllShapes.getInstance().getCopiedShape() == null) {
+            Button pasteButton = findViewById(R.id.pasteShapeButton);
+            pasteButton.setVisibility(View.INVISIBLE);
+        }
         //displays the name of the current page
         TextView currentPage = findViewById(R.id.currPage);
         currPageName = intent.getStringExtra("Page");
@@ -350,14 +357,36 @@ public class NewShape extends AppCompatActivity {
      *     Creates a shape assuming the user has given us all the necessary information
      */
     public void createNewShape(View view) {
+        if (checkUserInputs(CREATE)) {
+            EditText shapeName = findViewById(R.id.currentShapeName);
+            String shapeNameString = shapeName.getText().toString().toLowerCase();
+            Shape newShape = buildNewShape(shapeNameString);
+            AllShapes.getInstance().getAllShapes().put(shapeNameString, newShape);
+
+            // adds one to the total number of shapes ever created so we know what to name future Shapes
+            AllShapes.getInstance().updateCurrShapeNumber();
+            Toast.makeText(getApplicationContext(), shapeNameString +" CREATED", Toast.LENGTH_SHORT).show();
+
+            // Goes back to the page, does not create new page
+            Intent intent = new Intent(this, NewPage.class);
+            intent.putExtra("NEW_PAGE", false);
+            intent.putExtra("pageName", currPageName);
+            startActivity(intent);
+        }
+    }
+
+
+    private boolean checkUserInputs (String mode) {
         EditText shapeName = findViewById(R.id.currentShapeName);
         String shapeNameString = shapeName.getText().toString().toLowerCase();
 
         // If a Shape with that name doesn't already exist
-        if (AllShapes.getInstance().getAllShapes().containsKey(shapeNameString)) {
+        if (AllShapes.getInstance().getAllShapes().containsKey(shapeNameString) && mode.equals(CREATE)) {
             Toast.makeText(getApplicationContext(), shapeNameString +" ALREADY EXISTS", Toast.LENGTH_SHORT).show();
-        } else if (shapeNameString.isEmpty()) {
+            return false;
+        } else if (shapeNameString.isEmpty() && mode.equals(CREATE)) {
             Toast.makeText(getApplicationContext(), "MUST PROVIDE SHAPE NAME", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             EditText shapeWidth = findViewById(R.id.shapeWidth);
             String widthString = shapeWidth.getText().toString();
@@ -373,24 +402,15 @@ public class NewShape extends AppCompatActivity {
 
             if (textString.isEmpty() && (heightString.isEmpty() || widthString.isEmpty())) {
                 Toast.makeText(getApplicationContext(), "MUST PROVIDE DIMENSIONS FOR IMAGE", Toast.LENGTH_SHORT).show();
+                return false;
             } else if (!textString.isEmpty() && textSizeString.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "MUST GIVE FONT SIZE FOR TEXT", Toast.LENGTH_SHORT).show();
-            } else {
-                Shape newShape = buildNewShape(shapeNameString);
-                AllShapes.getInstance().getAllShapes().put(shapeNameString, newShape);
-
-                // adds one to the total number of shapes ever created so we know what to name future Shapes
-                AllShapes.getInstance().updateCurrShapeNumber();
-                Toast.makeText(getApplicationContext(), shapeNameString +" CREATED", Toast.LENGTH_SHORT).show();
-
-                // Goes back to the page, does not create new page
-                Intent intent = new Intent(this, NewPage.class);
-                intent.putExtra("NEW_PAGE", false);
-                intent.putExtra("pageName", currPageName);
-                startActivity(intent);
+                return false;
             }
+            return true;
         }
     }
+
 
 
     // Gets the default dimensions of the image selected
@@ -409,4 +429,66 @@ public class NewShape extends AppCompatActivity {
             shapeWidth.setText(Float.toString(width));
         }
     }
+
+
+
+    public void copyShape(View view) {
+        if (checkUserInputs(COPY)) {
+            Shape newShape = buildNewShape(COPY);
+            AllShapes.getInstance().setCopiedShape(newShape);
+            Toast.makeText(getApplicationContext(), "SHAPE COPIED", Toast.LENGTH_SHORT).show();
+            Button pasteButton = findViewById(R.id.pasteShapeButton);
+            pasteButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void pasteSave(View view) {
+        Shape copiedShape = AllShapes.getInstance().getCopiedShape();
+        if (copiedShape != null) {
+            fillInShape(copiedShape);
+        }
+    }
+
+
+    private void fillInShape(Shape currShape) {
+        //Width
+        EditText shapeWidth = findViewById(R.id.shapeWidth);
+        shapeWidth.setText(Float.toString(currShape.getWidth()));
+
+        //Height
+        EditText shapeHeight = findViewById(R.id.shapeHeight);
+        shapeHeight.setText(Float.toString(currShape.getHeight()));
+
+        //Hidden
+        if (currShape.isHidden()) {
+            RadioButton hideYes = findViewById(R.id.hiddenYes);
+            hideYes.setChecked(true);
+        } else {
+            RadioButton hideNo = findViewById(R.id.hiddenNo);
+            hideNo.setChecked(true);
+        }
+
+        // Moveable
+        if(currShape.isMovable()) {
+            RadioButton yesMove = findViewById(R.id.moveableYes);
+            yesMove.setChecked(true);
+        } else {
+            RadioButton noMove = findViewById(R.id.moveableNo);
+            noMove.setChecked(true);
+        }
+
+        //Image
+        String imgName = currShape.imageName;
+        Spinner imageSpinner = findViewById(R.id.imageNameSpin);
+        imageSpinner.setSelection(allImages.indexOf(imgName));
+
+        // text
+        EditText textInput = findViewById(R.id.textString);
+        textInput.setText(currShape.getText());
+
+        // text Size
+        EditText textSizeInput = findViewById(R.id.textSize);
+        textSizeInput.setText(Integer.toString(currShape.getFontSize()));
+    }
+
 }
