@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioButton;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -54,7 +52,7 @@ public class EditScript extends AppCompatActivity {
         TextView currentPage = findViewById(R.id.currPageEditScript);
         currentPage.setText(currShape.getAssociatedPage());
 
-        // displays the name of the current shape in an edit text so the user can edit it if they want
+        // displays the name of the current shape
         TextView currShapeName = findViewById(R.id.currShapeEditScript);
         currShapeName.setText(currShape.getName());
         setUpFirstSpinner();
@@ -63,6 +61,37 @@ public class EditScript extends AppCompatActivity {
         currScript.setText(currShape.getScript());
     }
 
+    public void addClause(View view) {
+        TextView clause = (TextView) findViewById(R.id.clause);
+        if(!clause.getText().toString().equals("Clause: ")) {
+            TextView command = (TextView) findViewById(R.id.command);
+            Spinner spin2 = findViewById(R.id.scriptSecondEdit);
+            Spinner spin3 = findViewById(R.id.scriptThirdEdit);
+            Spinner spin4 = findViewById(R.id.scriptFourthEdit);
+            String two = spin2.getSelectedItem().toString();
+            String three = spin3.getSelectedItem().toString();
+            if(command.getText().equals("Current Command: ")) {
+                Spinner spin1 = findViewById(R.id.scriptFirstEdit);
+                String one = spin1.getSelectedItem().toString();
+                command.setText(command.getText() + one + " " + two + " " + three);
+                if (spin4.getSelectedItem() != null) {
+                    String four = spin4.getSelectedItem().toString();
+                    command.setText(command.getText() + " " + four);
+                }
+            } else {
+                command.setText(command.getText() + " " + two + " " + three);
+                if (spin4.getSelectedItem() != null) {
+                    String four = spin4.getSelectedItem().toString();
+                    command.setText(command.getText() + " " + four);
+                }
+            }
+        }
+    }
+
+    public void clearCommand(View view) {
+        TextView command = (TextView) findViewById(R.id.command);
+        command.setText("Current Command: ");
+    }
 
     // Sets up the first spinner and its listener
     private void setUpFirstSpinner () {
@@ -74,7 +103,15 @@ public class EditScript extends AppCompatActivity {
         scriptPartOne.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                clearCommand(findViewById(R.id.clear));
                 setUpSpinnerTwo();
+                Spinner firstSpin = findViewById(R.id.scriptFirstEdit);
+                if(firstSpin.getSelectedItem().toString().equals("Select One")) {
+                    Button addClause = (Button) findViewById(R.id.addClause);
+                    addClause.setVisibility(View.INVISIBLE);
+                    TextView clause = (TextView) findViewById(R.id.clause);
+                    clause.setText("Clause: ");
+                }
             }
 
             @Override
@@ -104,7 +141,7 @@ public class EditScript extends AppCompatActivity {
 
 
     // Makes Spinner Two visible and adds an OnItemSelectedListener to it
-    private void setUpSpinnerTwoListener (Spinner secondSpin) {
+    private void setUpSpinnerTwoListener (final Spinner secondSpin) {
         secondSpin.setVisibility(View.VISIBLE);
 
         // sets up the listener for the new spinner
@@ -112,6 +149,12 @@ public class EditScript extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 setUpSpinnerThree();
+                if(secondSpin.getSelectedItem().toString().equals("Select One")) {
+                    Button addClause = (Button) findViewById(R.id.addClause);
+                    addClause.setVisibility(View.INVISIBLE);
+                    TextView clause = (TextView) findViewById(R.id.clause);
+                    clause.setText("Clause: ");
+                }
             }
 
             @Override
@@ -133,27 +176,47 @@ public class EditScript extends AppCompatActivity {
 
         if (selectedOne.equals(ON_DROP)) {
             setSpinnerListToAllActions(thirdSpin);
-            setUpSpinnerThreeListerner(thirdSpin);
+            setUpSpinnerThreeListener(thirdSpin);
         } else if (selectedTwo.equals(PLAY)) {
             setSpinnerListToAllSounds(thirdSpin);
-            setUpSpinnerThreeListerner(thirdSpin);
+            setUpSpinnerThreeListener(thirdSpin);
         } else if (selectedTwo.equals(GOTO)) {
             setSpinnerListToAllPages(thirdSpin);
-            setUpSpinnerThreeListerner(thirdSpin);
+            setUpSpinnerThreeListener(thirdSpin);
         } else if (selectedTwo.equals(HIDE) || selectedTwo.equals(SHOW)) {
             setSpinnerListToAllShapes(thirdSpin);
-            setUpSpinnerThreeListerner(thirdSpin);
+            setUpSpinnerThreeListener(thirdSpin);
         }
     }
 
 
     // Makes Spinner Three visible and adds an OnItemSelectedListener to it
-    private void setUpSpinnerThreeListerner(Spinner thirdSpin) {
-        thirdSpin.setVisibility(View.VISIBLE);
+    private void setUpSpinnerThreeListener(final Spinner thirdSpin) {
         thirdSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                setUpSpinnerFour();
+                Spinner firstSpin = findViewById(R.id.scriptFirstEdit);
+                Spinner secondSpin = findViewById(R.id.scriptSecondEdit);
+                String task2 = secondSpin.getSelectedItem().toString();
+                String selectedOne = firstSpin.getSelectedItem().toString();
+                thirdSpin.setVisibility(View.VISIBLE);
+                Button addClause = (Button) findViewById(R.id.addClause);
+                if(selectedOne.equals(ON_DROP)) {
+                    setUpSpinnerFour();
+                    if(thirdSpin.getSelectedItem().toString().equals("Select One")) {
+                        addClause.setVisibility(View.INVISIBLE);
+                        TextView clause = (TextView) findViewById(R.id.clause);
+                        clause.setText("Clause: ");
+                    }
+                } else if (!thirdSpin.getSelectedItem().toString().equals("Select One") && !selectedOne.equals("Select One") && !task2.equals("Select One")){
+                    addClause.setVisibility(View.VISIBLE);
+                    TextView clause = (TextView) findViewById(R.id.clause);
+                    clause.setText("Clause: " + task2 + " " + thirdSpin.getSelectedItem().toString());
+                } else {
+                    addClause.setVisibility(View.INVISIBLE);
+                    TextView clause = (TextView) findViewById(R.id.clause);
+                    clause.setText("Clause: ");
+                }
             }
 
             @Override
@@ -173,13 +236,45 @@ public class EditScript extends AppCompatActivity {
         if (selected.equals(PLAY)) {
             setSpinnerListToAllSounds(fourthSpin);
             fourthSpin.setVisibility(View.VISIBLE);
+            setUpSpinnerFourListener(fourthSpin);
         } else if (selected.equals(GOTO)) {
             setSpinnerListToAllPages(fourthSpin);
             fourthSpin.setVisibility(View.VISIBLE);
+            setUpSpinnerFourListener(fourthSpin);
         } else if (selected.equals(HIDE) || selected.equals(SHOW)) {
             setSpinnerListToAllShapes(fourthSpin);
             fourthSpin.setVisibility(View.VISIBLE);
+            setUpSpinnerFourListener(fourthSpin);
         }
+    }
+
+    private void setUpSpinnerFourListener(final Spinner fourthSpin) {
+        fourthSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Spinner firstSpin = findViewById(R.id.scriptFirstEdit);
+                String task1 = firstSpin.getSelectedItem().toString();
+                Spinner secondSpin = findViewById(R.id.scriptSecondEdit);
+                String task2 = secondSpin.getSelectedItem().toString();
+                Spinner thirdSpin = findViewById(R.id.scriptThirdEdit);
+                String task3 = thirdSpin.getSelectedItem().toString();
+                Button addClause = (Button) findViewById(R.id.addClause);
+                if(!task1.equals("Select One") && !task2.equals("Select One") && !task3.equals("Select One") && !fourthSpin.getSelectedItem().toString().equals("Select One")) {
+                    addClause.setVisibility(View.VISIBLE);
+                    TextView clause = (TextView) findViewById(R.id.clause);
+                    clause.setText("Clause: " + task2 + " " + task3 + " " + fourthSpin.getSelectedItem().toString());
+                } else {
+                    addClause.setVisibility(View.INVISIBLE);
+                    TextView clause = (TextView) findViewById(R.id.clause);
+                    clause.setText("Clause: ");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
     }
 
 
@@ -258,33 +353,19 @@ public class EditScript extends AppCompatActivity {
 
 
     public void addToScript(View view) {
-        //Script
         Spinner script1 = findViewById(R.id.scriptFirstEdit);
         Spinner script2 = findViewById(R.id.scriptSecondEdit);
         Spinner script3 = findViewById(R.id.scriptThirdEdit);
         Spinner script4 = findViewById(R.id.scriptFourthEdit);
-        String script = "";
+        TextView command = (TextView) findViewById(R.id.command);
+        String script = command.getText().toString();
 
-        // Makes sure to only make a script when something is selected
-        if (!script1.getSelectedItem().equals("Select One")) {
-            script += script1.getSelectedItem().toString();
-            if (script2.getSelectedItem() != null && !script2.getSelectedItem().equals("Select One")) {
-                script += " " + script2.getSelectedItem().toString();
-                if (script3.getVisibility() != View.INVISIBLE && script3.getSelectedItem() != null
-                        && !script3.getSelectedItem().equals("Select One")) {
-                    script += " " + script3.getSelectedItem().toString();
-                    if (script4.getVisibility() != View.INVISIBLE && script4.getSelectedItem() != null
-                            && !script4.getSelectedItem().equals("Select One"))
-                        script += " " + script4.getSelectedItem().toString();
-                }
-            }
-        }
-
-        if(!script.equals(""))  {
-            script += " ; ";
-            currShape.addToScript(script);
+        if(!script.equals("Current Command: ")){
+            int index = script.indexOf(':');
+            String result = script.substring(index + 2);
+            result += ";";
+            currShape.addToScript(result);
             currScript.setText(currShape.getScript());
-
         }
 
         script1.setSelection(0);
