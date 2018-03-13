@@ -317,6 +317,25 @@
         </Spinner>
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:onClick="copyShape"
+            android:layout_weight="1"
+            android:text="COPY SHAPE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/pasteShapeButton"
+            android:onClick="pasteSave"
+            android:layout_weight="1"
+            android:text="PASTE SAVED SHAPE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
     <Button
         android:onClick="createNewShape"
         android:id="@+id/createButton"
