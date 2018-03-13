@@ -62,10 +62,17 @@
                 android:text="Event Trigger: "
                 android:textStyle="bold" />
 
-                <Spinner
-                    android:id="@+id/scriptFirstEdit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></Spinner>
+            <Spinner
+                android:id="@+id/scriptFirstEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></Spinner>
+
+            <Spinner
+                android:id="@+id/optionalShapeDrop"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></Spinner>
+
         </LinearLayout>
 
         <TextView
@@ -130,9 +137,45 @@
         android:layout_height="wrap_content" />
     <Button
         android:onClick="deleteScript"
-        android:text="DELETE SCRIPT"
+        android:text="DELETE SCRIPT COMMAND"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/deleteHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event Trigger: "/>
+
+        <Spinner
+            android:id="@+id/deleteTrigger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Spinner>
+
+        <Spinner
+            android:id="@+id/deleteShape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+        </Spinner>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/specialDeleteButton"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Command"
+        android:onClick="deleteCommand"/>
     <Button
         android:onClick="doneWithScript"
         android:text="DONE "

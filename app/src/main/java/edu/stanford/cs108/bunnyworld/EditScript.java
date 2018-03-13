@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -73,6 +74,11 @@ public class EditScript extends AppCompatActivity {
             if(command.getText().equals("Current Command: ")) {
                 Spinner spin1 = findViewById(R.id.scriptFirstEdit);
                 String one = spin1.getSelectedItem().toString();
+                if(one.equals(ON_DROP)) {
+                    Spinner dropSpinner = findViewById(R.id.optionalShapeDrop);
+                    String shapeDrop = dropSpinner.getSelectedItem().toString();
+                    command.setText(command.getText() + " " + one + " " + shapeDrop + " " + two + " " + three);
+                }
                 command.setText(command.getText() + one + " " + two + " " + three);
                 if (spin4.getSelectedItem() != null) {
                     String four = spin4.getSelectedItem().toString();
@@ -103,14 +109,56 @@ public class EditScript extends AppCompatActivity {
         scriptPartOne.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Spinner dropSpinner = findViewById(R.id.optionalShapeDrop);
+                Spinner spinnerTwo = findViewById(R.id.scriptSecondEdit);
+                Spinner spinnerThree = findViewById(R.id.scriptThirdEdit);
                 clearCommand(findViewById(R.id.clear));
-                setUpSpinnerTwo();
                 Spinner firstSpin = findViewById(R.id.scriptFirstEdit);
                 if(firstSpin.getSelectedItem().toString().equals("Select One")) {
                     Button addClause = (Button) findViewById(R.id.addClause);
                     addClause.setVisibility(View.INVISIBLE);
                     TextView clause = (TextView) findViewById(R.id.clause);
                     clause.setText("Clause: ");
+                    dropSpinner.setVisibility(View.INVISIBLE);
+                    spinnerTwo.setVisibility(View.INVISIBLE);
+                    spinnerThree.setVisibility(View.INVISIBLE);
+
+                } else if(firstSpin.getSelectedItem().toString().equals(ON_DROP)){
+                    setSpinnerListToAllShapes(dropSpinner);
+                    dropSpinner.setVisibility(View.VISIBLE);
+                    setUpDropSpinner();
+                    spinnerTwo.setVisibility(View.INVISIBLE);
+                    spinnerThree.setVisibility(View.INVISIBLE);
+                    setUpSpinnerTwo();
+                } else {
+                    dropSpinner.setVisibility(View.INVISIBLE);
+                    setUpSpinnerTwo();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+    }
+
+    private void setUpDropSpinner() {
+        final Spinner dropSpinner = findViewById(R.id.optionalShapeDrop);
+        dropSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Spinner secondSpin = findViewById(R.id.scriptSecondEdit);
+                Spinner thirdSpin = findViewById(R.id.scriptThirdEdit);
+                if(dropSpinner.getSelectedItem().toString().equals("Select One")) {
+                    Button addClause = (Button) findViewById(R.id.addClause);
+                    addClause.setVisibility(View.INVISIBLE);
+                    TextView clause = (TextView) findViewById(R.id.clause);
+                    clause.setText("Clause: ");
+                    secondSpin.setVisibility(View.INVISIBLE);
+                    thirdSpin.setVisibility(View.INVISIBLE);
+                } else {
+                    secondSpin.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -124,19 +172,12 @@ public class EditScript extends AppCompatActivity {
 
     // Based on what was selected in spinner one it sets up spinner two
     private void setUpSpinnerTwo () {
-        Spinner firstSpin = findViewById(R.id.scriptFirstEdit);
         Spinner secondSpin = findViewById(R.id.scriptSecondEdit);
-        String selected = firstSpin.getSelectedItem().toString();
 
-        if (selected.equals(ON_DROP)) {
-            setSpinnerListToAllShapes(secondSpin);
-            setUpSpinnerTwoListener(secondSpin);
-        } else if (selected.equals(ON_ENTER) || selected.equals(ON_CLICK)){
-            setSpinnerListToAllActions(secondSpin);
-            setUpSpinnerTwoListener(secondSpin);
-            findViewById(R.id.scriptFourthEdit).setVisibility(View.INVISIBLE);
-            findViewById(R.id.scriptThirdEdit).setVisibility(View.INVISIBLE);
-        }
+        setSpinnerListToAllActions(secondSpin);
+        setUpSpinnerTwoListener(secondSpin);
+        findViewById(R.id.scriptFourthEdit).setVisibility(View.INVISIBLE);
+        findViewById(R.id.scriptThirdEdit).setVisibility(View.INVISIBLE);
     }
 
 
@@ -149,11 +190,14 @@ public class EditScript extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 setUpSpinnerThree();
+                Spinner thirdSpin = findViewById(R.id.scriptThirdEdit);
                 if(secondSpin.getSelectedItem().toString().equals("Select One")) {
                     Button addClause = (Button) findViewById(R.id.addClause);
                     addClause.setVisibility(View.INVISIBLE);
                     TextView clause = (TextView) findViewById(R.id.clause);
                     clause.setText("Clause: ");
+                } else {
+                    thirdSpin.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -171,13 +215,9 @@ public class EditScript extends AppCompatActivity {
         Spinner secondSpin = findViewById(R.id.scriptSecondEdit);
         Spinner thirdSpin = findViewById(R.id.scriptThirdEdit);
 
-        String selectedOne = firstSpin.getSelectedItem().toString();
         String selectedTwo = secondSpin.getSelectedItem().toString();
 
-        if (selectedOne.equals(ON_DROP)) {
-            setSpinnerListToAllActions(thirdSpin);
-            setUpSpinnerThreeListener(thirdSpin);
-        } else if (selectedTwo.equals(PLAY)) {
+        if (selectedTwo.equals(PLAY)) {
             setSpinnerListToAllSounds(thirdSpin);
             setUpSpinnerThreeListener(thirdSpin);
         } else if (selectedTwo.equals(GOTO)) {
@@ -189,80 +229,29 @@ public class EditScript extends AppCompatActivity {
         }
     }
 
-
-    // Makes Spinner Three visible and adds an OnItemSelectedListener to it
-    private void setUpSpinnerThreeListener(final Spinner thirdSpin) {
-        thirdSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Spinner firstSpin = findViewById(R.id.scriptFirstEdit);
-                Spinner secondSpin = findViewById(R.id.scriptSecondEdit);
-                String task2 = secondSpin.getSelectedItem().toString();
-                String selectedOne = firstSpin.getSelectedItem().toString();
-                thirdSpin.setVisibility(View.VISIBLE);
-                Button addClause = (Button) findViewById(R.id.addClause);
-                if(selectedOne.equals(ON_DROP)) {
-                    setUpSpinnerFour();
-                    if(thirdSpin.getSelectedItem().toString().equals("Select One")) {
-                        addClause.setVisibility(View.INVISIBLE);
-                        TextView clause = (TextView) findViewById(R.id.clause);
-                        clause.setText("Clause: ");
-                    }
-                } else if (!thirdSpin.getSelectedItem().toString().equals("Select One") && !selectedOne.equals("Select One") && !task2.equals("Select One")){
-                    addClause.setVisibility(View.VISIBLE);
-                    TextView clause = (TextView) findViewById(R.id.clause);
-                    clause.setText("Clause: " + task2 + " " + thirdSpin.getSelectedItem().toString());
-                } else {
-                    addClause.setVisibility(View.INVISIBLE);
-                    TextView clause = (TextView) findViewById(R.id.clause);
-                    clause.setText("Clause: ");
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                return;
-            }
-        });
-    }
-
-
-    // Based on what was selected in spinner three it sets up spinner four if necessary
-    private void setUpSpinnerFour () {
-        Spinner thirdSpin = findViewById(R.id.scriptThirdEdit);
-        Spinner fourthSpin = findViewById(R.id.scriptFourthEdit);
-        String selected = thirdSpin.getSelectedItem().toString();
-
-        if (selected.equals(PLAY)) {
-            setSpinnerListToAllSounds(fourthSpin);
-            fourthSpin.setVisibility(View.VISIBLE);
-            setUpSpinnerFourListener(fourthSpin);
-        } else if (selected.equals(GOTO)) {
-            setSpinnerListToAllPages(fourthSpin);
-            fourthSpin.setVisibility(View.VISIBLE);
-            setUpSpinnerFourListener(fourthSpin);
-        } else if (selected.equals(HIDE) || selected.equals(SHOW)) {
-            setSpinnerListToAllShapes(fourthSpin);
-            fourthSpin.setVisibility(View.VISIBLE);
-            setUpSpinnerFourListener(fourthSpin);
-        }
-    }
-
-    private void setUpSpinnerFourListener(final Spinner fourthSpin) {
+    private void setUpSpinnerThreeListener(final Spinner fourthSpin) {
         fourthSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Spinner firstSpin = findViewById(R.id.scriptFirstEdit);
                 String task1 = firstSpin.getSelectedItem().toString();
+                Spinner dropShape = findViewById(R.id.optionalShapeDrop);
                 Spinner secondSpin = findViewById(R.id.scriptSecondEdit);
                 String task2 = secondSpin.getSelectedItem().toString();
                 Spinner thirdSpin = findViewById(R.id.scriptThirdEdit);
                 String task3 = thirdSpin.getSelectedItem().toString();
                 Button addClause = (Button) findViewById(R.id.addClause);
-                if(!task1.equals("Select One") && !task2.equals("Select One") && !task3.equals("Select One") && !fourthSpin.getSelectedItem().toString().equals("Select One")) {
+                if(task1.equals(ON_DROP)){
+                    String shapeDrop = dropShape.getSelectedItem().toString();
+                    if(!shapeDrop.equals("Select One") && !task2.equals("Select One") && !task3.equals("Select One")){
+                        addClause.setVisibility(View.VISIBLE);
+                        TextView clause = (TextView) findViewById(R.id.clause);
+                        clause.setText("Clause: " + task2 + " " + task3);
+                    }
+                } else if(!task1.equals("Select One") && !task2.equals("Select One") && !task3.equals("Select One")) {
                     addClause.setVisibility(View.VISIBLE);
                     TextView clause = (TextView) findViewById(R.id.clause);
-                    clause.setText("Clause: " + task2 + " " + task3 + " " + fourthSpin.getSelectedItem().toString());
+                    clause.setText("Clause: " + task2 + " " + task3);
                 } else {
                     addClause.setVisibility(View.INVISIBLE);
                     TextView clause = (TextView) findViewById(R.id.clause);
@@ -337,8 +326,88 @@ public class EditScript extends AppCompatActivity {
      * @param view
      */
     public void deleteScript(View view) {
-        currScript.setText("");
-        currShape.setScript("");
+        LinearLayout holder = (LinearLayout) findViewById(R.id.deleteHolder);
+        if(holder.getVisibility() == View.GONE) {
+            holder.setVisibility(View.VISIBLE);
+            setUpDeleteSpinner();
+        } else {
+            holder.setVisibility(View.GONE);
+        }
+    }
+
+    private void setUpDeleteSpinner () {
+        Spinner deleteSpinner = findViewById(R.id.deleteTrigger);
+        ArrayAdapter<String> firstAdapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_spinner_item,initialTriggers);
+        firstAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        deleteSpinner.setAdapter(firstAdapter);
+        deleteSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Spinner delete = findViewById(R.id.deleteTrigger);
+                Button deleteButton = findViewById(R.id.specialDeleteButton);
+                Spinner shape = findViewById(R.id.deleteShape);
+                if(delete.getSelectedItem().toString().equals(ON_DROP)) {
+                    setUpDeleteShapeSpinner();
+                    shape.setVisibility(View.VISIBLE);
+                } else if(delete.getSelectedItem().toString().equals("Select One")) {
+                    deleteButton.setVisibility(View.GONE);
+                    shape.setVisibility(View.GONE);
+                } else {
+                    deleteButton.setVisibility(View.VISIBLE);
+                    shape.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+    }
+
+    private void setUpDeleteShapeSpinner () {
+        Spinner deleteShapeSpinner = findViewById(R.id.deleteShape);
+        setSpinnerListToAllShapes(deleteShapeSpinner);
+        setUpDeleteShapeSpinnerListener(deleteShapeSpinner);
+    }
+
+    private void setUpDeleteShapeSpinnerListener(Spinner deleteShapeSpinner) {
+        deleteShapeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Spinner deleteShapeSpinner = findViewById(R.id.deleteShape);
+                Button deleteButton = findViewById(R.id.specialDeleteButton);
+                if(deleteShapeSpinner.getSelectedItem().toString().equals("Select One")) {
+                    deleteButton.setVisibility(View.GONE);
+                } else {
+                    deleteButton.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+    }
+
+    public void deleteCommand(View view) {
+        Spinner deleteTrigger = findViewById(R.id.deleteTrigger);
+        Spinner deleteShape = findViewById(R.id.deleteShape);
+        String trigger = deleteTrigger.getSelectedItem().toString();
+        if(deleteShape.getSelectedItem() != null) {
+            trigger += " " + deleteShape.getSelectedItem().toString();
+        }
+        String shapeScript = currShape.getScript();
+        int index = shapeScript.indexOf(trigger);
+        if(index != -1) {
+            int end = shapeScript.indexOf(';', index);
+            String newScript = shapeScript.replace(shapeScript.substring(index, end + 1), "");
+            currShape.setScript(newScript);
+            currScript.setText(newScript);
+        }
     }
 
     /**
