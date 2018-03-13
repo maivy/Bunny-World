@@ -123,7 +123,7 @@ public class EditShape extends AppCompatActivity {
 
     }
 
-private boolean checkInputs (String mode) {
+        private boolean checkInputs (String mode) {
         HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
         EditText nameBox = findViewById(R.id.currentShapeNameEdit);
         String newName = nameBox.getText().toString().toLowerCase();
@@ -157,8 +157,6 @@ private boolean checkInputs (String mode) {
             return true;
         }
     }
-
-  
   
     public void moveShape(View view) {
         Intent intent = new Intent(this, PlaceShape.class);
@@ -167,41 +165,6 @@ private boolean checkInputs (String mode) {
         intent.putExtra("editing", true);
         intent.putExtra("shape", currShapeName);
         startActivity(intent);
-    }
-
-    public void updateTheShape(View view) {
-        HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
-        EditText nameBox = findViewById(R.id.currentShapeNameEdit);
-        String newName = nameBox.getText().toString().toLowerCase();
-
-        if (newName.isEmpty() && mode.equals(UPDATE)) {
-            Toast.makeText(getApplicationContext(), "MUST PROVIDE SHAPE NAME", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if ((!currShapeName.equals(newName) && currShapes.containsKey(newName)) && mode.equals(UPDATE)) {
-            Toast.makeText(getApplicationContext(), "SHAPE NAME ALREADY EXISTS", Toast.LENGTH_SHORT).show();
-            return false;
-        } else {
-            EditText shapeWidth = findViewById(R.id.shapeWidthEdit);
-            String widthString = shapeWidth.getText().toString();
-
-            EditText shapeHeight = findViewById(R.id.shapeHeightEdit);
-            String heightString = shapeHeight.getText().toString();
-
-            EditText textInput = findViewById(R.id.textStringEdit);
-            String textString = textInput.getText().toString();
-
-            EditText textSizeInput = findViewById(R.id.textSizeEdit);
-            String textSizeString = textSizeInput.getText().toString();
-
-            if (textString.isEmpty() && (heightString.isEmpty() || widthString.isEmpty())) {
-                Toast.makeText(getApplicationContext(), "MUST PROVIDE DIMENSIONS FOR IMAGE", Toast.LENGTH_SHORT).show();
-                return false;
-            } else if (!textString.isEmpty() && textSizeString.isEmpty()) {
-                Toast.makeText(getApplicationContext(), "MUST GIVE FONT SIZE FOR TEXT", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            return true;
-        }
     }
 
 
@@ -284,7 +247,6 @@ private boolean checkInputs (String mode) {
             startActivity(intent);
         }
     }
-
 
 
     public void setImgDefault(View view) {
