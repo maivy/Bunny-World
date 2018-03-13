@@ -2,7 +2,6 @@ package edu.stanford.cs108.bunnyworld;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SyncStats;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.BitmapDrawable;
