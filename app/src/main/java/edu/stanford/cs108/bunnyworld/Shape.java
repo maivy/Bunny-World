@@ -59,11 +59,9 @@ public class Shape {
     }
 
     public void draw(Canvas canvas, boolean withBorder) {
-        if(!isHidden) {
-            if (!text.equals("")) drawText(canvas, withBorder);
-            else if (image != null) drawImage(canvas, withBorder);
-            else drawRect(canvas, withBorder);
-        }
+        if (!text.equals("")) drawText(canvas, withBorder);
+        else if (image != null) drawImage(canvas, withBorder);
+        else drawRect(canvas, withBorder);
     }
 
     //text shapes ignore the width and height given by the user and is only as wide and high as the text

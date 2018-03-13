@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:layout_margin="10sp"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,7 +9,6 @@
     tools:context="edu.stanford.cs108.bunnyworld.EditShape">
 
     <LinearLayout
-        android:layout_weight="1"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -44,103 +44,160 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-
-
-    // All Shape Geometry
-    <TextView
-        android:layout_marginTop="5sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="Shape Geometry " />
-
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        // Image Name
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            <TextView
-                android:gravity="center_vertical"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Start X :"/>
-            <TextView
-                android:gravity="center_vertical"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Width :"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            <EditText
-                android:id="@+id/startXEdit"
-                android:layout_weight= "1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"/>
-            <EditText
-                android:id="@+id/shapeWidthEdit"
-                android:layout_weight= "1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_marginLeft="5sp"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            <TextView
-                android:gravity="center_vertical"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Start Y:"/>
-            <TextView
-                android:gravity="center_vertical"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Height:"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/startYEdit"
-                android:layout_weight= "1"
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Image Name : "/>
+            <Spinner
+                android:layout_gravity="center_vertical"
+                android:id="@+id/imageNameSpinEdit"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </Spinner>
+        </LinearLayout>
+
+        // All Image Geometry
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_weight="1"
+                android:layout_marginTop="5sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"/>
-            <EditText
-                android:id="@+id/shapeHeightEdit"
-                android:layout_weight= "1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"/>
+                android:textStyle="bold"
+                android:text="Image Geometry : " />
+            <Button
+                android:onClick="setImgDefault"
+                android:id="@+id/dimEdit"
+                android:visibility="invisible"
+                android:text="DEFAULT IMAGE DIMENSIONS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Width :"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <EditText
+                    android:id="@+id/shapeWidthEdit"
+                    android:layout_weight= "1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginLeft="5sp"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Height:"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/shapeHeightEdit"
+                    android:layout_weight= "1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        // Text and Text Size
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="Text : "/>
+                <TextView
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="Text Size: "/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/textStringEdit"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:id="@+id/textSizeEdit"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
+
     // Moveable and Hidden
     <LinearLayout
+        android:layout_weight="1"
         android:layout_marginTop="5sp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -154,7 +211,6 @@
             android:layout_height="match_parent">
             <TextView
                 android:textStyle="bold"
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -187,7 +243,6 @@
             android:layout_height="match_parent">
             <TextView
                 android:textStyle="bold"
-                android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -213,79 +268,26 @@
         </LinearLayout>
     </LinearLayout>
 
-    // Image Name
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:onClick="updateTheShape"
+            android:text="Finish Editing"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Image Name : "/>
-        <Spinner
-            android:layout_gravity="center_vertical"
-            android:id="@+id/imageNameSpinEdit"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Spinner>
+            android:layout_weight="0.5"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Edit Placement/Size"
+            android:onClick="moveShape"/>
+
+
     </LinearLayout>
 
-
-    // Text and Text Size
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            <TextView
-                android:gravity="center_vertical"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="Text : "/>
-            <TextView
-                android:gravity="center_vertical"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="Text Size: "/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/textStringEdit"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <EditText
-                android:inputType="numberDecimal"
-                android:id="@+id/textSizeEdit"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-    </LinearLayout>
-    </LinearLayout>
-    <Button
-        android:onClick="updateTheShape"
-        android:text="Update Shape"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 </LinearLayout>

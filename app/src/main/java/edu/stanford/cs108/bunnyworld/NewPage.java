@@ -15,6 +15,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
 public class NewPage extends AppCompatActivity {
     private static final String MAIN_PAGE = "page1";
@@ -86,14 +88,27 @@ public class NewPage extends AppCompatActivity {
         if ((newNameString.equals(MAIN_PAGE) || pages.containsKey(newNameString)) && !newNameString.equals(currPage.getPageName())) {
             Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
         } else {
-            String currName = currPage.getPageName();
-            pages.remove(currName);
+            String pageName = currPage.getPageName();
+
+            final HashMap<String, Shape> allShapes = AllShapes.getInstance().getAllShapes();
+            Iterator<String> it = allShapes.keySet().iterator();
+
+            while (it.hasNext()) {
+                String shapeName = it.next();
+                Shape currShape = allShapes.get(shapeName);
+                if (currShape.getAssociatedPage().equals(pageName)) {
+                    currShape.setAssociatedPage(newNameString);
+                }
+            }
+
+            pages.remove(pageName);
 
             currPage.setPageName(newNameString);
             pages.put(newNameString, currPage);
 
-            TextView pageName = findViewById(R.id.nameOfNewPage);
-            pageName.setText(newNameString);
+            // Clears the Edit Text where user can input new page name
+            TextView pageNameText = findViewById(R.id.nameOfNewPage);
+            pageNameText.setText(newNameString);
             newName.setText("");
         }
     }
@@ -109,10 +124,13 @@ public class NewPage extends AppCompatActivity {
         AllPages.getInstance().getAllPages().remove(pageName);
 
         final HashMap<String, Shape> allShapes = AllShapes.getInstance().getAllShapes();
-        for (String key : allShapes.keySet()) {
-           Shape currShape = allShapes.get(key);
-           String currShapePage = currShape.getAssociatedPage();
-           if(currShapePage.equals(pageName)) allShapes.remove(currShape.getName());
+        Iterator<String> it = allShapes.keySet().iterator();
+
+        while (it.hasNext()) {
+            String shapeName = it.next();
+            if (allShapes.get(shapeName).getAssociatedPage().equals(pageName)) {
+                it.remove();
+            }
         }
         Intent intent = new Intent(this, NewGame.class);
         startActivity(intent);

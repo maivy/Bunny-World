@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
 
 public class EditShapeOptions extends AppCompatActivity {
     private String shapeName;
+    private String currPageName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +19,11 @@ public class EditShapeOptions extends AppCompatActivity {
         setContentView(R.layout.activity_edit_shape_options);
         Intent intent = this.getIntent();
         shapeName = intent.getStringExtra("shape");
+        TextView currShapeText = findViewById(R.id.currPageEditOptions);
+        currShapeText.setText(shapeName);
+        HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
+        Shape currShape = currShapes.get(shapeName);
+        currPageName = currShape.getAssociatedPage();
     }
 
     /**
@@ -49,6 +56,12 @@ public class EditShapeOptions extends AppCompatActivity {
     public void editTheShape(View view) {
         Intent intent = new Intent(getApplicationContext(), EditShape.class);
         intent.putExtra("shape", shapeName);
+        startActivity(intent);
+    }
+
+    public void returnToAllShapes(View view) {
+        Intent intent = new Intent(this, ViewAllShapes.class);
+        intent.putExtra("Page", currPageName);
         startActivity(intent);
     }
 }
