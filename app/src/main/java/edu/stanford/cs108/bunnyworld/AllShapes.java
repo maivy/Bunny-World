@@ -9,11 +9,21 @@ class AllShapes {
     static AllShapes getInstance() {
         return ourInstance;
     }
+    private Shape copiedShape;
 
     private AllShapes() {
         currShapes = new HashMap<>();
         currShapeNumber = 1;
+        copiedShape = null;
     }
+
+
+    public void setCopiedShape(Shape newShape) {
+        copiedShape = newShape;
+    }
+
+    public Shape getCopiedShape() {return copiedShape;}
+
 
     public HashMap<String, Shape> getAllShapes () {
         return currShapes;

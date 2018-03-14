@@ -55,12 +55,14 @@ public class NewPage extends AppCompatActivity {
 
         if (currPageName.equals(MAIN_PAGE)) {
             Button renameButton = findViewById(R.id.renameButton);
-            renameButton.setClickable(false);
+            renameButton.setVisibility(View.INVISIBLE);
             EditText nameEditBox = findViewById(R.id.pageNameByUser);
-            nameEditBox.setEnabled(false);
+            nameEditBox.setVisibility(View.INVISIBLE);
             Toast.makeText(getApplicationContext(), "THIS IS THE MAIN PAGE", Toast.LENGTH_SHORT).show();
             Button deleteButton = findViewById(R.id.deleteB);
-            deleteButton.setClickable(false);
+            deleteButton.setVisibility(View.GONE);
+            TextView newName = findViewById(R.id.newPageName);
+            newName.setVisibility(View.INVISIBLE);
         }
     }
 

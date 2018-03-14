@@ -116,7 +116,7 @@ public class EditScript extends AppCompatActivity {
                 Spinner firstSpin = findViewById(R.id.scriptFirstEdit);
                 if(firstSpin.getSelectedItem().toString().equals("Select One")) {
                     Button addClause = (Button) findViewById(R.id.addClause);
-                    addClause.setVisibility(View.INVISIBLE);
+                    addClause.setVisibility(View.GONE);
                     TextView clause = (TextView) findViewById(R.id.clause);
                     clause.setText("Clause: ");
                     dropSpinner.setVisibility(View.INVISIBLE);
@@ -152,7 +152,7 @@ public class EditScript extends AppCompatActivity {
                 Spinner thirdSpin = findViewById(R.id.scriptThirdEdit);
                 if(dropSpinner.getSelectedItem().toString().equals("Select One")) {
                     Button addClause = (Button) findViewById(R.id.addClause);
-                    addClause.setVisibility(View.INVISIBLE);
+                    addClause.setVisibility(View.GONE);
                     TextView clause = (TextView) findViewById(R.id.clause);
                     clause.setText("Clause: ");
                     secondSpin.setVisibility(View.INVISIBLE);
@@ -193,7 +193,7 @@ public class EditScript extends AppCompatActivity {
                 Spinner thirdSpin = findViewById(R.id.scriptThirdEdit);
                 if(secondSpin.getSelectedItem().toString().equals("Select One")) {
                     Button addClause = (Button) findViewById(R.id.addClause);
-                    addClause.setVisibility(View.INVISIBLE);
+                    addClause.setVisibility(View.GONE);
                     TextView clause = (TextView) findViewById(R.id.clause);
                     clause.setText("Clause: ");
                 } else {
@@ -253,7 +253,7 @@ public class EditScript extends AppCompatActivity {
                     TextView clause = (TextView) findViewById(R.id.clause);
                     clause.setText("Clause: " + task2 + " " + task3);
                 } else {
-                    addClause.setVisibility(View.INVISIBLE);
+                    addClause.setVisibility(View.GONE);
                     TextView clause = (TextView) findViewById(R.id.clause);
                     clause.setText("Clause: ");
                 }
