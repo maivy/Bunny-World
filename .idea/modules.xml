@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BunnyWorld.iml" filepath="$PROJECT_DIR$/BunnyWorld.iml" />
-      <module fileurl="file://C:\Users\angel\OneDrive\Documents\CS108\BunnyWorld\Final.iml" filepath="C:\Users\angel\OneDrive\Documents\CS108\BunnyWorld\Final.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\miche\OneDrive\CS108\Final\test.iml" filepath="C:\Users\miche\OneDrive\CS108\Final\test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test.iml" filepath="$PROJECT_DIR$/test.iml" />
     </modules>
   </component>
 </project>
