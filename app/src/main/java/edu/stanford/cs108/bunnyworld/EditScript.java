@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -251,9 +252,13 @@ public class EditScript extends AppCompatActivity {
      * @param view
      */
     public void doneWithScript(View view) {
-        Intent intent = new Intent(this, EditShapeOptions.class);
-        intent.putExtra("shape", currShape.getName());
-        startActivity(intent);
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShape.getName())) {
+            Intent intent = new Intent(this, EditShapeOptions.class);
+            intent.putExtra("shape", currShape.getName());
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
