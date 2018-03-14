@@ -75,7 +75,7 @@ public class Screen extends View {
                 String rest = script.substring(start + event.length() + 1);
 
                 int end = rest.indexOf(";");
-                String newClause = rest.substring(0,end);
+                String newClause = rest.substring(0,end-1);
 
                 clauses.add(newClause);
 
@@ -97,20 +97,17 @@ public class Screen extends View {
 
             String [] words = clause.split(" ");
 
-            // loops through words in clause two at a time
-            for (int curr = 0; curr < words.length; curr+=2) {
-                String verb = words[curr];
-                String modifier = words[curr+1];
+            String verb = words[0];
+            String modifier = clause.substring(verb.length()+1);
 
-                if (verb.equals(GO_TO)) {
-                    goTo(modifier);
-                } else if (verb.equals(PLAY)) {
-                    play(modifier);
-                } else if (verb.equals(HIDE)) {
-                    hide(modifier);
-                } else if (verb.equals(SHOW)) {
-                    show(modifier);
-                }
+            if (verb.equals(GO_TO)) {
+                goTo(modifier);
+            } else if (verb.equals(PLAY)) {
+                play(modifier);
+            } else if (verb.equals(HIDE)) {
+                hide(modifier);
+            } else if (verb.equals(SHOW)) {
+                show(modifier);
             }
         }
 
