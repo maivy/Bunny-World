@@ -50,7 +50,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        // Script
+        <!--Script-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,14 +59,37 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Script : "
+                android:text="Event Trigger: "
                 android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/scriptFirstEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></Spinner>
+
+            <Spinner
+                android:id="@+id/optionalShapeDrop"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"></Spinner>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/clause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clause: "
+            android:textStyle="bold"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
+
                 <Spinner
-                    android:id="@+id/scriptFirstEdit"
+                    android:id="@+id/scriptSecondEdit"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"></Spinner>
 
@@ -75,27 +98,37 @@
                     android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"></Spinner>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <Spinner
-                    android:id="@+id/scriptSecondEdit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="invisible"></Spinner>
 
                 <Spinner
                     android:id="@+id/scriptFourthEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="invisible"></Spinner>
+
+
             </LinearLayout>
+        <Button
+            android:id="@+id/addClause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="addClause"
+            android:text="Add clause"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/command"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Current Command: "/>
+
+        <Button
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear command"
+            android:onClick="clearCommand"/>
         </LinearLayout>
-    </LinearLayout>
 
     <Button
         android:onClick="addToScript"
@@ -104,9 +137,45 @@
         android:layout_height="wrap_content" />
     <Button
         android:onClick="deleteScript"
-        android:text="DELETE SCRIPT"
+        android:text="DELETE SCRIPT COMMAND"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/deleteHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event Trigger: "/>
+
+        <Spinner
+            android:id="@+id/deleteTrigger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Spinner>
+
+        <Spinner
+            android:id="@+id/deleteShape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+        </Spinner>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/specialDeleteButton"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Command"
+        android:onClick="deleteCommand"/>
     <Button
         android:onClick="doneWithScript"
         android:text="DONE "
