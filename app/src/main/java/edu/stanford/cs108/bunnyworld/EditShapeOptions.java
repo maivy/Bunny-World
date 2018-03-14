@@ -4,10 +4,14 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class EditShapeOptions extends AppCompatActivity {
     private String shapeName;
@@ -28,9 +32,9 @@ public class EditShapeOptions extends AppCompatActivity {
 
     /**
      * Deletes the current shape.
-     * @param view
+     * @param
      */
-    public void deleteShape(View view) {
+    private void deleteShape() {
         if (AllShapes.getInstance().getAllShapes().containsKey(shapeName)) {
             HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
             Shape currShape = currShapes.get(shapeName);
@@ -76,5 +80,76 @@ public class EditShapeOptions extends AppCompatActivity {
         Intent intent = new Intent(this, ViewAllShapes.class);
         intent.putExtra("Page", currPageName);
         startActivity(intent);
+    }
+
+    /**
+     * Goes through all the shapes' scripts and checks if they are using the
+     * shape to be deleting.
+     */
+    public void checkIfShapeUsed(View view) {
+        if (AllShapes.getInstance().getAllShapes().containsKey(shapeName)) {
+            final HashMap<String, Shape> allShapes = AllShapes.getInstance().getAllShapes();
+            Iterator<String> it = allShapes.keySet().iterator();
+
+            boolean shapeUsed = false;
+            while (it.hasNext()) {
+                String currShapeName = it.next();
+                Shape currShape = allShapes.get(currShapeName);
+                String currScript  = currShape.getScript();
+                if (currScript.contains(shapeName)) {
+                    giveUserWarning();
+                    shapeUsed = true;
+                    break;
+                }
+            }
+            if (!shapeUsed) deleteShape();
+        } else {
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void giveUserWarning() {
+        Button  editShape = findViewById(R.id.editShapeButton);
+        editShape.setVisibility(View.GONE);
+        Button editScript = findViewById(R.id.editScriptButton);
+        editScript.setVisibility(View.GONE);
+        Button deleteShape = findViewById(R.id.deleteShapeButton);
+        deleteShape.setVisibility(View.GONE);
+        Button returnButton = findViewById(R.id.returnButton);
+        returnButton.setVisibility(View.GONE);
+
+        Button yes = findViewById(R.id.yesButton);
+        yes.setVisibility(View.VISIBLE);
+        Button no = findViewById(R.id.noButton);
+        no.setVisibility(View.VISIBLE);
+        TextView warning = findViewById(R.id.warningText);
+        warning.setVisibility(View.VISIBLE);
+        TextView question = findViewById(R.id.questionText);
+        question.setVisibility(View.VISIBLE);
+    }
+
+    public void continueToDelete(View view) {
+        deleteShape();
+    }
+
+    public void cancelDelete(View view) {
+        Button  editShape = findViewById(R.id.editShapeButton);
+        editShape.setVisibility(View.VISIBLE);
+        Button editScript = findViewById(R.id.editScriptButton);
+        editScript.setVisibility(View.VISIBLE);
+        Button deleteShape = findViewById(R.id.deleteShapeButton);
+        deleteShape.setVisibility(View.VISIBLE);
+        Button returnButton = findViewById(R.id.returnButton);
+        returnButton.setVisibility(View.VISIBLE);
+
+        Button yes = findViewById(R.id.yesButton);
+        yes.setVisibility(View.GONE);
+        Button no = findViewById(R.id.noButton);
+        no.setVisibility(View.GONE);
+        TextView warning = findViewById(R.id.warningText);
+        warning.setVisibility(View.GONE);
+        TextView question = findViewById(R.id.questionText);
+        question.setVisibility(View.GONE);
     }
 }

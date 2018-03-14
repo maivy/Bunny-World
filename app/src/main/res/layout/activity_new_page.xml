@@ -29,6 +29,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/nameLayout"
             android:paddingTop="10sp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -58,6 +59,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/returnMenuButton"
         android:onClick="returnToMenu"
         android:text="Return to Game Menu"
         android:layout_width="match_parent"
@@ -70,14 +72,51 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
+        android:id="@+id/addShapeButton"
         android:onClick="addNewShape"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ADD SHAPE TO PAGE"/>
     <Button
         android:id="@+id/deleteB"
-        android:onClick="deleteCurrPage"
+        android:onClick="checkCurrPage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="DELETE PAGE"/>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/warningsLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="The current page or shapes on this page are called in another shape's script."/>
+        <TextView
+            android:text="Are you sure you want to delete the page?"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/buttons"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:onClick="deletePage"
+            android:layout_weight="1"
+            android:text="YES"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:onClick="cancelPageDelete"
+            android:layout_weight="1"
+            android:text="NO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>
