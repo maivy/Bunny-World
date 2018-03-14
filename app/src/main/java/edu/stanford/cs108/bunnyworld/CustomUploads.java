@@ -57,8 +57,6 @@ public class CustomUploads extends AppCompatActivity {
                 if(requestResult != null) {
                     LinearLayout nameImage = findViewById(R.id.nameImage);
                     nameImage.setVisibility(View.VISIBLE);
-                    Toast toast = Toast.makeText(getApplicationContext(),"Image uploaded successfully",Toast.LENGTH_SHORT);
-                    toast.show();
                 }
             }
         }
@@ -69,6 +67,9 @@ public class CustomUploads extends AppCompatActivity {
         customImages.put(name.getText().toString(), requestResult);
         LinearLayout nameImage = findViewById(R.id.nameImage);
         nameImage.setVisibility(View.GONE);
+        name.setText("");
+        Toast toast = Toast.makeText(getApplicationContext(),"Image uploaded successfully",Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 }

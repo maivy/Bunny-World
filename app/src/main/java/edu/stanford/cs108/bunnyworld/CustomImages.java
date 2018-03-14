@@ -24,4 +24,13 @@ class CustomImages {
     public HashMap<String, Uri> getImages() {
         return images;
     }
+
+    //https://stackoverflow.com/questions/17356312/converting-of-uri-to-string
+    public static String uriToString(Uri uri) {
+        return uri.toString();
+    }
+
+    public static Uri stringToUri(String str) {
+        return Uri.parse(str);
+    }
 }
