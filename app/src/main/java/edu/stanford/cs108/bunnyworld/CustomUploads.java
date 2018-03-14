@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ public class CustomUploads extends AppCompatActivity {
     private static final int IMAGE_REQUEST_CODE = 42;
     public CustomImages imageMap;
     public HashMap<String, Uri> customImages;
+    public HashMap<String, BitmapDrawable> bitmapDrawables;
     private Uri requestResult;
 
     @Override
@@ -31,6 +33,7 @@ public class CustomUploads extends AppCompatActivity {
         setContentView(R.layout.activity_custom_uploads);
         imageMap = CustomImages.getInstance();
         customImages = imageMap.getImages();
+        bitmapDrawables = imageMap.getBitmapDrawables();
     }
 
     public void uploadImage(View view) {
@@ -63,13 +66,27 @@ public class CustomUploads extends AppCompatActivity {
     }
 
     public void nameImage(View view) {
-        EditText name = findViewById(R.id.imageName);
-        customImages.put(name.getText().toString(), requestResult);
-        LinearLayout nameImage = findViewById(R.id.nameImage);
-        nameImage.setVisibility(View.GONE);
-        name.setText("");
-        Toast toast = Toast.makeText(getApplicationContext(),"Image uploaded successfully",Toast.LENGTH_SHORT);
-        toast.show();
+        try {
+            BitmapDrawable imageDrawable;
+            ParcelFileDescriptor parcelFileDescriptor =
+                    getContentResolver().openFileDescriptor(requestResult, "r");
+            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+            Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+            imageDrawable = new BitmapDrawable(getResources(), image);
+            parcelFileDescriptor.close();
+            EditText name = findViewById(R.id.imageName);
+            customImages.put(name.getText().toString(), requestResult);
+            bitmapDrawables.put(name.getText().toString(), imageDrawable);
+            LinearLayout nameImage = findViewById(R.id.nameImage);
+            nameImage.setVisibility(View.GONE);
+            name.setText("");
+            Toast toast = Toast.makeText(getApplicationContext(),"Image uploaded successfully",Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (IOException e) {
+            Toast toast = Toast.makeText(getApplicationContext(),"Image could not load",Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
     }
 
 }

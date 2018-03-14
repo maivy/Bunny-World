@@ -8,6 +8,10 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
+//    public CustomImages customImages;
+//    public HashMap<String, Uri> uriMap;
+//    public HashMap<String, BitmapDrawable> bitmapDrawableMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -49,6 +49,7 @@ public class NewShape extends AppCompatActivity {
     public CustomImages imageMap;
     public HashMap<String, Uri> customImages;
     private ArrayList<String> customImagesNames;
+    public HashMap<String, BitmapDrawable> customBitmapDrawables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +89,13 @@ public class NewShape extends AppCompatActivity {
         customImages = imageMap.getImages();
         customImagesNames = new ArrayList<>(customImages.keySet());
         customImagesNames.add(0, NO_IMG);
+        customBitmapDrawables = imageMap.getBitmapDrawables();
     }
 
     public void loadCustomSpinner(View view) {
+        TextView spinnerType = findViewById(R.id.spinnerType);
+        spinnerType.setVisibility(View.VISIBLE);
+        spinnerType.setText("Custom Images: ");
         final Spinner customSpinner = findViewById(R.id.customImageNameSpin);
         customSpinner.setVisibility(View.VISIBLE);
         Spinner preloadSpinner = findViewById(R.id.imageNameSpin);
@@ -120,6 +125,9 @@ public class NewShape extends AppCompatActivity {
     }
 
     public void loadPreloadSpinner(View view) {
+        TextView spinnerType = findViewById(R.id.spinnerType);
+        spinnerType.setVisibility(View.VISIBLE);
+        spinnerType.setText("Preloaded Images: ");
         final Spinner imageSpinner = findViewById(R.id.imageNameSpin);
         imageSpinner.setVisibility(View.VISIBLE);
         Spinner customSpinner = findViewById(R.id.customImageNameSpin);
@@ -199,18 +207,7 @@ public class NewShape extends AppCompatActivity {
         } else if(customSpinner.getSelectedItem() != null && customSpinner.getVisibility() != View.GONE) {
             imageName = customSpinner.getSelectedItem().toString();
             if (!imageName.equals(NO_IMG)) {
-                try {
-                    ParcelFileDescriptor parcelFileDescriptor =
-                            getContentResolver().openFileDescriptor(customImages.get(imageName), "r");
-                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                    Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-                    imageDrawable = new BitmapDrawable(getResources(), image);
-                    parcelFileDescriptor.close();
-                } catch (IOException e) {
-                    Toast toast = Toast.makeText(getApplicationContext(),"Image could not load",Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-
+                imageDrawable = customBitmapDrawables.get(imageName);
             }
         }
         // text Size
@@ -300,18 +297,7 @@ public class NewShape extends AppCompatActivity {
         } else if(customSpin.getSelectedItem() != null && customSpin.getVisibility() != View.GONE) {
             String image = customSpin.getSelectedItem().toString();
             if (!image.equals(NO_IMG)) {
-                BitmapDrawable imageDrawable = null;
-                try {
-                    ParcelFileDescriptor parcelFileDescriptor =
-                            getContentResolver().openFileDescriptor(customImages.get(image), "r");
-                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                    Bitmap imageMap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-                    imageDrawable = new BitmapDrawable(getResources(), imageMap);
-                    parcelFileDescriptor.close();
-                } catch (IOException e) {
-                    Toast toast = Toast.makeText(getApplicationContext(),"Image could not load",Toast.LENGTH_SHORT);
-                    toast.show();
-                }                
+                BitmapDrawable imageDrawable = customBitmapDrawables.get(image);
                 float height = imageDrawable.getIntrinsicHeight();
                 float width = imageDrawable.getIntrinsicWidth();
                 EditText shapeHeight = findViewById(R.id.shapeHeight);

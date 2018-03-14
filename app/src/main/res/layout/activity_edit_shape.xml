@@ -76,6 +76,12 @@
                 android:onClick="loadPreloadSpinner"/>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/spinnerType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
         <Spinner
             android:layout_gravity="center_horizontal"
             android:id="@+id/imageNameSpinEdit"

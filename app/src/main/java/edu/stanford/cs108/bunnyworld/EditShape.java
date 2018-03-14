@@ -35,6 +35,7 @@ public class EditShape extends AppCompatActivity {
 
     public CustomImages imageMap;
     public HashMap<String, Uri> customImages;
+    public HashMap<String, BitmapDrawable> customBitmapDrawables;
     private ArrayList<String> customImagesNames;
 
     @Override
@@ -95,6 +96,7 @@ public class EditShape extends AppCompatActivity {
         customImages = imageMap.getImages();
         customImagesNames = new ArrayList<>(customImages.keySet());
         customImagesNames.add(0, NO_IMG);
+        customBitmapDrawables = imageMap.getBitmapDrawables();
         if (AllShapes.getInstance().getCopiedShape() == null) {
             Button pasteButton = findViewById(R.id.pasteShapeEdit);
             pasteButton.setVisibility(View.INVISIBLE);
@@ -123,6 +125,9 @@ public class EditShape extends AppCompatActivity {
     }
 
     public void loadCustomSpinner(View view) {
+        TextView spinnerType = findViewById(R.id.spinnerType);
+        spinnerType.setVisibility(View.VISIBLE);
+        spinnerType.setText("Custom Images: ");
         final Spinner customSpinner = findViewById(R.id.customImageNameSpin);
         customSpinner.setVisibility(View.VISIBLE);
         Spinner preloadSpinner = findViewById(R.id.imageNameSpinEdit);
@@ -152,6 +157,9 @@ public class EditShape extends AppCompatActivity {
     }
 
     public void loadPreloadSpinner(View view) {
+        TextView spinnerType = findViewById(R.id.spinnerType);
+        spinnerType.setVisibility(View.VISIBLE);
+        spinnerType.setText("Preloaded Images: ");
         final Spinner imageSpinner = findViewById(R.id.imageNameSpinEdit);
         imageSpinner.setVisibility(View.VISIBLE);
         Spinner customSpinner = findViewById(R.id.customImageNameSpin);
@@ -290,17 +298,7 @@ public class EditShape extends AppCompatActivity {
                 int imageID = getResources().getIdentifier(imageName, "drawable", getPackageName());
                 imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
             } else if(customSpinner.getSelectedItem() != null && customSpinner.getVisibility() != View.GONE) {
-                try {
-                    ParcelFileDescriptor parcelFileDescriptor =
-                            getContentResolver().openFileDescriptor(customImages.get(imageName), "r");
-                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                    Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-                    imageDrawable = new BitmapDrawable(getResources(), image);
-                    parcelFileDescriptor.close();
-                } catch (IOException e) {
-                    Toast toast = Toast.makeText(getApplicationContext(),"Image could not load",Toast.LENGTH_SHORT);
-                    toast.show();
-                }
+                imageDrawable = customBitmapDrawables.get(imageName);
             }
         } else {
             imageDrawable = null;
@@ -359,17 +357,7 @@ public class EditShape extends AppCompatActivity {
             String image = customSpin.getSelectedItem().toString();
             if (!image.equals(NO_IMG)) {
                 BitmapDrawable imageDrawable = null;
-                try {
-                    ParcelFileDescriptor parcelFileDescriptor =
-                            getContentResolver().openFileDescriptor(customImages.get(image), "r");
-                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                    Bitmap imageMap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-                    imageDrawable = new BitmapDrawable(getResources(), imageMap);
-                    parcelFileDescriptor.close();
-                } catch (IOException e) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Image could not load", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
+                imageDrawable = customBitmapDrawables.get(image);
                 float height = imageDrawable.getIntrinsicHeight();
                 float width = imageDrawable.getIntrinsicWidth();
                 EditText shapeHeight = findViewById(R.id.shapeHeightEdit);

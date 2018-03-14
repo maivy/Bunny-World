@@ -1,5 +1,6 @@
 package edu.stanford.cs108.bunnyworld;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 
 import java.util.HashMap;
@@ -16,16 +17,22 @@ class CustomImages {
     }
 
     private HashMap<String, Uri> images;
+    private HashMap<String, BitmapDrawable> bitmapDrawables;
 
     private CustomImages() {
         images = new HashMap<>();
+        bitmapDrawables = new HashMap<>();
     }
 
     public HashMap<String, Uri> getImages() {
         return images;
     }
+    public HashMap<String, BitmapDrawable> getBitmapDrawables() {
+        return bitmapDrawables;
+    }
 
     //https://stackoverflow.com/questions/17356312/converting-of-uri-to-string
+    //helper to load in to database
     public static String uriToString(Uri uri) {
         return uri.toString();
     }
