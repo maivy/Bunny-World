@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -415,17 +416,21 @@ public class EditScript extends AppCompatActivity {
      * @param view
      */
     public void doneWithScript(View view) {
-        if(!getIntent().getBooleanExtra("editing", false)) {
-            Intent intent = new Intent(this, PlaceShape.class);
-            intent.putExtra("pageName", currShape.getAssociatedPage());
-            intent.putExtra("shape", currShape.getName());
-            intent.putExtra("editing", false);
-            startActivity(intent);
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShape.getName())) {
+            if(!getIntent().getBooleanExtra("editing", false)) {
+                Intent intent = new Intent(this, PlaceShape.class);
+                intent.putExtra("pageName", currShape.getAssociatedPage());
+                intent.putExtra("shape", currShape.getName());
+                intent.putExtra("editing", false);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, EditShapeOptions.class);
+                intent.putExtra("shape", currShape.getName());
+                intent.putExtra("pageName", currShape.getAssociatedPage());
+                startActivity(intent);
+            }
         } else {
-            Intent intent = new Intent(this, EditShapeOptions.class);
-            intent.putExtra("shape", currShape.getName());
-            intent.putExtra("pageName", currShape.getAssociatedPage());
-            startActivity(intent);
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
         }
     }
 

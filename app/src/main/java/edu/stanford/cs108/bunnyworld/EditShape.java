@@ -33,7 +33,7 @@ public class EditShape extends AppCompatActivity {
         setContentView(R.layout.activity_edit_shape);
         Intent intent = this.getIntent();
         currShapeName = intent.getStringExtra("shape");
-        init();
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShapeName)) init();
     }
 
 
