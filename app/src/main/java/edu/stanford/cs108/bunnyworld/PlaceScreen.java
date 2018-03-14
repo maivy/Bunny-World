@@ -10,7 +10,9 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -76,10 +78,17 @@ public class PlaceScreen extends View {
         HashSet<Shape> shapes = new HashSet<>(this.shapes.values());
         for(Shape shape : shapes) {
             if(shape.getAssociatedPage().equals(currPage)) {
+                if(!shape.getText().equals("") && shape != selectedShape) {
+                    Paint textPaint = shape.getTextPaint();
+                    textPaint.setColor(Color.BLACK);
+                }
                 shape.draw(canvas, false);
                 //cannot resize text this way
                 if(shape == selectedShape && shape.getText().equals("")) {
                     addCircles(shape, canvas);
+                } else if(shape == selectedShape && !shape.getText().equals("")){
+                    Paint textPaint = selectedShape.getTextPaint();
+                    textPaint.setColor(Color.RED);
                 }
             }
         }
@@ -159,9 +168,18 @@ public class PlaceScreen extends View {
                 Shape shape = getShape();
                 selectedShape = shape;
                 EditText fontSize = (EditText) ((Activity) getContext()).findViewById(R.id.fontSize);
+                TextView fontText = ((Activity) getContext()).findViewById(R.id.fontText);
+                Button fontButton = ((Activity) getContext()).findViewById(R.id.setFontSize);
                 if(selectedShape != null && !selectedShape.getText().equals("")){
+                    fontSize.setVisibility(VISIBLE);
+                    fontButton.setVisibility(VISIBLE);
                     fontSize.setText("" + selectedShape.getFontSize());
+                    fontText.setText("Change font size: ");
+
                 } else {
+                    fontSize.setVisibility(INVISIBLE);
+                    fontText.setText("Inventory Zone");
+                    fontButton.setVisibility(INVISIBLE);
                     fontSize.setText("");
                 }
                 break;

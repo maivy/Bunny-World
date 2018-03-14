@@ -27,6 +27,8 @@ public class NewShape extends AppCompatActivity {
     private static final String ON_ENTER = "on enter";
     private static final String ON_DROP = "on drop";
     private static final String NO_IMG = "No Image";
+    private static final String CREATE = "create";
+    private static final String COPY = "copy";
 
     // made the first entry in the list Select One So That's what Appears at the start
     private final ArrayList<String> initialTriggers = new ArrayList<>(Arrays.asList("Select One", ON_CLICK, ON_ENTER, ON_DROP));
@@ -49,6 +51,11 @@ public class NewShape extends AppCompatActivity {
 
 
     private void init (Intent intent) {
+
+        if(AllShapes.getInstance().getCopiedShape() == null) {
+            Button pasteButton = findViewById(R.id.pasteShapeButton);
+            pasteButton.setVisibility(View.INVISIBLE);
+        }
         //displays the name of the current page
         TextView currentPage = findViewById(R.id.currPage);
         currPageName = intent.getStringExtra("Page");
@@ -91,180 +98,6 @@ public class NewShape extends AppCompatActivity {
                 return;
             }
         });
-        setUpFirstSpinner();
-    }
-
-
-    // Sets up the first spinner and its listener
-    private void setUpFirstSpinner () {
-        Spinner scriptPartOne = findViewById(R.id.scriptFirst);
-        ArrayAdapter<String> firstAdapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_spinner_item,initialTriggers);
-        firstAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        scriptPartOne.setAdapter(firstAdapter);
-        scriptPartOne.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                setUpSpinnerTwo();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                return;
-            }
-        });
-    }
-
-
-    // Based on what was selected in spinner one it sets up spinner two
-    private void setUpSpinnerTwo () {
-        Spinner firstSpin = findViewById(R.id.scriptFirst);
-        Spinner secondSpin = findViewById(R.id.scriptSecond);
-        String selected = firstSpin.getSelectedItem().toString();
-
-        if (selected.equals(ON_DROP)) {
-            setSpinnerListToAllShapes(secondSpin);
-            setUpSpinnerTwoListener(secondSpin);
-        } else if (selected.equals(ON_ENTER) || selected.equals(ON_CLICK)){
-            setSpinnerListToAllActions(secondSpin);
-            setUpSpinnerTwoListener(secondSpin);
-            findViewById(R.id.scriptFourth).setVisibility(View.INVISIBLE);
-            findViewById(R.id.scriptThird).setVisibility(View.INVISIBLE);
-        }
-    }
-
-
-    // Makes Spinner Two visible and adds an OnItemSelectedListener to it
-    private void setUpSpinnerTwoListener (Spinner secondSpin) {
-        secondSpin.setVisibility(View.VISIBLE);
-
-        // sets up the listener for the new spinner
-        secondSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                setUpSpinnerThree();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                return;
-            }
-        });
-    }
-
-
-    // Based on what was selected in spinner two, sets up spinner three if necessary
-    private void setUpSpinnerThree() {
-        Spinner firstSpin = findViewById(R.id.scriptFirst);
-        Spinner secondSpin = findViewById(R.id.scriptSecond);
-        Spinner thirdSpin = findViewById(R.id.scriptThird);
-
-        String selectedOne = firstSpin.getSelectedItem().toString();
-        String selectedTwo = secondSpin.getSelectedItem().toString();
-
-        if (selectedOne.equals(ON_DROP)) {
-            setSpinnerListToAllActions(thirdSpin);
-            setUpSpinnerThreeListerner(thirdSpin);
-        } else if (selectedTwo.equals(PLAY)) {
-            setSpinnerListToAllSounds(thirdSpin);
-            setUpSpinnerThreeListerner(thirdSpin);
-        } else if (selectedTwo.equals(GOTO)) {
-            setSpinnerListToAllPages(thirdSpin);
-            setUpSpinnerThreeListerner(thirdSpin);
-        } else if (selectedTwo.equals(HIDE) || selectedTwo.equals(SHOW)) {
-            setSpinnerListToAllShapes(thirdSpin);
-            setUpSpinnerThreeListerner(thirdSpin);
-        }
-    }
-
-
-    // Makes Spinner Three visible and adds an OnItemSelectedListener to it
-    private void setUpSpinnerThreeListerner(Spinner thirdSpin) {
-        thirdSpin.setVisibility(View.VISIBLE);
-        thirdSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                setUpSpinnerFour();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                return;
-            }
-        });
-    }
-
-
-    // Based on what was selected in spinner three it sets up spinner four if necessary
-    private void setUpSpinnerFour () {
-        Spinner thirdSpin = findViewById(R.id.scriptThird);
-        Spinner fourthSpin = findViewById(R.id.scriptFourth);
-        String selected = thirdSpin.getSelectedItem().toString();
-
-        if (selected.equals(PLAY)) {
-            setSpinnerListToAllSounds(fourthSpin);
-            fourthSpin.setVisibility(View.VISIBLE);
-        } else if (selected.equals(GOTO)) {
-            setSpinnerListToAllPages(fourthSpin);
-            fourthSpin.setVisibility(View.VISIBLE);
-        } else if (selected.equals(HIDE) || selected.equals(SHOW)) {
-            setSpinnerListToAllShapes(fourthSpin);
-            fourthSpin.setVisibility(View.VISIBLE);
-        }
-    }
-
-
-    // Sets the ArrayList of all the possible things you can select in the given spinner,
-    // to be a list of all the actions available in the game (4 actions)
-    private void setSpinnerListToAllActions (Spinner currSpinner) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_spinner_item,allActions);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        currSpinner.setAdapter(adapter);
-    }
-
-
-    // Sets the ArrayList of items the currSpinner is displaying to be all the available sounds
-    private void setSpinnerListToAllSounds (Spinner currSpinner) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_spinner_item,allSounds);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        currSpinner.setAdapter(adapter);
-    }
-
-    // Sets the ArrayList of items the currSpinner is displaying to be all the available shapes
-    private void setSpinnerListToAllShapes (Spinner currSpinner) {
-        // makes the first entry in the list "Select One" so that's what initially visible
-        ArrayList<String> shapeNames = new ArrayList<>();
-        shapeNames.add("Select One");
-
-        HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
-        for (String key : currShapes.keySet()) {
-            shapeNames.add(key);
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_spinner_item,shapeNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        currSpinner.setAdapter(adapter);
-    }
-
-
-    // Sets the ArrayList of items the currSpinner is displaying to be all the available pages
-    private void setSpinnerListToAllPages (Spinner currSpinner) {
-        // makes the first entry in the list "Select One" so that's what initially visible
-        ArrayList<String> pageNames = new ArrayList<>();
-        pageNames.add("Select One");
-
-        HashMap<String, Page> currPages = AllPages.getInstance().getAllPages();
-        for (String key : currPages.keySet()) {
-            pageNames.add(key);
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_spinner_item,pageNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        currSpinner.setAdapter(adapter);
     }
 
 
@@ -309,39 +142,14 @@ public class NewShape extends AppCompatActivity {
             int imageID = getResources().getIdentifier(imageName,"drawable", getPackageName());
             imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
         } else {
-           imageDrawable = null;
+            imageDrawable = null;
         }
 
         // text Size
         int textSize = 0;
         if (!textSizeString.isEmpty()) textSize = Integer.parseInt(textSizeString);
 
-        //Script
-        Spinner script1 = findViewById(R.id.scriptFirst);
-        Spinner script2 = findViewById(R.id.scriptSecond);
-        Spinner script3 = findViewById(R.id.scriptThird);
-        Spinner script4 = findViewById(R.id.scriptFourth);
-        String script = "";
-
-        //TODO: Change Script
-        // Makes sure to only make a script when something is selected
-        if (!script1.getSelectedItem().equals("Select One")) {
-            script += script1.getSelectedItem().toString();
-            if (script2.getSelectedItem() != null && !script2.getSelectedItem().equals("Select One")) {
-                script += " " + script2.getSelectedItem().toString();
-                if (script3.getVisibility() != View.INVISIBLE && script3.getSelectedItem() != null
-                        && !script3.getSelectedItem().equals("Select One")) {
-                    script += " " + script3.getSelectedItem().toString();
-                    if (script4.getVisibility() != View.INVISIBLE && script4.getSelectedItem() != null
-                            && !script4.getSelectedItem().equals("Select One"))
-                        script += " " + script4.getSelectedItem().toString();
-                }
-            }
-        }
-
-        if (!script.equals("")) script += " ; ";
-
-        Shape currShape = new Shape(currPageName, shapeName, 200, 200, width, height, hidden, moveable, imageName, imageDrawable, textString, script, textSize);
+        Shape currShape = new Shape(currPageName, shapeName, 200, 200, width, height, hidden, moveable, imageName, imageDrawable, textString, "", textSize);
         return currShape;
     }
 
@@ -350,14 +158,35 @@ public class NewShape extends AppCompatActivity {
      *     Creates a shape assuming the user has given us all the necessary information
      */
     public void createNewShape(View view) {
+        if (checkUserInputs(CREATE)) {
+            EditText shapeName = findViewById(R.id.currentShapeName);
+            String shapeNameString = shapeName.getText().toString().toLowerCase();
+            Shape newShape = buildNewShape(shapeNameString);
+            AllShapes.getInstance().getAllShapes().put(shapeNameString, newShape);
+
+            // adds one to the total number of shapes ever created so we know what to name future Shapes
+            AllShapes.getInstance().updateCurrShapeNumber();
+            Toast.makeText(getApplicationContext(), shapeNameString +" CREATED", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, EditScript.class);
+            intent.putExtra("shape", shapeNameString);
+            intent.putExtra("pageName", currPageName);
+            intent.putExtra("editing", false);
+            startActivity(intent);
+        }
+    }
+
+    private boolean checkUserInputs (String mode) {
         EditText shapeName = findViewById(R.id.currentShapeName);
         String shapeNameString = shapeName.getText().toString().toLowerCase();
 
         // If a Shape with that name doesn't already exist
-        if (AllShapes.getInstance().getAllShapes().containsKey(shapeNameString)) {
+        if (AllShapes.getInstance().getAllShapes().containsKey(shapeNameString) && mode.equals(CREATE)) {
             Toast.makeText(getApplicationContext(), shapeNameString +" ALREADY EXISTS", Toast.LENGTH_SHORT).show();
-        } else if (shapeNameString.isEmpty()) {
+            return false;
+        } else if (shapeNameString.isEmpty() && mode.equals(CREATE)) {
             Toast.makeText(getApplicationContext(), "MUST PROVIDE SHAPE NAME", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             EditText shapeWidth = findViewById(R.id.shapeWidth);
             String widthString = shapeWidth.getText().toString();
@@ -373,29 +202,15 @@ public class NewShape extends AppCompatActivity {
 
             if (textString.isEmpty() && (heightString.isEmpty() || widthString.isEmpty())) {
                 Toast.makeText(getApplicationContext(), "MUST PROVIDE DIMENSIONS FOR IMAGE", Toast.LENGTH_SHORT).show();
+                return false;
             } else if (!textString.isEmpty() && textSizeString.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "MUST GIVE FONT SIZE FOR TEXT", Toast.LENGTH_SHORT).show();
-            } else {
-                Shape newShape = buildNewShape(shapeNameString);
-                AllShapes.getInstance().getAllShapes().put(shapeNameString, newShape);
-
-                // adds one to the total number of shapes ever created so we know what to name future Shapes
-                AllShapes.getInstance().updateCurrShapeNumber();
-                Toast.makeText(getApplicationContext(), shapeNameString +" CREATED", Toast.LENGTH_SHORT).show();
-
-                // Goes back to the page, does not create new page
-//                Intent intent = new Intent(this, NewPage.class);
-//                intent.putExtra("NEW_PAGE", false);
-//                intent.putExtra("pageName", currPageName);
-//                startActivity(intent);
-
-                Intent intent = new Intent(this, PlaceShape.class);
-                intent.putExtra("pageName", currPageName);
-                intent.putExtra("editing", false);
-                startActivity(intent);
+                return false;
             }
+            return true;
         }
     }
+
 
 
     // Gets the default dimensions of the image selected
@@ -414,4 +229,66 @@ public class NewShape extends AppCompatActivity {
             shapeWidth.setText(Float.toString(width));
         }
     }
+
+
+
+    public void copyShape(View view) {
+        if (checkUserInputs(COPY)) {
+            Shape newShape = buildNewShape(COPY);
+            AllShapes.getInstance().setCopiedShape(newShape);
+            Toast.makeText(getApplicationContext(), "SHAPE COPIED", Toast.LENGTH_SHORT).show();
+            Button pasteButton = findViewById(R.id.pasteShapeButton);
+            pasteButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void pasteSave(View view) {
+        Shape copiedShape = AllShapes.getInstance().getCopiedShape();
+        if (copiedShape != null) {
+            fillInShape(copiedShape);
+        }
+    }
+
+
+    private void fillInShape(Shape currShape) {
+        //Width
+        EditText shapeWidth = findViewById(R.id.shapeWidth);
+        shapeWidth.setText(Float.toString(currShape.getWidth()));
+
+        //Height
+        EditText shapeHeight = findViewById(R.id.shapeHeight);
+        shapeHeight.setText(Float.toString(currShape.getHeight()));
+
+        //Hidden
+        if (currShape.isHidden()) {
+            RadioButton hideYes = findViewById(R.id.hiddenYes);
+            hideYes.setChecked(true);
+        } else {
+            RadioButton hideNo = findViewById(R.id.hiddenNo);
+            hideNo.setChecked(true);
+        }
+
+        // Moveable
+        if(currShape.isMovable()) {
+            RadioButton yesMove = findViewById(R.id.moveableYes);
+            yesMove.setChecked(true);
+        } else {
+            RadioButton noMove = findViewById(R.id.moveableNo);
+            noMove.setChecked(true);
+        }
+
+        //Image
+        String imgName = currShape.imageName;
+        Spinner imageSpinner = findViewById(R.id.imageNameSpin);
+        imageSpinner.setSelection(allImages.indexOf(imgName));
+
+        // text
+        EditText textInput = findViewById(R.id.textString);
+        textInput.setText(currShape.getText());
+
+        // text Size
+        EditText textSizeInput = findViewById(R.id.textSize);
+        textSizeInput.setText(Integer.toString(currShape.getFontSize()));
+    }
+
 }

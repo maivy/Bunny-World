@@ -55,12 +55,14 @@ public class NewPage extends AppCompatActivity {
 
         if (currPageName.equals(MAIN_PAGE)) {
             Button renameButton = findViewById(R.id.renameButton);
-            renameButton.setClickable(false);
+            renameButton.setVisibility(View.INVISIBLE);
             EditText nameEditBox = findViewById(R.id.pageNameByUser);
-            nameEditBox.setEnabled(false);
+            nameEditBox.setVisibility(View.INVISIBLE);
             Toast.makeText(getApplicationContext(), "THIS IS THE MAIN PAGE", Toast.LENGTH_SHORT).show();
             Button deleteButton = findViewById(R.id.deleteB);
-            deleteButton.setClickable(false);
+            deleteButton.setVisibility(View.GONE);
+            TextView newName = findViewById(R.id.newPageName);
+            newName.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -70,9 +72,13 @@ public class NewPage extends AppCompatActivity {
      * @param view
      */
     public void addNewShape(View view) {
-        Intent intent = new Intent(this, NewShape.class);
-        intent.putExtra("Page", currPage.getPageName());
-        startActivity(intent);
+        if (AllPages.getInstance().getAllPages().containsKey(currPage.getPageName())) {
+            Intent intent = new Intent(this, NewShape.class);
+            intent.putExtra("Page", currPage.getPageName());
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "PAGE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -81,35 +87,39 @@ public class NewPage extends AppCompatActivity {
      * @param view
      */
     public void renamePage(View view) {
-        EditText newName = findViewById(R.id.pageNameByUser);
-        String newNameString = newName.getText().toString().toLowerCase();
-        HashMap<String, Page> pages = AllPages.getInstance().getAllPages();
+        if (AllPages.getInstance().getAllPages().containsKey(currPage.getPageName())) {
+            EditText newName = findViewById(R.id.pageNameByUser);
+            String newNameString = newName.getText().toString().toLowerCase();
+            HashMap<String, Page> pages = AllPages.getInstance().getAllPages();
 
-        if ((newNameString.equals(MAIN_PAGE) || pages.containsKey(newNameString)) && !newNameString.equals(currPage.getPageName())) {
-            Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
-        } else {
-            String pageName = currPage.getPageName();
+            if ((newNameString.equals(MAIN_PAGE) || pages.containsKey(newNameString)) && !newNameString.equals(currPage.getPageName())) {
+                Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
+            } else {
+                String pageName = currPage.getPageName();
 
-            final HashMap<String, Shape> allShapes = AllShapes.getInstance().getAllShapes();
-            Iterator<String> it = allShapes.keySet().iterator();
+                final HashMap<String, Shape> allShapes = AllShapes.getInstance().getAllShapes();
+                Iterator<String> it = allShapes.keySet().iterator();
 
-            while (it.hasNext()) {
-                String shapeName = it.next();
-                Shape currShape = allShapes.get(shapeName);
-                if (currShape.getAssociatedPage().equals(pageName)) {
-                    currShape.setAssociatedPage(newNameString);
+                while (it.hasNext()) {
+                    String shapeName = it.next();
+                    Shape currShape = allShapes.get(shapeName);
+                    if (currShape.getAssociatedPage().equals(pageName)) {
+                        currShape.setAssociatedPage(newNameString);
+                    }
                 }
+
+                pages.remove(pageName);
+
+                currPage.setPageName(newNameString);
+                pages.put(newNameString, currPage);
+
+                // Clears the Edit Text where user can input new page name
+                TextView pageNameText = findViewById(R.id.nameOfNewPage);
+                pageNameText.setText(newNameString);
+                newName.setText("");
             }
-
-            pages.remove(pageName);
-
-            currPage.setPageName(newNameString);
-            pages.put(newNameString, currPage);
-
-            // Clears the Edit Text where user can input new page name
-            TextView pageNameText = findViewById(R.id.nameOfNewPage);
-            pageNameText.setText(newNameString);
-            newName.setText("");
+        } else {
+            Toast.makeText(getApplicationContext(), "PAGE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -118,22 +128,26 @@ public class NewPage extends AppCompatActivity {
      * @param view
      */
     public void deleteCurrPage(View view) {
-        String pageName = currPage.getPageName();
+        if (AllPages.getInstance().getAllPages().containsKey(currPage.getPageName())) {
+            String pageName = currPage.getPageName();
 
-        //deletes the page from AllPages
-        AllPages.getInstance().getAllPages().remove(pageName);
+            //deletes the page from AllPages
+            AllPages.getInstance().getAllPages().remove(pageName);
 
-        final HashMap<String, Shape> allShapes = AllShapes.getInstance().getAllShapes();
-        Iterator<String> it = allShapes.keySet().iterator();
+            final HashMap<String, Shape> allShapes = AllShapes.getInstance().getAllShapes();
+            Iterator<String> it = allShapes.keySet().iterator();
 
-        while (it.hasNext()) {
-            String shapeName = it.next();
-            if (allShapes.get(shapeName).getAssociatedPage().equals(pageName)) {
-                it.remove();
+            while (it.hasNext()) {
+                String shapeName = it.next();
+                if (allShapes.get(shapeName).getAssociatedPage().equals(pageName)) {
+                    it.remove();
+                }
             }
+            Intent intent = new Intent(this, NewGame.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "PAGE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
         }
-        Intent intent = new Intent(this, NewGame.class);
-        startActivity(intent);
     }
 
     /**
@@ -142,9 +156,13 @@ public class NewPage extends AppCompatActivity {
      * @param view
      */
     public void displayPageShapes(View view) {
-        Intent intent = new Intent(this, ViewAllShapes.class);
-        intent.putExtra("Page", currPage.getPageName());
-        startActivity(intent);
+        if (AllPages.getInstance().getAllPages().containsKey(currPage.getPageName())) {
+            Intent intent = new Intent(this, ViewAllShapes.class);
+            intent.putExtra("Page", currPage.getPageName());
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "PAGE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

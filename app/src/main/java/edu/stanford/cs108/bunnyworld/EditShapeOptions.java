@@ -31,12 +31,16 @@ public class EditShapeOptions extends AppCompatActivity {
      * @param view
      */
     public void deleteShape(View view) {
-        HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
-        Shape currShape = currShapes.get(shapeName);
-        currShapes.remove(shapeName);
-        Intent intent = new Intent(this, ViewAllShapes.class);
-        intent.putExtra("Page", currShape.getAssociatedPage());
-        startActivity(intent);
+        if (AllShapes.getInstance().getAllShapes().containsKey(shapeName)) {
+            HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
+            Shape currShape = currShapes.get(shapeName);
+            currShapes.remove(shapeName);
+            Intent intent = new Intent(this, ViewAllShapes.class);
+            intent.putExtra("Page", currShape.getAssociatedPage());
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -44,9 +48,14 @@ public class EditShapeOptions extends AppCompatActivity {
      * @param view
      */
     public void deleteOrAddToScript(View view) {
-        Intent intent = new Intent(getApplicationContext(), EditScript.class);
-        intent.putExtra("shape", shapeName);
-        startActivity(intent);
+        if (AllShapes.getInstance().getAllShapes().containsKey(shapeName)) {
+            Intent intent = new Intent(getApplicationContext(), EditScript.class);
+            intent.putExtra("shape", shapeName);
+            intent.putExtra("editing", true);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -54,9 +63,13 @@ public class EditShapeOptions extends AppCompatActivity {
      * @param view
      */
     public void editTheShape(View view) {
-        Intent intent = new Intent(getApplicationContext(), EditShape.class);
-        intent.putExtra("shape", shapeName);
-        startActivity(intent);
+        if (AllShapes.getInstance().getAllShapes().containsKey(shapeName)) {
+            Intent intent = new Intent(getApplicationContext(), EditShape.class);
+            intent.putExtra("shape", shapeName);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void returnToAllShapes(View view) {

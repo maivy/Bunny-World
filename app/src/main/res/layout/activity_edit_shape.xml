@@ -1,293 +1,342 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:layout_margin="10sp"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="10sp"
+    android:orientation="vertical"
     tools:context="edu.stanford.cs108.bunnyworld.EditShape">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Current Page : "/>
-        <TextView
-            android:id="@+id/currPageEditShape"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Shape Name : " />
-
-        <EditText
-            android:layout_weight="1"
-            android:id="@+id/currentShapeNameEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-        // Image Name
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <TextView
-                android:layout_gravity="center_vertical"
-                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Image Name : "/>
-            <Spinner
-                android:layout_gravity="center_vertical"
-                android:id="@+id/imageNameSpinEdit"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </Spinner>
-        </LinearLayout>
+                android:text="Current Page : " />
 
-        // All Image Geometry
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
             <TextView
-                android:layout_weight="1"
-                android:layout_marginTop="5sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="Image Geometry : " />
-            <Button
-                android:onClick="setImgDefault"
-                android:id="@+id/dimEdit"
-                android:visibility="invisible"
-                android:text="DEFAULT IMAGE DIMENSIONS"
+                android:id="@+id/currPageEditShape"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shape Name : "
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/currentShapeNameEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        // Image Name
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Image Name : "
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/imageNameSpinEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"></Spinner>
+        </LinearLayout>
+
+        // All Image Geometry
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_weight="1"
+                android:text="Image Geometry : "
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/dimEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="setImgDefault"
+                android:text="DEFAULT IMAGE DIMENSIONS"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
                 <TextView
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Width :"/>
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Width :" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
                 <EditText
                     android:id="@+id/shapeWidthEdit"
-                    android:layout_weight= "1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
+                    android:layout_weight="1"
+                    android:inputType="numberDecimal" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginLeft="5sp"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5sp"
+                android:orientation="vertical">
+
                 <TextView
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Height:"/>
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Height:" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
                 <EditText
                     android:id="@+id/shapeHeightEdit"
-                    android:layout_weight= "1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
+                    android:layout_weight="1"
+                    android:inputType="numberDecimal" />
             </LinearLayout>
         </LinearLayout>
 
         // Text and Text Size
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
                 <TextView
-                    android:gravity="center_vertical"
-                    android:textStyle="bold"
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:text="Text : "/>
-                <TextView
-                    android:gravity="center_vertical"
-                    android:textStyle="bold"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Text : "
+                    android:textStyle="bold" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:text="Text Size: "/>
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Text Size: "
+                    android:textStyle="bold" />
             </LinearLayout>
 
 
             <LinearLayout
-                android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <EditText
                     android:id="@+id/textStringEdit"
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
                 <EditText
-                    android:inputType="numberDecimal"
                     android:id="@+id/textSizeEdit"
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="numberDecimal" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
 
     // Moveable and Hidden
+
     <LinearLayout
-        android:layout_weight="1"
-        android:layout_marginTop="5sp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
         //moveable
+
         <LinearLayout
-            android:layout_weight="1"
-            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
             <TextView
-                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Moveable : "/>
+                android:text="Moveable : "
+                android:textStyle="bold" />
+
             <RadioGroup
+                android:id="@+id/moveableGroupEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:id="@+id/moveableGroupEdit"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:orientation="horizontal">
+
                 <RadioButton
                     android:id="@+id/moveableYesEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yes"/>
+                    android:text="Yes" />
+
                 <RadioButton
                     android:id="@+id/moveableNoEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No"/>
+                    android:text="No" />
             </RadioGroup>
         </LinearLayout>
 
         // hidden
+
         <LinearLayout
-            android:layout_weight="1"
-            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
             <TextView
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hidden : "/>
+                android:layout_gravity="center_horizontal"
+                android:text="Hidden : "
+                android:textStyle="bold" />
+
             <RadioGroup
+                android:id="@+id/hiddenGroupEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:id="@+id/hiddenGroupEdit"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:orientation="horizontal">
+
                 <RadioButton
                     android:id="@+id/hiddenYesEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yes"/>
+                    android:text="Yes" />
+
                 <RadioButton
                     android:id="@+id/hiddenNoEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No"/>
+                    android:text="No" />
             </RadioGroup>
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="copyShapeEdit"
+            android:text="COPY SHAPE" />
+
+        <Button
+            android:id="@+id/pasteShapeEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="pasteShapeEdit"
+            android:text="PASTE SAVED SHAPE" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="horizontal" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <Button
-            android:onClick="updateTheShape"
-            android:text="Finish Editing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5"
+            android:onClick="updateTheShape"
+            android:text="Finish Editing" />
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Edit Placement/Size"
-            android:onClick="moveShape"/>
-
-
+            android:onClick="moveShape"
+            android:text="Edit Placement/Size" />
     </LinearLayout>
-
 </LinearLayout>
+
+
+
