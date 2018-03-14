@@ -31,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void uploadCustom(View view) {
+        Intent intent = new Intent(this, CustomUploads.class);
+        startActivity(intent);
+    }
     /**
      * Uncomment to allow option to debug database
      */
