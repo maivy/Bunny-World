@@ -51,6 +51,7 @@ public class EditShapeOptions extends AppCompatActivity {
         if (AllShapes.getInstance().getAllShapes().containsKey(shapeName)) {
             Intent intent = new Intent(getApplicationContext(), EditScript.class);
             intent.putExtra("shape", shapeName);
+            intent.putExtra("editing", true);
             startActivity(intent);
         } else {
             Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();

@@ -271,33 +271,6 @@
 
     // Image Name
 
-
-    // Script
-    <TextView
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Script : "/>
-
-    <LinearLayout
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Spinner
-            android:id="@+id/scriptFirst"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Spinner>
-        <Spinner
-            android:id="@+id/scriptSecond"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </Spinner>
-    </LinearLayout>
-
     <LinearLayout
         android:layout_weight="1"
         android:orientation="horizontal"
@@ -341,6 +314,6 @@
         android:id="@+id/createButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CREATE">
+        android:text="Create and Add Script">
     </Button>
 </LinearLayout>
