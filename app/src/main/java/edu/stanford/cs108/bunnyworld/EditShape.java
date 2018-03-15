@@ -135,7 +135,7 @@ public class EditShape extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "SHAPE NAME ALREADY EXISTS", Toast.LENGTH_SHORT).show();
             return false;
         } else if (newName.contains(" ") && mode.equals(UPDATE)) {
-            Toast.makeText(getApplicationContext(), "MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "SHAPE NAME MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             EditText shapeWidth = findViewById(R.id.shapeWidthEdit);
@@ -162,15 +162,27 @@ public class EditShape extends AppCompatActivity {
     }
 
     public void moveShape(View view) {
-        if (AllShapes.getInstance().getAllShapes().containsKey(currShapeName)) {
-            Intent intent = new Intent(this, PlaceShape.class);
-            Shape currShape = AllShapes.getInstance().getAllShapes().get(currShapeName);
-            intent.putExtra("pageName", currShape.getAssociatedPage());
-            intent.putExtra("editing", true);
-            intent.putExtra("shape", currShapeName);
-            startActivity(intent);
-        } else {
-            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
+        Shape currShape = currShapes.get(currShapeName);
+        EditText nameBox = findViewById(R.id.currentShapeNameEdit);
+        String newName = nameBox.getText().toString().toLowerCase();
+
+        if (checkInputs(UPDATE)) {
+            currShape.setName(newName);
+
+            updateAShape(currShape);
+            currShapes.remove(currShapeName);
+            currShapes.put(newName, currShape);
+            currShapeName = newName;
+            if (AllShapes.getInstance().getAllShapes().containsKey(currShapeName)) {
+                Intent intent = new Intent(this, PlaceShape.class);
+                intent.putExtra("pageName", currShape.getAssociatedPage());
+                intent.putExtra("editing", true);
+                intent.putExtra("shape", currShapeName);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
