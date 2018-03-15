@@ -16,28 +16,18 @@ class CustomImages {
         return ourInstance;
     }
 
-    private HashMap<String, Uri> images;
     private HashMap<String, BitmapDrawable> bitmapDrawables;
 
     private CustomImages() {
-        images = new HashMap<>();
         bitmapDrawables = new HashMap<>();
     }
 
-    public HashMap<String, Uri> getImages() {
-        return images;
+    public void setBitmapDrawables(HashMap<String, BitmapDrawable> bitmapDrawables) {
+        this.bitmapDrawables = bitmapDrawables;
     }
+
     public HashMap<String, BitmapDrawable> getBitmapDrawables() {
         return bitmapDrawables;
     }
 
-    //https://stackoverflow.com/questions/17356312/converting-of-uri-to-string
-    //helper to load in to database
-    public static String uriToString(Uri uri) {
-        return uri.toString();
-    }
-
-    public static Uri stringToUri(String str) {
-        return Uri.parse(str);
-    }
 }

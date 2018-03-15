@@ -4,13 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
-import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class BunnyWorldDB {
     private static final Context CONTEXT = App.getContext();
@@ -28,12 +30,7 @@ public class BunnyWorldDB {
         database = databaseHelper.getWritableDatabase();
     }
 
-    private static final BitmapDrawable CARROT = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.carrot);
-    private static final BitmapDrawable CARROT2 = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.carrot2);
-    private static final BitmapDrawable DEATH = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.death);
-    private static final BitmapDrawable DUCK = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.duck);
-    private static final BitmapDrawable FIRE = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.fire);
-    private static final BitmapDrawable MYSTIC = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.mystic);
+
 
     // Returns id of object in specified table
     private int getId(String tableName, String objName) {
@@ -51,9 +48,93 @@ public class BunnyWorldDB {
         return objId;
     }
 
+
+
     /**
      *
-     * Add a new game, new pages, and new shapes
+     * Get custom images and preloaded images
+     *
+     */
+
+    private static final BitmapDrawable CARROT = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.carrot);
+    private static final BitmapDrawable CARROT2 = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.carrot2);
+    private static final BitmapDrawable DEATH = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.death);
+    private static final BitmapDrawable DUCK = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.duck);
+    private static final BitmapDrawable FIRE = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.fire);
+    private static final BitmapDrawable MYSTIC = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.mystic);
+
+    int IMG_NAME_COL = 0;
+    int IMG_COL = 1;
+
+    /**
+     * Source:
+     * https://stackoverflow.com/questions/11790104/how-to-storebitmap-image-and-retrieve-image-from-sqlite-database-in-android
+     * @param bitmap
+     * @return
+     */
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
+    }
+
+    /**
+     * Source:
+     * https://stackoverflow.com/questions/11790104/how-to-storebitmap-image-and-retrieve-image-from-sqlite-database-in-android
+     * @param image
+     * @return
+     */
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
+    }
+
+    public static BitmapDrawable getBitmapDrawable(String drawingName) {
+        BitmapDrawable drawable = null;
+        if (drawingName.equals("carrot")) drawable = CARROT;
+        else if (drawingName.equals("carrot2")) drawable = CARROT2;
+        else if (drawingName.equals("death")) drawable = DEATH;
+        else if (drawingName.equals("duck")) drawable = DUCK;
+        else if (drawingName.equals("fire")) drawable = FIRE;
+        else if (drawingName.equals("mystic")) drawable = MYSTIC;
+        else {
+            HashMap<String, BitmapDrawable> images = CustomImages.getInstance().getBitmapDrawables();
+            if (images.containsKey(drawingName)) {
+                drawable = images.get(drawingName);
+            }
+        }
+        return drawable;
+    }
+
+    private HashMap<String, BitmapDrawable> getCustomBitmapDrawables() {
+        HashMap<String, BitmapDrawable> bitmapDrawables = new HashMap<String,BitmapDrawable>();
+
+        String query = "SELECT * FROM images;";
+        Cursor cursor = database.rawQuery(query,null);
+
+        if (cursor.getCount() == 0 || cursor == null) return bitmapDrawables;
+
+        try {
+            while(cursor.moveToNext()) {
+                String imageName = cursor.getString(IMG_NAME_COL);
+                byte [] imageInBytes = cursor.getBlob(IMG_COL);
+                Bitmap imageBitmap = getImage(imageInBytes);
+                BitmapDrawable imageDrawable = new BitmapDrawable(CONTEXT.getResources(),imageBitmap);
+                bitmapDrawables.put(imageName,imageDrawable);
+            }
+        } catch (Exception e) {
+
+        } finally {
+            cursor.close();
+        }
+
+        return bitmapDrawables;
+    }
+
+
+
+    /**
+     *
+     * Add a new game, new pages, new shapes, and new custom images
      *
      */
 
@@ -93,7 +174,6 @@ public class BunnyWorldDB {
             shapeValues.put(DatabaseContract.Shapes.FONT_SIZE,shape.getFontSize());
             shapeValues.put(DatabaseContract.Shapes.IS_HIDDEN,shape.isHidden());
             shapeValues.put(DatabaseContract.Shapes.IS_MOVABLE,shape.isMovable());
-//            shapeValues.put(DatabaseContract.Shapes.IS_RECEIVING,false);
             shapeValues.put(DatabaseContract.Shapes.X,shape.getX());
             shapeValues.put(DatabaseContract.Shapes.Y,shape.getY());
             shapeValues.put(DatabaseContract.Shapes.WIDTH,shape.getWidth());
@@ -102,16 +182,11 @@ public class BunnyWorldDB {
         }
     }
 
-    private void addImagesToDB() {
-        HashMap<String,Uri> images = CustomImages.getInstance().getImages();
-        for (Map.Entry<String,Uri> image: images.entrySet()) {
-            ContentValues imageValues = new ContentValues();
-            String imageName = image.getKey();
-            String uriString = CustomImages.uriToString(image.getValue());
-            imageValues.put(DatabaseContract.Images.IMG_NAME,imageName);
-            imageValues.put(DatabaseContract.Images.URI,uriString);
-            database.insert(DatabaseContract.Images.TABLE_NAME,null,imageValues);
-        }
+    public void addImageToDB(String name, BitmapDrawable image) {
+        ContentValues imageValues = new ContentValues();
+        imageValues.put(DatabaseContract.Images.IMG_NAME,name);
+        imageValues.put(DatabaseContract.Images.IMG,getBytes(image.getBitmap()));
+        database.insert(DatabaseContract.Images.TABLE_NAME,null,imageValues);
     }
 
     /**
@@ -123,8 +198,10 @@ public class BunnyWorldDB {
         long gameId = addGameToDB(gameName);
         HashMap<String, Long> pageIds = addPagesToDB(gameId);
         addShapesToDB(gameId,pageIds);
-        addImagesToDB();
+//        addImagesToDB();
     }
+
+
 
     /**
      *
@@ -154,6 +231,8 @@ public class BunnyWorldDB {
         return pages;
     }
 
+
+
     /**
      *
      * Get shapes from an existing game
@@ -168,10 +247,10 @@ public class BunnyWorldDB {
     private static final int SHAPE_FONT_SIZE = 7;
     private static final int SHAPE_IS_HIDDEN = 8;
     private static final int SHAPE_IS_MOVABLE = 9;
-    private static final int SHAPE_X = 11;
-    private static final int SHAPE_Y = 12;
-    private static final int SHAPE_WIDTH = 13;
-    private static final int SHAPE_HEIGHT = 14;
+    private static final int SHAPE_X = 10;
+    private static final int SHAPE_Y = 11;
+    private static final int SHAPE_WIDTH = 12;
+    private static final int SHAPE_HEIGHT = 13;
 
     private String findPageName(long pageId) {
         String findPageQuery = "SELECT * FROM pages WHERE _id = " + pageId + ";";
@@ -180,17 +259,6 @@ public class BunnyWorldDB {
         String pageName = findPageCursor.getString(PAGE_NAME_COL);
         findPageCursor.close();
         return pageName;
-    }
-
-    private static BitmapDrawable getBitmapDrawable(String drawingName) {
-        BitmapDrawable drawable = null;
-        if (drawingName.equals("carrot")) drawable = CARROT;
-        else if (drawingName.equals("carrot2")) drawable = CARROT2;
-        else if (drawingName.equals("death")) drawable = DEATH;
-        else if (drawingName.equals("duck")) drawable = DUCK;
-        else if (drawingName.equals("fire")) drawable = FIRE;
-        else if (drawingName.equals("mystic")) drawable = MYSTIC;
-        return drawable;
     }
 
     private Shape getShapeFromCursor(Cursor cursor, String name) {
@@ -217,13 +285,14 @@ public class BunnyWorldDB {
         Cursor cursor = database.rawQuery(shapeQuery,null);
         while(cursor.moveToNext()) {
             String shapeName = cursor.getString(SHAPE_NAME_COL);
-//            System.out.println("Shape Name: " + shapeName);
             shapes.put(shapeName,getShapeFromCursor(cursor,shapeName));
         }
         cursor.close();
 
         return shapes;
     }
+
+
 
     /**
      *
@@ -256,38 +325,7 @@ public class BunnyWorldDB {
         return currShapeNumber;
     }
 
-    /**
-     *
-     * Get custom images
-     *
-     */
 
-    int IMG_NAME_COL = 0;
-    int IMG_URI_COL = 1;
-
-    /**
-     * Returns hashmap of custom image names and their uris.
-     * If no images exist, returns an empty (not null) hashmap.
-     * @return
-     */
-    private HashMap<String, Uri> getCustomImages() {
-        HashMap<String, Uri> images = new HashMap<String,Uri>();
-
-        String query = "SELECT * FROM images;";
-        Cursor cursor = database.rawQuery(query,null);
-
-        if (cursor.getCount() == 0 || cursor == null) return images;
-
-        while(cursor.moveToNext()) {
-            String imageName = cursor.getString(IMG_NAME_COL);
-            String uriString = cursor.getString(IMG_URI_COL);
-            Uri uri = CustomImages.stringToUri(uriString);
-            images.put(imageName,uri);
-        }
-        cursor.close();
-
-        return images;
-    }
 
     /**
      * Sets all pages and shapes singletons to data
@@ -305,8 +343,13 @@ public class BunnyWorldDB {
         AllShapes allShapes = AllShapes.getInstance();
         allShapes.setCurrShapeNumber(getCurrShapeNumber(gameId));
         allShapes.setCurrShapes(getCurrShapes(gameId));
-        CustomImages.getInstance().setImages(getCustomImages());
     }
+
+    public void loadCustomImages() {
+        CustomImages.getInstance().setBitmapDrawables(getCustomBitmapDrawables());
+    }
+
+
 
     /**
      * Deletes all pages and shapes associated with given game.
@@ -330,8 +373,10 @@ public class BunnyWorldDB {
         database.delete("shapes",whereClause,null);
 
         // Delete all rows in images table
-        database.delete(DatabaseContract.Images.TABLE_NAME,null,null);
+//        database.delete(DatabaseContract.Images.TABLE_NAME,null,null);
     }
+
+
 
     /**
      * Deletes old version of game and adds current game data.
@@ -345,6 +390,8 @@ public class BunnyWorldDB {
         removeGame(gameName);
         addCurrentGame(gameName);
     }
+
+
 
     /**
      *
@@ -368,4 +415,5 @@ public class BunnyWorldDB {
 
         return gameNames;
     }
+
 }

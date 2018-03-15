@@ -86,10 +86,9 @@ public class NewShape extends AppCompatActivity {
 
         //set up list of custom images
         imageMap = CustomImages.getInstance();
-        customImages = imageMap.getImages();
-        customImagesNames = new ArrayList<>(customImages.keySet());
-        customImagesNames.add(0, NO_IMG);
         customBitmapDrawables = imageMap.getBitmapDrawables();
+        customImagesNames = new ArrayList<>(customBitmapDrawables.keySet());
+        customImagesNames.add(0, NO_IMG);
     }
 
     public void loadCustomSpinner(View view) {

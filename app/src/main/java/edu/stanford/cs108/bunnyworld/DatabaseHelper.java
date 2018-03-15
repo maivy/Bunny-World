@@ -44,7 +44,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "" + DatabaseContract.Shapes.FONT_SIZE + " INTEGER, " +
                     "" + DatabaseContract.Shapes.IS_HIDDEN + " BOOL, " +
                     "" + DatabaseContract.Shapes.IS_MOVABLE + " BOOL, " +
-//                    "" + DatabaseContract.Shapes.IS_RECEIVING+ " BOOL, " +
                     "" + DatabaseContract.Shapes.X + " FLOAT, " +
                     "" + DatabaseContract.Shapes.Y + " FLOAT, " +
                     "" + DatabaseContract.Shapes.WIDTH + " FLOAT, " +
@@ -54,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_IMAGES =
             "CREATE TABLE " + DatabaseContract.Images.TABLE_NAME + " (" +
                     "" + DatabaseContract.Images.IMG_NAME + " TEXT, " +
-                    "" + DatabaseContract.Images.URI + " TEXT" +
+                    "" + DatabaseContract.Images.IMG + " BLOB" +
                     ");";
 
     @Override

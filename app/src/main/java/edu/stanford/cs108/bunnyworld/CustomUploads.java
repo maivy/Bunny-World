@@ -32,7 +32,7 @@ public class CustomUploads extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_uploads);
         imageMap = CustomImages.getInstance();
-        customImages = imageMap.getImages();
+//        customImages = imageMap.getImages();
         bitmapDrawables = imageMap.getBitmapDrawables();
     }
 
@@ -74,9 +74,14 @@ public class CustomUploads extends AppCompatActivity {
             Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
             imageDrawable = new BitmapDrawable(getResources(), image);
             parcelFileDescriptor.close();
+
             EditText name = findViewById(R.id.imageName);
-            customImages.put(name.getText().toString(), requestResult);
-            bitmapDrawables.put(name.getText().toString(), imageDrawable);
+            String imageName = name.getText().toString();
+            bitmapDrawables.put(imageName, imageDrawable);
+
+            // add image to database
+            BunnyWorldDB.getInstance().addImageToDB(imageName,imageDrawable);
+
             LinearLayout nameImage = findViewById(R.id.nameImage);
             nameImage.setVisibility(View.GONE);
             name.setText("");

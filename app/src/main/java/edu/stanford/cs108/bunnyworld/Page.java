@@ -1,5 +1,7 @@
 package edu.stanford.cs108.bunnyworld;
 
+import android.graphics.drawable.BitmapDrawable;
+
 /**
  * edu.stanford.cs108.bunnyworld.Page Class
  */
@@ -7,7 +9,6 @@ package edu.stanford.cs108.bunnyworld;
 public class Page {
     private String pageName;
     private String backgroundImageName;
-
 
     // Initializes a page with a given name.
     public Page (String name) {
@@ -35,4 +36,13 @@ public class Page {
         return backgroundImageName;
     }
 
+    /**
+     * Returns image associated with background image name or null.
+     * @return backgroundImage
+     */
+    public BitmapDrawable getBackgroundImage() {
+        if (backgroundImageName.equals("")) return null;
+        BitmapDrawable backgroundImage = BunnyWorldDB.getBitmapDrawable(backgroundImageName);
+        return backgroundImage;
+    }
 }

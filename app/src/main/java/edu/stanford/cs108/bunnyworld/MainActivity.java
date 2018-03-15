@@ -1,21 +1,24 @@
 package edu.stanford.cs108.bunnyworld;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Map;
 
-//    public CustomImages customImages;
-//    public HashMap<String, Uri> uriMap;
-//    public HashMap<String, BitmapDrawable> bitmapDrawableMap;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // load custom images
+        BunnyWorldDB bunnyWorldDB = BunnyWorldDB.getInstance();
+        bunnyWorldDB.loadCustomImages();
     }
 
     public void createClicked(View view) {

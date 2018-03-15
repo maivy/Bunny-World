@@ -21,8 +21,8 @@ public class DatabaseDebug extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_debug);
-        this.deleteDatabase("BunnyWorldDB.db"); // reset database
-
+//        this.deleteDatabase("BunnyWorldDB.db"); // reset database
+//        BunnyWorldDB bunnyWorldDB = BunnyWorldDB.getInstance();
 /**
  * Instantiate BunnyWorldDB first then use the below code to add values into database
  */
@@ -48,24 +48,24 @@ public class DatabaseDebug extends AppCompatActivity {
 //        bunnyWorldDB.execSQL(addGames);
 //        bunnyWorldDB.execSQL(addShapes);
 
-        HashMap<String, Page> allCurrPages = AllPages.getInstance().getAllPages();
-        HashMap<String, Shape> allCurrShapes = AllShapes.getInstance().getAllShapes();
-        HashMap<String, Uri> images = CustomImages.getInstance().getImages();
-
-        // Dummy data for debug
-        allCurrPages.put("page1", new Page("page1"));
+//        HashMap<String, Page> allCurrPages = AllPages.getInstance().getAllPages();
+//        HashMap<String, Shape> allCurrShapes = AllShapes.getInstance().getAllShapes();
+//        HashMap<String, Uri> images = CustomImages.getInstance().getImages();
+//
+//        // Dummy data for debug
+//        allCurrPages.put("page1", new Page("page1"));
 //        allCurrPages.put("page2", new Page("page2"));
 //
-        allCurrShapes.put("shape1", new Shape("page1", "shape1", 1, 2, 3, 4, true, false, "carrot", null, "text", "script", 12));
-        allCurrShapes.put("shape2", new Shape("page2", "shape2", 1, 2, 3, 4, false, true, "death", null, "text", "script", 12));
+//        allCurrShapes.put("shape1", new Shape("page1", "shape1", 1, 2, 3, 4, true, false, "carrot", null, "text", "script", 12));
+//        allCurrShapes.put("shape2", new Shape("page2", "shape2", 1, 2, 3, 4, false, true, "death", null, "text", "script", 12));
 //        allCurrShapes.put("shape3", new Shape("page1", "shape3", 1, 2, 3, 4, true, false, "duck", null, "text", "script", 12));
 //        allCurrShapes.put("shape4", new Shape("page2", "shape4", 1, 2, 3, 4, false, false, "fire", null, "text", "script", 12));
 
 //
-        BunnyWorldDB bunnyWorldDB = BunnyWorldDB.getInstance();
+//        BunnyWorldDB bunnyWorldDB = BunnyWorldDB.getInstance();
 //
-        // add new game to database
-        bunnyWorldDB.addCurrentGame("game1");
+//        // add new game to database
+//        bunnyWorldDB.addCurrentGame("game1");
 //        bunnyWorldDB.addCurrentGame("game3");
 //
 //        // edit game in app
@@ -73,8 +73,8 @@ public class DatabaseDebug extends AppCompatActivity {
 //        allCurrShapes.remove("shape1");
 //        allCurrShapes.remove("shape4");
 //
-        ArrayList<String> games = bunnyWorldDB.getGameNames();
-        System.out.println(games);
+//        ArrayList<String> games = bunnyWorldDB.getGameNames();
+//        System.out.println(games);
 //
 //        // want to add new game, but and existing game already has same name
 //        if (!games.contains("game1")) {

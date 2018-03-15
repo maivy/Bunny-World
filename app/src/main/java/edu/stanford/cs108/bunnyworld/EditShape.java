@@ -34,7 +34,6 @@ public class EditShape extends AppCompatActivity {
             "fire", "mystic"));
 
     public CustomImages imageMap;
-    public HashMap<String, Uri> customImages;
     public HashMap<String, BitmapDrawable> customBitmapDrawables;
     private ArrayList<String> customImagesNames;
 
@@ -93,10 +92,9 @@ public class EditShape extends AppCompatActivity {
 
     private void init () {
         imageMap = CustomImages.getInstance();
-        customImages = imageMap.getImages();
-        customImagesNames = new ArrayList<>(customImages.keySet());
-        customImagesNames.add(0, NO_IMG);
         customBitmapDrawables = imageMap.getBitmapDrawables();
+        customImagesNames = new ArrayList<>(customBitmapDrawables.keySet());
+        customImagesNames.add(0, NO_IMG);
         if (AllShapes.getInstance().getCopiedShape() == null) {
             Button pasteButton = findViewById(R.id.pasteShapeEdit);
             pasteButton.setVisibility(View.INVISIBLE);
