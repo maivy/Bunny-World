@@ -162,12 +162,16 @@ public class EditShape extends AppCompatActivity {
     }
 
     public void moveShape(View view) {
-        Intent intent = new Intent(this, PlaceShape.class);
-        Shape currShape = AllShapes.getInstance().getAllShapes().get(currShapeName);
-        intent.putExtra("pageName", currShape.getAssociatedPage());
-        intent.putExtra("editing", true);
-        intent.putExtra("shape", currShapeName);
-        startActivity(intent);
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShapeName)) {
+            Intent intent = new Intent(this, PlaceShape.class);
+            Shape currShape = AllShapes.getInstance().getAllShapes().get(currShapeName);
+            intent.putExtra("pageName", currShape.getAssociatedPage());
+            intent.putExtra("editing", true);
+            intent.putExtra("shape", currShapeName);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -231,23 +235,27 @@ public class EditShape extends AppCompatActivity {
 
 
     public void updateTheShape(View view) {
-        HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
-        Shape currShape = currShapes.get(currShapeName);
-        EditText nameBox = findViewById(R.id.currentShapeNameEdit);
-        String newName = nameBox.getText().toString().toLowerCase();
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShapeName)) {
+            HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
+            Shape currShape = currShapes.get(currShapeName);
+            EditText nameBox = findViewById(R.id.currentShapeNameEdit);
+            String newName = nameBox.getText().toString().toLowerCase();
 
-        if (checkInputs(UPDATE)) {
-            currShape.setName(newName);
+            if (checkInputs(UPDATE)) {
+                currShape.setName(newName);
 
-            updateAShape(currShape);
-            currShapes.remove(currShapeName);
-            currShapes.put(newName, currShape);
-            currShapeName = newName;
+                updateAShape(currShape);
+                currShapes.remove(currShapeName);
+                currShapes.put(newName, currShape);
+                currShapeName = newName;
 
-            Toast.makeText(getApplicationContext(), "SHAPE UPDATED", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getApplicationContext(), EditShapeOptions.class);
-            intent.putExtra("shape", currShapeName);
-            startActivity(intent);
+                Toast.makeText(getApplicationContext(), "SHAPE UPDATED", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), EditShapeOptions.class);
+                intent.putExtra("shape", currShapeName);
+                startActivity(intent);
+            }
+        }  else {
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
         }
     }
 
