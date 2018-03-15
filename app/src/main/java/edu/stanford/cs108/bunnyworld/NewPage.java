@@ -145,6 +145,9 @@ public class NewPage extends AppCompatActivity {
                     it.remove();
                 }
             }
+
+            // TODO: delete page from scripts
+
             Intent intent = new Intent(this, NewGame.class);
             startActivity(intent);
         } else {

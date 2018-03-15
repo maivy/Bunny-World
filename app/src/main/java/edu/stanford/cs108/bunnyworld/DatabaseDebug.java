@@ -44,72 +44,72 @@ public class DatabaseDebug extends AppCompatActivity {
 //        bunnyWorldDB.execSQL(addGames);
 //        bunnyWorldDB.execSQL(addShapes);
 
-        HashMap<String, Page> allCurrPages = AllPages.getInstance().getAllPages();
-        HashMap<String, Shape> allCurrShapes = AllShapes.getInstance().getAllShapes();
-
-        // Dummy data for debug
-        allCurrPages.put("page1", new Page("page1"));
-        allCurrPages.put("page2", new Page("page2"));
-
-        allCurrShapes.put("shape1", new Shape("page1", "shape1", 1, 2, 3, 4, true, false, "carrot", null, "text", "script", 12));
-        allCurrShapes.put("shape2", new Shape("page2", "shape2", 1, 2, 3, 4, false, true, "death", null, "text", "script", 12));
-        allCurrShapes.put("shape3", new Shape("page1", "shape3", 1, 2, 3, 4, true, false, "duck", null, "text", "script", 12));
-        allCurrShapes.put("shape4", new Shape("page2", "shape4", 1, 2, 3, 4, false, false, "fire", null, "text", "script", 12));
-
-        BunnyWorldDB bunnyWorldDB = BunnyWorldDB.getInstance();
-
-        // add new game to database
-        bunnyWorldDB.addCurrentGame("game1");
-        bunnyWorldDB.addCurrentGame("game3");
-
-        // edit game in app
-        allCurrPages.put("page3", new Page("page3"));
-        allCurrShapes.remove("shape1");
-        allCurrShapes.remove("shape4");
-
-        ArrayList<String> games = bunnyWorldDB.getGameNames();
-        System.out.println(games);
-
-        // want to add new game, but and existing game already has same name
-        if (!games.contains("game1")) {
-            System.out.println("GAME ADDED");
-            bunnyWorldDB.addCurrentGame("game1");
-        } else {
-            System.out.println("GAME ALREADY EXISTS, RENAME THEN ADD");
-            bunnyWorldDB.addCurrentGame("game2");
-        }
-
-        // get game from database
-        bunnyWorldDB.loadGame("game1");
-        printCurrPages();
-        printCurrShapes();
-
-        // get another game from database
-        bunnyWorldDB.loadGame("game2");
-        printCurrPages();
-        printCurrShapes();
-
-        // removes a game from database, tries to load it
-        bunnyWorldDB.removeGame("game1");
-        bunnyWorldDB.loadGame("game1"); // game does not exist, nothing happens
-        printCurrPages();
-        printCurrShapes();
-
-        //edit an existing game
-        bunnyWorldDB.loadGame("game3");
-
-        allCurrPages = AllPages.getInstance().getAllPages(); // adding new data
-        allCurrShapes = AllShapes.getInstance().getAllShapes();
-        allCurrPages.put("page3", new Page("page3"));
-        allCurrPages.put("page4", new Page("page4"));
-        allCurrShapes.remove("shape2");
-        allCurrShapes.remove("shape3");
-
-        bunnyWorldDB.updateGame("game3");
-        bunnyWorldDB.loadGame("game2"); // load a different game
-        bunnyWorldDB.loadGame("game3"); // check if previous game was updated
-        printCurrPages();
-        printCurrShapes();
+//        HashMap<String, Page> allCurrPages = AllPages.getInstance().getAllPages();
+//        HashMap<String, Shape> allCurrShapes = AllShapes.getInstance().getAllShapes();
+//
+//        // Dummy data for debug
+//        allCurrPages.put("page1", new Page("page1"));
+//        allCurrPages.put("page2", new Page("page2"));
+//
+//        allCurrShapes.put("shape1", new Shape("page1", "shape1", 1, 2, 3, 4, true, false, "carrot", null, "text", "script", 12));
+//        allCurrShapes.put("shape2", new Shape("page2", "shape2", 1, 2, 3, 4, false, true, "death", null, "text", "script", 12));
+//        allCurrShapes.put("shape3", new Shape("page1", "shape3", 1, 2, 3, 4, true, false, "duck", null, "text", "script", 12));
+//        allCurrShapes.put("shape4", new Shape("page2", "shape4", 1, 2, 3, 4, false, false, "fire", null, "text", "script", 12));
+//
+//        BunnyWorldDB bunnyWorldDB = BunnyWorldDB.getInstance();
+//
+//        // add new game to database
+//        bunnyWorldDB.addCurrentGame("game1");
+//        bunnyWorldDB.addCurrentGame("game3");
+//
+//        // edit game in app
+//        allCurrPages.put("page3", new Page("page3"));
+//        allCurrShapes.remove("shape1");
+//        allCurrShapes.remove("shape4");
+//
+//        ArrayList<String> games = bunnyWorldDB.getGameNames();
+//        System.out.println(games);
+//
+//        // want to add new game, but and existing game already has same name
+//        if (!games.contains("game1")) {
+//            System.out.println("GAME ADDED");
+//            bunnyWorldDB.addCurrentGame("game1");
+//        } else {
+//            System.out.println("GAME ALREADY EXISTS, RENAME THEN ADD");
+//            bunnyWorldDB.addCurrentGame("game2");
+//        }
+//
+//        // get game from database
+//        bunnyWorldDB.loadGame("game1");
+//        printCurrPages();
+//        printCurrShapes();
+//
+//        // get another game from database
+//        bunnyWorldDB.loadGame("game2");
+//        printCurrPages();
+//        printCurrShapes();
+//
+//        // removes a game from database, tries to load it
+//        bunnyWorldDB.removeGame("game1");
+//        bunnyWorldDB.loadGame("game1"); // game does not exist, nothing happens
+//        printCurrPages();
+//        printCurrShapes();
+//
+//        //edit an existing game
+//        bunnyWorldDB.loadGame("game3");
+//
+//        allCurrPages = AllPages.getInstance().getAllPages(); // adding new data
+//        allCurrShapes = AllShapes.getInstance().getAllShapes();
+//        allCurrPages.put("page3", new Page("page3"));
+//        allCurrPages.put("page4", new Page("page4"));
+//        allCurrShapes.remove("shape2");
+//        allCurrShapes.remove("shape3");
+//
+//        bunnyWorldDB.updateGame("game3");
+//        bunnyWorldDB.loadGame("game2"); // load a different game
+//        bunnyWorldDB.loadGame("game3"); // check if previous game was updated
+//        printCurrPages();
+//        printCurrShapes();
     }
 
     private void printCurrShapes() {

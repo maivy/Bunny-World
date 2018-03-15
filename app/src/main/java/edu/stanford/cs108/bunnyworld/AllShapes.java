@@ -17,13 +17,11 @@ class AllShapes {
         copiedShape = null;
     }
 
-
     public void setCopiedShape(Shape newShape) {
         copiedShape = newShape;
     }
 
     public Shape getCopiedShape() {return copiedShape;}
-
 
     public HashMap<String, Shape> getAllShapes () {
         return currShapes;
@@ -102,4 +100,6 @@ class AllShapes {
         }
         return newClause;
     }
+
+    // TODO: remove page from scripts as well
 }
