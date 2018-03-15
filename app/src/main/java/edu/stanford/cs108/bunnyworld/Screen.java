@@ -197,7 +197,7 @@ public class Screen extends View {
             if (sound_name.equals("carrotcarrotcarrot")) sound = R.raw.carrotcarrotcarrot;
             else if (sound_name.equals("evillaugh")) sound = R.raw.evillaugh;
             else if (sound_name.equals("fire")) sound = R.raw.fire;
-            else if (sound_name.equals("hooray")) sound = R.raw.evillaugh;
+            else if (sound_name.equals("hooray")) sound = R.raw.hooray;
             else if (sound_name.equals("munch")) sound = R.raw.munch;
             else if (sound_name.equals("munching")) sound = R.raw.munching;
             else if (sound_name.equals("woof")) sound = R.raw.woof;

@@ -21,7 +21,7 @@ class AllShapes {
         copiedShape = newShape;
     }
 
-    public Shape getCopiedShape() {return copiedShape;}
+    public Shape getCopiedShape() { return copiedShape; }
 
     public HashMap<String, Shape> getAllShapes () {
         return currShapes;
@@ -48,27 +48,7 @@ class AllShapes {
         currShapeNumber = 1;
     }
 
-    public void removeShapeFromScripts(String shapeName) {
-        for (Shape shape: currShapes.values()) {
-            String script = shape.getScript();
-            String newScript = "";
-            while (script.contains(shapeName)) {
-                int semicolon = script.indexOf(";");
-                String clause = script.substring(0,semicolon).trim();
-
-                String newClause  = clause + " ; ";
-                if (clause.contains(shapeName)) {
-                    newClause = removeShapeFromClause(clause,shapeName);
-                }
-
-                newScript = newScript.concat(newClause);
-                script = script.substring(semicolon+1);
-            }
-            shape.setScript(newScript);
-        }
-    }
-
-    private String removeShapeFromClause(String clause, String shapeName) {
+    private String removeObjectFromClause(String clause, String objName) {
         String [] words = clause.split(" ");
 
         String newClause = "";
@@ -84,11 +64,10 @@ class AllShapes {
             newClause = event + " ";
             int retainedActions = 0;
 
-
-            for (int currAction = start; currAction < words.length; currAction += 2) {
-                String verb = words[currAction];
-                String modifier = words[currAction + 1];
-                if (!modifier.equals(shapeName)) {
+            for (int currVerb = start; currVerb < words.length; currVerb += 2) {
+                String verb = words[currVerb];
+                String modifier = words[currVerb + 1];
+                if (!modifier.equals(objName)) {
                     String action = verb + " " + modifier + " ";
                     newClause = newClause.concat(action);
                     retainedActions++;
@@ -99,6 +78,31 @@ class AllShapes {
             if (retainedActions == 0) newClause = ""; // reset if all actions omitted
         }
         return newClause;
+    }
+
+    /**
+     * Removes given shape or page object from every shape script
+     * @param objName
+     */
+    public void removeObjectFromScripts(String objName) {
+        for (Shape shape: currShapes.values()) {
+            String script = shape.getScript();
+            if (!script.contains(objName)) break;
+            String newScript = "";
+            while (script.contains(objName)) {
+                int semicolon = script.indexOf(";");
+                String clause = script.substring(0,semicolon).trim();
+
+                String newClause  = clause + " ; ";
+                if (clause.contains(objName)) {
+                    newClause = removeObjectFromClause(clause,objName);
+                }
+
+                newScript = newScript.concat(newClause);
+                script = script.substring(semicolon+1);
+            }
+            shape.setScript(newScript);
+        }
     }
 
     // TODO: remove page from scripts as well

@@ -16,12 +16,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
     }
 
-//    private static final String TYPE_INT_PRIMARY_KEY = "INTEGER PRIMARY KEY AUTOINCREMENT";
-//    private static final String TYPE_INTEGER = "INTEGER";
-//    private static final String TYPE_TEXT = "TEXT";
-//    private static final String TYPE_FLOAT = "FLOAT";
-//    private static final String TYPE_BOOL = "BOOL";
-
     private static final String SQL_CREATE_GAMES =
             "CREATE TABLE " + DatabaseContract.Games.TABLE_NAME + " (" +
                     "" + DatabaseContract.Games.GAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -34,7 +28,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + DatabaseContract.Pages.TABLE_NAME + " (" +
                     "" + DatabaseContract.Pages.PAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "" + DatabaseContract.Pages.NAME + " TEXT, " +
-                    "" + DatabaseContract.Pages.GAME_ID + " INTEGER" +
+                    "" + DatabaseContract.Pages.GAME_ID + " INTEGER, " +
+                    "" + DatabaseContract.Pages.BACKGROUND_IMG + " TEXT" +
                     ");";
 
     private static final String SQL_CREATE_SHAPES =
@@ -49,11 +44,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "" + DatabaseContract.Shapes.FONT_SIZE + " INTEGER, " +
                     "" + DatabaseContract.Shapes.IS_HIDDEN + " BOOL, " +
                     "" + DatabaseContract.Shapes.IS_MOVABLE + " BOOL, " +
-                    "" + DatabaseContract.Shapes.IS_RECEIVING+ " BOOL, " +
+//                    "" + DatabaseContract.Shapes.IS_RECEIVING+ " BOOL, " +
                     "" + DatabaseContract.Shapes.X + " FLOAT, " +
                     "" + DatabaseContract.Shapes.Y + " FLOAT, " +
                     "" + DatabaseContract.Shapes.WIDTH + " FLOAT, " +
                     "" + DatabaseContract.Shapes.HEIGHT + " FLOAT" +
+                    ");";
+
+    private static final String SQL_CREATE_IMAGES =
+            "CREATE TABLE " + DatabaseContract.Images.TABLE_NAME + " (" +
+                    "" + DatabaseContract.Images.IMG_NAME + " TEXT, " +
+                    "" + DatabaseContract.Images.URI + " TEXT" +
                     ");";
 
     @Override
@@ -61,6 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_GAMES);
         db.execSQL(SQL_CREATE_PAGES);
         db.execSQL(SQL_CREATE_SHAPES);
+        db.execSQL(SQL_CREATE_IMAGES);
     }
 
     @Override

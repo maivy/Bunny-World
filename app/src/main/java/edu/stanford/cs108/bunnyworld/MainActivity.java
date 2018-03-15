@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Uncomment to allow option to debug database
      */
-//    public void gotoDB(View view) {
-//        Intent intent = new Intent(this, DatabaseDebug.class);
-//        startActivity(intent);
-//    }
+    public void gotoDB(View view) {
+        Intent intent = new Intent(this, DatabaseDebug.class);
+        startActivity(intent);
+    }
 }
