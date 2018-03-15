@@ -118,7 +118,7 @@ public class DatabaseDebug extends AppCompatActivity {
         for (Shape shape: allCurrShapes.values()) {
             System.out.printf("Name: %s Page: %s Script: %s ImageName: %s ", shape.getName(), shape.getAssociatedPage(), shape.getScript(), shape.getImageName());
             System.out.printf("Image: %s Text: %s FontSize: %d isHidden: %b ",shape.getImage().toString(), shape.getText(), shape.getFontSize(), shape.isHidden());
-            System.out.printf("isMovable: %b isReceiving: %b x: %f y: %f ", shape.isMovable(), shape.isReceiving(), shape.getX(), shape.getY());
+            System.out.printf("isMovable: %b isReceiving: %b x: %f y: %f ", shape.isMovable(), false, shape.getX(), shape.getY());
             System.out.printf("width: %f height: %f\n", shape.getWidth(), shape.getHeight());
         }
     }
