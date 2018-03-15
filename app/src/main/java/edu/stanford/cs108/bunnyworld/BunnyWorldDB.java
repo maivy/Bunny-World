@@ -11,8 +11,8 @@ import java.util.HashMap;
 
 public class BunnyWorldDB {
     private static final Context CONTEXT = App.getContext();
-    private DatabaseHelper bWDBHelper;
-    private SQLiteDatabase bWDB;
+    private DatabaseHelper databaseHelper;
+    private SQLiteDatabase database;
 
     private static final BunnyWorldDB BUNNY_WORLD_DB = new BunnyWorldDB();
 
@@ -21,8 +21,8 @@ public class BunnyWorldDB {
     }
 
     private BunnyWorldDB() {
-        bWDBHelper = new DatabaseHelper(CONTEXT);
-        bWDB = bWDBHelper.getWritableDatabase();
+        databaseHelper = new DatabaseHelper(CONTEXT);
+        database = databaseHelper.getWritableDatabase();
     }
 
     private static final BitmapDrawable CARROT = (BitmapDrawable) CONTEXT.getResources().getDrawable(R.drawable.carrot);
@@ -35,7 +35,7 @@ public class BunnyWorldDB {
     // Returns id of object in specified table
     private int getId(String tableName, String objName) {
         String getObjectQuery = "SELECT * FROM " + tableName + " WHERE name = '" + objName + "';";
-        Cursor cursor = bWDB.rawQuery(getObjectQuery,null);
+        Cursor cursor = database.rawQuery(getObjectQuery,null);
 
         if (cursor.getCount() == 0) return -1;
 
@@ -59,7 +59,7 @@ public class BunnyWorldDB {
         gameValues.put(DatabaseContract.Games.NAME,gameName);
         gameValues.put(DatabaseContract.Games.CURR_PAGE_NUMBER,AllPages.getInstance().getCurrPageNumber());
         gameValues.put(DatabaseContract.Games.CURR_SHAPE_NUMBER,AllShapes.getInstance().getCurrShapeNumber());
-        long gameId = bWDB.insert("games",null,gameValues);
+        long gameId = database.insert("games",null,gameValues);
         return gameId;
     }
 
@@ -70,7 +70,7 @@ public class BunnyWorldDB {
             ContentValues pageValues = new ContentValues();
             pageValues.put(DatabaseContract.Pages.NAME,page.getPageName());
             pageValues.put(DatabaseContract.Pages.GAME_ID,game_id);
-            long pageId = bWDB.insert("pages",null,pageValues);
+            long pageId = database.insert("pages",null,pageValues);
             pageIds.put(page.getPageName(),pageId);
         }
         return pageIds;
@@ -89,12 +89,12 @@ public class BunnyWorldDB {
             shapeValues.put(DatabaseContract.Shapes.FONT_SIZE,shape.getFontSize());
             shapeValues.put(DatabaseContract.Shapes.IS_HIDDEN,shape.isHidden());
             shapeValues.put(DatabaseContract.Shapes.IS_MOVABLE,shape.isMovable());
-            shapeValues.put(DatabaseContract.Shapes.IS_RECEIVING,shape.isReceiving());
+            shapeValues.put(DatabaseContract.Shapes.IS_RECEIVING,false);
             shapeValues.put(DatabaseContract.Shapes.X,shape.getX());
             shapeValues.put(DatabaseContract.Shapes.Y,shape.getY());
             shapeValues.put(DatabaseContract.Shapes.WIDTH,shape.getWidth());
             shapeValues.put(DatabaseContract.Shapes.HEIGHT,shape.getHeight());
-            bWDB.insert("shapes",null,shapeValues);
+            database.insert("shapes",null,shapeValues);
         }
     }
 
@@ -121,7 +121,7 @@ public class BunnyWorldDB {
         HashMap<String, Page> pages = new HashMap<String,Page>();
 
         String query = "SELECT * FROM pages WHERE gameId = " + gameId + ";";
-        Cursor cursor = bWDB.rawQuery(query,null);
+        Cursor cursor = database.rawQuery(query,null);
 
         while(cursor.moveToNext()) {
             String pageName = cursor.getString(PAGE_NAME_COL);
@@ -154,7 +154,7 @@ public class BunnyWorldDB {
 
     private String findPageName(long pageId) {
         String findPageQuery = "SELECT * FROM pages WHERE _id = " + pageId + ";";
-        Cursor findPageCursor = bWDB.rawQuery(findPageQuery,null);
+        Cursor findPageCursor = database.rawQuery(findPageQuery,null);
         findPageCursor.moveToFirst();
         String pageName = findPageCursor.getString(PAGE_NAME_COL);
         findPageCursor.close();
@@ -193,9 +193,10 @@ public class BunnyWorldDB {
         HashMap<String, Shape> shapes = new HashMap<String, Shape>();
 
         String shapeQuery = "SELECT * FROM shapes WHERE gameId = " + gameId + ";";
-        Cursor cursor = bWDB.rawQuery(shapeQuery,null);
+        Cursor cursor = database.rawQuery(shapeQuery,null);
         while(cursor.moveToNext()) {
             String shapeName = cursor.getString(SHAPE_NAME_COL);
+            System.out.println("Shape Name: " + shapeName);
             shapes.put(shapeName,getShapeFromCursor(cursor,shapeName));
         }
         cursor.close();
@@ -212,7 +213,7 @@ public class BunnyWorldDB {
 
     private Cursor getGameCursor(long gameId) {
         String query = "SELECT * FROM games WHERE _id = " + gameId + ";";
-        Cursor cursor = bWDB.rawQuery(query,null);
+        Cursor cursor = database.rawQuery(query,null);
         cursor.moveToFirst();
         return cursor;
     }
@@ -253,12 +254,6 @@ public class BunnyWorldDB {
     }
 
     /**
-     *
-     * Get current list of games
-     *
-     */
-
-    /**
      * Deletes all pages and shapes associated with given game.
      * Does nothing if given game does not exist.
      * @param gameName
@@ -269,14 +264,14 @@ public class BunnyWorldDB {
 
         // Delete game from games table
         String whereClause = "_id = " + gameId + ";";
-        bWDB.delete("games",whereClause,null);
+        database.delete("games",whereClause,null);
 
         // Delete rows in pages table
         whereClause = "gameId = " + gameId + ";";
-        bWDB.delete("pages",whereClause,null);
+        database.delete("pages",whereClause,null);
 
         // Delete rows in shapes table
-        bWDB.delete("shapes",whereClause,null);
+        database.delete("shapes",whereClause,null);
     }
 
     /**
@@ -292,13 +287,19 @@ public class BunnyWorldDB {
         addCurrentGame(gameName);
     }
 
+    /**
+     *
+     * Get current list of games
+     *
+     */
+
     private static final int GAME_NAME_COL = 1;
 
     public ArrayList<String> getGameNames() {
         ArrayList<String> gameNames = new ArrayList<String>();
 
         String getGamesQuery = "SELECT * FROM games;";
-        Cursor gameCursor = bWDB.rawQuery(getGamesQuery,null);
+        Cursor gameCursor = database.rawQuery(getGamesQuery,null);
 
         while(gameCursor.moveToNext()) {
             String gameName = gameCursor.getString(GAME_NAME_COL);

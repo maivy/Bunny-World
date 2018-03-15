@@ -177,6 +177,8 @@ public class Screen extends View {
          * @param page_name
          */
         private void goTo(String page_name) {
+            Page page = AllPages.getInstance().getAllPages().get(page_name);
+            if (page == null) return;
             prevPage = currPage;
             currPage = page_name;
             if(!prevPage.equals(currPage)){
@@ -191,7 +193,7 @@ public class Screen extends View {
          * @param sound_name
          */
         private void play(String sound_name) {
-            int sound = 0;
+            int sound = -1;
             if (sound_name.equals("carrotcarrotcarrot")) sound = R.raw.carrotcarrotcarrot;
             else if (sound_name.equals("evillaugh")) sound = R.raw.evillaugh;
             else if (sound_name.equals("fire")) sound = R.raw.fire;
@@ -199,6 +201,7 @@ public class Screen extends View {
             else if (sound_name.equals("munch")) sound = R.raw.munch;
             else if (sound_name.equals("munching")) sound = R.raw.munching;
             else if (sound_name.equals("woof")) sound = R.raw.woof;
+            if (sound == -1) return;
             MediaPlayer mp = MediaPlayer.create(getContext(),sound);
             mp.start();
             System.out.printf("play(%s) called\n",sound_name);
@@ -210,6 +213,7 @@ public class Screen extends View {
          */
         private void hide(String shape_name) {
             Shape toHide = AllShapes.getInstance().getAllShapes().get(shape_name);
+            if (toHide == null) return;
             toHide.setHidden(true);
             toHide.setMovable(false);
             System.out.printf("hide(%s) called\n",shape_name);
@@ -221,6 +225,7 @@ public class Screen extends View {
          */
         private void show(String shape_name) {
             Shape toShow = AllShapes.getInstance().getAllShapes().get(shape_name);
+            if (toShow == null) return;
             toShow.setHidden(false);
             toShow.setMovable(false);
             System.out.printf("show(%s) called\n",shape_name);
@@ -250,8 +255,12 @@ public class Screen extends View {
     public void drawShapes(Canvas canvas) {
         HashSet<Shape> shapes = new HashSet<>(this.shapes.values());
         for(Shape shape : shapes) {
-            if(shape.getAssociatedPage().equals(currPage) && !possessions.contains(shape) && !shape.isHidden()) {
-                shape.draw(canvas, dragging);
+            if((shape.getAssociatedPage().equals(currPage) && (!possessions.contains(shape) || dragShape == shape) && !shape.isHidden()) || (possessions.contains(shape) && shape == dragShape)) {
+                boolean withBorder = false;
+                if(dragShape != null && shape.isReceiving(dragShape.getName())) {
+                    withBorder = true;
+                }
+                shape.draw(canvas, withBorder);
             }
         }
     }
@@ -302,7 +311,9 @@ public class Screen extends View {
         Iterator<Shape> it = possessions.iterator();
         while(it.hasNext()){
             Shape shape = it.next();
-            shape.draw(canvas, false);
+            if((shape != dragShape || y > inventoryMin) && !shape.isHidden()) {
+                shape.shrinkDraw(canvas);
+            }
         }
     }
 
@@ -325,14 +336,26 @@ public class Screen extends View {
         for(Shape shape : shapes) {
                 leftX = shape.getX();
                 //need to check bounds differently depending on the type of shape
-            if(shape.getText().equals("")) {
-                topY = shape.getY();
-                rightX = leftX + shape.getWidth();
-                bottomY = topY + shape.getHeight();
+            if(!possessions.contains(shape)) {
+                if (shape.getText().equals("")) {
+                    topY = shape.getY();
+                    rightX = leftX + shape.getWidth();
+                    bottomY = topY + shape.getHeight();
+                } else {
+                    topY = shape.getY() + shape.getTextPaint().ascent();
+                    rightX = leftX + shape.getTextPaint().measureText(shape.getText());
+                    bottomY = shape.getY() + shape.getTextPaint().descent();
+                }
             } else {
-                topY = shape.getY() + shape.getTextPaint().ascent();
-                rightX = leftX + shape.getTextPaint().measureText(shape.getText());
-                bottomY = shape.getY() + shape.getTextPaint().descent();
+                if (shape.getText().equals("")) {
+                    topY = shape.getY();
+                    rightX = leftX + Shape.SHAPE_SHRINK_WIDTH;
+                    bottomY = topY + Shape.SHAPE_SHRINK_HEIGHT;
+                } else {
+                    topY = shape.getY() + shape.getTextPaint().ascent();
+                    rightX = leftX + shape.getTextPaint().measureText(shape.getText());
+                    bottomY = shape.getY() + shape.getTextPaint().descent();
+                }
             }
             if(x >= leftX && x <= rightX && y >= topY && y <= bottomY) {
                 if(!shape.isHidden() && shape.associatedPage.equals(currPage) || possessions.contains(shape)) {
@@ -374,14 +397,25 @@ public class Screen extends View {
                     }
                     if(dragShape != null) {
                         x = event.getX();
-                        y = event.getY();
+                        //don't drag things off screen
+                        y = Math.min(event.getY(), viewHeight);
                         //drags shape in the middle
-                        if (dragShape.getText().equals("")) {
-                            dragShape.setX(x - dragShape.getWidth() * .5f);
-                            dragShape.setY(y - dragShape.getHeight() * .5f);
+                        if(y <= inventoryHeight) {
+                            if (dragShape.getText().equals("")) {
+                                dragShape.setX(x - dragShape.getWidth() * .5f);
+                                dragShape.setY(y - dragShape.getHeight() * .5f);
+                            } else {
+                                dragShape.setX(x - dragShape.getTextPaint().measureText(dragShape.getText()) * .5f);
+                                dragShape.setY(y);
+                            }
                         } else {
-                            dragShape.setX(x - dragShape.getTextPaint().measureText(dragShape.getText()) * .5f);
-                            dragShape.setY(y);
+                            if (dragShape.getText().equals("")) {
+                                dragShape.setX(x - Shape.SHAPE_SHRINK_WIDTH * .5f);
+                                dragShape.setY(y - Shape.SHAPE_SHRINK_HEIGHT * .5f);
+                            } else {
+                                dragShape.setX(x - dragShape.getTextPaint().measureText(dragShape.getText()) * .5f);
+                                dragShape.setY(y);
+                            }
                         }
                     }
                         invalidate();
@@ -391,9 +425,9 @@ public class Screen extends View {
                 if(dragShape != null) {
                     if(y > inventoryHeight) {
                         if(dragShape.getText().equals("")) {
-                            dragShape.setX(x - dragShape.getWidth() * .5f);
+                            dragShape.setX(x - Shape.SHAPE_SHRINK_WIDTH * .5f);
                             //lies well within the inventory box
-                            dragShape.setY(Math.max(y - dragShape.getHeight() * .5f, inventoryMin));
+                            dragShape.setY(Math.max(y - Shape.SHAPE_SHRINK_HEIGHT * .5f, inventoryMin));
                         } else {
                             dragShape.setX(x - dragShape.getTextPaint().measureText(dragShape.getText()) * .5f);
                             dragShape.setY(Math.max(y, inventoryMin + 30));
@@ -401,9 +435,10 @@ public class Screen extends View {
                         possessions.add(dragShape);
                     } else {
                         Shape receiver = getShape(true);
-                        if (receiver != null) {
-                            script.shapeDropped(receiver, dragShape);
-                        } else {
+                        if (receiver != null && receiver.isReceiving(dragShape.getName())) {
+                                possessions.remove(dragShape);
+                                script.shapeDropped(receiver, dragShape);
+                            } else {
                             //shape snaps back to where it was before
                             dragShape.setX(prevX);
                             dragShape.setY(prevY);

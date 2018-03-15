@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,7 +69,6 @@ public class EditScript extends AppCompatActivity {
             TextView command = (TextView) findViewById(R.id.command);
             Spinner spin2 = findViewById(R.id.scriptSecondEdit);
             Spinner spin3 = findViewById(R.id.scriptThirdEdit);
-            Spinner spin4 = findViewById(R.id.scriptFourthEdit);
             String two = spin2.getSelectedItem().toString();
             String three = spin3.getSelectedItem().toString();
             if(command.getText().equals("Current Command: ")) {
@@ -78,18 +78,11 @@ public class EditScript extends AppCompatActivity {
                     Spinner dropSpinner = findViewById(R.id.optionalShapeDrop);
                     String shapeDrop = dropSpinner.getSelectedItem().toString();
                     command.setText(command.getText() + " " + one + " " + shapeDrop + " " + two + " " + three);
-                }
-                command.setText(command.getText() + one + " " + two + " " + three);
-                if (spin4.getSelectedItem() != null) {
-                    String four = spin4.getSelectedItem().toString();
-                    command.setText(command.getText() + " " + four);
+                } else {
+                    command.setText(command.getText() + one + " " + two + " " + three);
                 }
             } else {
                 command.setText(command.getText() + " " + two + " " + three);
-                if (spin4.getSelectedItem() != null) {
-                    String four = spin4.getSelectedItem().toString();
-                    command.setText(command.getText() + " " + four);
-                }
             }
         }
     }
@@ -129,7 +122,6 @@ public class EditScript extends AppCompatActivity {
                     setUpDropSpinner();
                     spinnerTwo.setVisibility(View.INVISIBLE);
                     spinnerThree.setVisibility(View.INVISIBLE);
-                    setUpSpinnerTwo();
                 } else {
                     dropSpinner.setVisibility(View.INVISIBLE);
                     setUpSpinnerTwo();
@@ -150,6 +142,7 @@ public class EditScript extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Spinner secondSpin = findViewById(R.id.scriptSecondEdit);
                 Spinner thirdSpin = findViewById(R.id.scriptThirdEdit);
+                clearCommand(null);
                 if(dropSpinner.getSelectedItem().toString().equals("Select One")) {
                     Button addClause = (Button) findViewById(R.id.addClause);
                     addClause.setVisibility(View.GONE);
@@ -159,6 +152,7 @@ public class EditScript extends AppCompatActivity {
                     thirdSpin.setVisibility(View.INVISIBLE);
                 } else {
                     secondSpin.setVisibility(View.VISIBLE);
+                    setUpSpinnerTwo();
                 }
             }
 
@@ -176,7 +170,6 @@ public class EditScript extends AppCompatActivity {
 
         setSpinnerListToAllActions(secondSpin);
         setUpSpinnerTwoListener(secondSpin);
-        findViewById(R.id.scriptFourthEdit).setVisibility(View.INVISIBLE);
         findViewById(R.id.scriptThirdEdit).setVisibility(View.INVISIBLE);
     }
 
@@ -326,12 +319,16 @@ public class EditScript extends AppCompatActivity {
      * @param view
      */
     public void deleteScript(View view) {
-        LinearLayout holder = (LinearLayout) findViewById(R.id.deleteHolder);
-        if(holder.getVisibility() == View.GONE) {
-            holder.setVisibility(View.VISIBLE);
-            setUpDeleteSpinner();
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShape.getName())) {
+            LinearLayout holder = (LinearLayout) findViewById(R.id.deleteHolder);
+            if (holder.getVisibility() == View.GONE) {
+                holder.setVisibility(View.VISIBLE);
+                setUpDeleteSpinner();
+            } else {
+                holder.setVisibility(View.GONE);
+            }
         } else {
-            holder.setVisibility(View.GONE);
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -415,28 +412,32 @@ public class EditScript extends AppCompatActivity {
      * @param view
      */
     public void doneWithScript(View view) {
-        if(!getIntent().getBooleanExtra("editing", false)) {
-            Intent intent = new Intent(this, PlaceShape.class);
-            intent.putExtra("pageName", currShape.getAssociatedPage());
-            intent.putExtra("shape", currShape.getName());
-            intent.putExtra("editing", false);
-            startActivity(intent);
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShape.getName())) {
+            if(!getIntent().getBooleanExtra("editing", false)) {
+                Intent intent = new Intent(this, PlaceShape.class);
+                intent.putExtra("pageName", currShape.getAssociatedPage());
+                intent.putExtra("shape", currShape.getName());
+                intent.putExtra("editing", false);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, EditShapeOptions.class);
+                intent.putExtra("shape", currShape.getName());
+                intent.putExtra("pageName", currShape.getAssociatedPage());
+                startActivity(intent);
+            }
         } else {
-            Intent intent = new Intent(this, EditShapeOptions.class);
-            intent.putExtra("shape", currShape.getName());
-            intent.putExtra("pageName", currShape.getAssociatedPage());
-            startActivity(intent);
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
         }
     }
 
 
     public void addToScript(View view) {
-        Spinner script1 = findViewById(R.id.scriptFirstEdit);
-        Spinner script2 = findViewById(R.id.scriptSecondEdit);
-        Spinner script3 = findViewById(R.id.scriptThirdEdit);
-        Spinner script4 = findViewById(R.id.scriptFourthEdit);
-        TextView command = (TextView) findViewById(R.id.command);
-        String script = command.getText().toString();
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShape.getName())) {
+            Spinner script1 = findViewById(R.id.scriptFirstEdit);
+            Spinner script2 = findViewById(R.id.scriptSecondEdit);
+            Spinner script3 = findViewById(R.id.scriptThirdEdit);
+            TextView command = (TextView) findViewById(R.id.command);
+            String script = command.getText().toString();
 
         if(!script.equals("Current Command: ")){
             int index = script.indexOf(':');
@@ -449,6 +450,8 @@ public class EditScript extends AppCompatActivity {
         script1.setSelection(0);
         script2.setVisibility(View.INVISIBLE);
         script3.setVisibility(View.INVISIBLE);
-        script4.setVisibility(View.INVISIBLE);
+        }  else {
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
     }
 }
