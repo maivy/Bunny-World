@@ -123,7 +123,7 @@ public class EditShape extends AppCompatActivity {
 
     }
 
-        private boolean checkInputs (String mode) {
+    private boolean checkInputs (String mode) {
         HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
         EditText nameBox = findViewById(R.id.currentShapeNameEdit);
         String newName = nameBox.getText().toString().toLowerCase();
@@ -133,6 +133,9 @@ public class EditShape extends AppCompatActivity {
             return false;
         } else if ((!currShapeName.equals(newName) && currShapes.containsKey(newName)) && mode.equals(UPDATE)) {
             Toast.makeText(getApplicationContext(), "SHAPE NAME ALREADY EXISTS", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (newName.contains(" ") && mode.equals(UPDATE)) {
+            Toast.makeText(getApplicationContext(), "MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             EditText shapeWidth = findViewById(R.id.shapeWidthEdit);
@@ -157,7 +160,7 @@ public class EditShape extends AppCompatActivity {
             return true;
         }
     }
-  
+
     public void moveShape(View view) {
         Intent intent = new Intent(this, PlaceShape.class);
         Shape currShape = AllShapes.getInstance().getAllShapes().get(currShapeName);
