@@ -177,6 +177,8 @@ public class Screen extends View {
          * @param page_name
          */
         private void goTo(String page_name) {
+            Page page = AllPages.getInstance().getAllPages().get(page_name);
+            if (page == null) return;
             prevPage = currPage;
             currPage = page_name;
             if(!prevPage.equals(currPage)){
@@ -191,7 +193,7 @@ public class Screen extends View {
          * @param sound_name
          */
         private void play(String sound_name) {
-            int sound = 0;
+            int sound = -1;
             if (sound_name.equals("carrotcarrotcarrot")) sound = R.raw.carrotcarrotcarrot;
             else if (sound_name.equals("evillaugh")) sound = R.raw.evillaugh;
             else if (sound_name.equals("fire")) sound = R.raw.fire;
@@ -199,6 +201,7 @@ public class Screen extends View {
             else if (sound_name.equals("munch")) sound = R.raw.munch;
             else if (sound_name.equals("munching")) sound = R.raw.munching;
             else if (sound_name.equals("woof")) sound = R.raw.woof;
+            if (sound == -1) return;
             MediaPlayer mp = MediaPlayer.create(getContext(),sound);
             mp.start();
             System.out.printf("play(%s) called\n",sound_name);
@@ -210,6 +213,7 @@ public class Screen extends View {
          */
         private void hide(String shape_name) {
             Shape toHide = AllShapes.getInstance().getAllShapes().get(shape_name);
+            if (toHide == null) return;
             toHide.setHidden(true);
             toHide.setMovable(false);
             System.out.printf("hide(%s) called\n",shape_name);
@@ -221,6 +225,7 @@ public class Screen extends View {
          */
         private void show(String shape_name) {
             Shape toShow = AllShapes.getInstance().getAllShapes().get(shape_name);
+            if (toShow == null) return;
             toShow.setHidden(false);
             toShow.setMovable(false);
             System.out.printf("show(%s) called\n",shape_name);
