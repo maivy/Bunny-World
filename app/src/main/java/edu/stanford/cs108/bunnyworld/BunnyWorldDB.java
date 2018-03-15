@@ -89,7 +89,7 @@ public class BunnyWorldDB {
             shapeValues.put(DatabaseContract.Shapes.FONT_SIZE,shape.getFontSize());
             shapeValues.put(DatabaseContract.Shapes.IS_HIDDEN,shape.isHidden());
             shapeValues.put(DatabaseContract.Shapes.IS_MOVABLE,shape.isMovable());
-            shapeValues.put(DatabaseContract.Shapes.IS_RECEIVING,shape.isReceiving());
+            shapeValues.put(DatabaseContract.Shapes.IS_RECEIVING,false);
             shapeValues.put(DatabaseContract.Shapes.X,shape.getX());
             shapeValues.put(DatabaseContract.Shapes.Y,shape.getY());
             shapeValues.put(DatabaseContract.Shapes.WIDTH,shape.getWidth());

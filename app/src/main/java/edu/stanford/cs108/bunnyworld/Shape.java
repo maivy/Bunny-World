@@ -12,6 +12,11 @@ import android.graphics.drawable.BitmapDrawable;
 
 public class Shape {
 
+    public static final float SHAPE_SHRINK_WIDTH = 120;
+    public static final float SHAPE_SHRINK_HEIGHT = 120;
+    public static final float FONT_SHRINK = 30;
+
+
     String name;
     String associatedPage;
     String script;
@@ -24,7 +29,6 @@ public class Shape {
     Paint textPaint;
     boolean isHidden;
     boolean isMovable;
-    boolean isReceiving;
     float x;
     float y;
     float width;
@@ -44,7 +48,6 @@ public class Shape {
         this.image = image;
         this.text = text;
         this.fontSize = fontSize;
-        setReceiving();
         lightGrey = new Paint();
         lightGrey.setColor(Color.LTGRAY);
         greenBorder = new Paint();
@@ -64,26 +67,52 @@ public class Shape {
         else drawRect(canvas, withBorder);
     }
 
+    public void shrinkDraw(Canvas canvas) {
+        if (!text.equals("")) shrinkDrawText(canvas);
+        else if (image != null) shrinkDrawImage(canvas);
+        else shrinkDrawRect(canvas);
+    }
+
     //text shapes ignore the width and height given by the user and is only as wide and high as the text
     private void drawText(Canvas canvas, boolean withBorder) {
         textPaint.setTextSize(fontSize);
+        float width = textPaint.measureText(text);
+        canvas.drawText(text, x, y, textPaint);
+        if(withBorder) {
+            RectF border = new RectF(x - 15, y + textPaint.ascent(), x + textPaint.measureText(text) + 15, y + textPaint.descent());
+            canvas.drawRect(border, greenBorder);
+        }
+    }
+
+    private void shrinkDrawText(Canvas canvas) {
+        textPaint.setTextSize(FONT_SHRINK);
         float width = textPaint.measureText(text);
         canvas.drawText(text, x, y, textPaint);
     }
 
     private void drawImage(Canvas canvas, boolean withBorder) {
         RectF rect = new RectF(x, y, x + width, y + height);
-        if(withBorder && isReceiving) {
+        if(withBorder) {
             canvas.drawRect(rect, greenBorder);
         }
         canvas.drawBitmap(image.getBitmap(), null, rect, null);
     }
 
+    private void shrinkDrawImage(Canvas canvas) {
+        RectF rect = new RectF(x, y, x + SHAPE_SHRINK_WIDTH, y + SHAPE_SHRINK_HEIGHT);
+        canvas.drawBitmap(image.getBitmap(), null, rect, null);
+    }
+
     private void drawRect(Canvas canvas, boolean withBorder) {
         RectF rect = new RectF(x, y, x + width, y + height);
-        if(withBorder && isReceiving) {
+        if(withBorder) {
             canvas.drawRect(rect, greenBorder);
         }
+        canvas.drawRect(rect, lightGrey);
+    }
+
+    private void shrinkDrawRect(Canvas canvas) {
+        RectF rect = new RectF(x, y, x + SHAPE_SHRINK_WIDTH, y + SHAPE_SHRINK_HEIGHT);
         canvas.drawRect(rect, lightGrey);
     }
 
@@ -125,7 +154,6 @@ public class Shape {
 
     public void setScript(String script) {
         this.script = script;
-        setReceiving();
     }
 
     public BitmapDrawable getImage() {
@@ -178,8 +206,8 @@ public class Shape {
         this.height = height;
     }
 
-    public boolean isReceiving() {
-        return isReceiving;
+    public boolean isReceiving(String shapeName) {
+        return script.contains("on drop " + shapeName);
     }
 
     public int getFontSize() {
@@ -188,16 +216,6 @@ public class Shape {
 
     public void setFontSize(int fontSize) {
         this.fontSize = fontSize;
-    }
-
-    public void setReceiving() {
-        if(script != null && !script.equals("")) {
-            if(script.indexOf("on drop ") != -1) {
-                isReceiving = true;
-                return;
-            }
-        }
-        isReceiving = false;
     }
 
     public Paint getTextPaint() {
