@@ -319,12 +319,16 @@ public class EditScript extends AppCompatActivity {
      * @param view
      */
     public void deleteScript(View view) {
-        LinearLayout holder = (LinearLayout) findViewById(R.id.deleteHolder);
-        if(holder.getVisibility() == View.GONE) {
-            holder.setVisibility(View.VISIBLE);
-            setUpDeleteSpinner();
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShape.getName())) {
+            LinearLayout holder = (LinearLayout) findViewById(R.id.deleteHolder);
+            if (holder.getVisibility() == View.GONE) {
+                holder.setVisibility(View.VISIBLE);
+                setUpDeleteSpinner();
+            } else {
+                holder.setVisibility(View.GONE);
+            }
         } else {
-            holder.setVisibility(View.GONE);
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -428,11 +432,12 @@ public class EditScript extends AppCompatActivity {
 
 
     public void addToScript(View view) {
-        Spinner script1 = findViewById(R.id.scriptFirstEdit);
-        Spinner script2 = findViewById(R.id.scriptSecondEdit);
-        Spinner script3 = findViewById(R.id.scriptThirdEdit);
-        TextView command = (TextView) findViewById(R.id.command);
-        String script = command.getText().toString();
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShape.getName())) {
+            Spinner script1 = findViewById(R.id.scriptFirstEdit);
+            Spinner script2 = findViewById(R.id.scriptSecondEdit);
+            Spinner script3 = findViewById(R.id.scriptThirdEdit);
+            TextView command = (TextView) findViewById(R.id.command);
+            String script = command.getText().toString();
 
         if(!script.equals("Current Command: ")){
             int index = script.indexOf(':');
@@ -445,5 +450,8 @@ public class EditScript extends AppCompatActivity {
         script1.setSelection(0);
         script2.setVisibility(View.INVISIBLE);
         script3.setVisibility(View.INVISIBLE);
+        }  else {
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
     }
 }

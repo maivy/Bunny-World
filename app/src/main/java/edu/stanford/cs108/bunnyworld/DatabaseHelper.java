@@ -16,6 +16,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
     }
 
+//    private static final String TYPE_INT_PRIMARY_KEY = "INTEGER PRIMARY KEY AUTOINCREMENT";
+//    private static final String TYPE_INTEGER = "INTEGER";
+//    private static final String TYPE_TEXT = "TEXT";
+//    private static final String TYPE_FLOAT = "FLOAT";
+//    private static final String TYPE_BOOL = "BOOL";
+
     private static final String SQL_CREATE_GAMES =
             "CREATE TABLE " + DatabaseContract.Games.TABLE_NAME + " (" +
                     "" + DatabaseContract.Games.GAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
