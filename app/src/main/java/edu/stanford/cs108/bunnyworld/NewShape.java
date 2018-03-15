@@ -1,7 +1,11 @@
 package edu.stanford.cs108.bunnyworld;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +18,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,6 +46,10 @@ public class NewShape extends AppCompatActivity {
             "fire", "mystic"));
 
     private String currPageName;
+    public CustomImages imageMap;
+    public HashMap<String, Uri> customImages;
+    private ArrayList<String> customImagesNames;
+    public HashMap<String, BitmapDrawable> customBitmapDrawables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +84,54 @@ public class NewShape extends AppCompatActivity {
         RadioButton hiddenNo = findViewById(R.id.hiddenNo);
         hiddenNo.setChecked(true);
 
-        //Set up list of possible images
+        //set up list of custom images
+        imageMap = CustomImages.getInstance();
+        customImages = imageMap.getImages();
+        customImagesNames = new ArrayList<>(customImages.keySet());
+        customImagesNames.add(0, NO_IMG);
+        customBitmapDrawables = imageMap.getBitmapDrawables();
+    }
+
+    public void loadCustomSpinner(View view) {
+        TextView spinnerType = findViewById(R.id.spinnerType);
+        spinnerType.setVisibility(View.VISIBLE);
+        spinnerType.setText("Custom Images: ");
+        final Spinner customSpinner = findViewById(R.id.customImageNameSpin);
+        customSpinner.setVisibility(View.VISIBLE);
+        Spinner preloadSpinner = findViewById(R.id.imageNameSpin);
+        preloadSpinner.setVisibility(View.GONE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_spinner_item, customImagesNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        customSpinner.setAdapter(adapter);
+        customSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Button imgDim = findViewById(R.id.defaultDim);
+                String selected = customSpinner.getSelectedItem().toString();
+                if (selected.equals(NO_IMG)) {
+                    imgDim.setVisibility(View.INVISIBLE);
+                } else {
+                    imgDim.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
+    }
+
+    public void loadPreloadSpinner(View view) {
+        TextView spinnerType = findViewById(R.id.spinnerType);
+        spinnerType.setVisibility(View.VISIBLE);
+        spinnerType.setText("Preloaded Images: ");
         final Spinner imageSpinner = findViewById(R.id.imageNameSpin);
+        imageSpinner.setVisibility(View.VISIBLE);
+        Spinner customSpinner = findViewById(R.id.customImageNameSpin);
+        customSpinner.setVisibility(View.GONE);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_spinner_item,allImages);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -135,16 +191,25 @@ public class NewShape extends AppCompatActivity {
         boolean moveable = yesMove.isChecked();
 
         //Image
+        BitmapDrawable imageDrawable = null;
+        String imageName = "";
         Spinner imageSpinner = findViewById(R.id.imageNameSpin);
-        String imageName = imageSpinner.getSelectedItem().toString();
-        BitmapDrawable imageDrawable;
-        if (!imageName.equals(NO_IMG)) {
-            int imageID = getResources().getIdentifier(imageName,"drawable", getPackageName());
-            imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
-        } else {
-            imageDrawable = null;
-        }
+        Spinner customSpinner = findViewById(R.id.customImageNameSpin);
 
+        if(imageSpinner.getSelectedItem() != null && imageSpinner.getVisibility() != View.GONE) {
+            imageName = imageSpinner.getSelectedItem().toString();
+            if (!imageName.equals(NO_IMG)) {
+                int imageID = getResources().getIdentifier(imageName, "drawable", getPackageName());
+                imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
+            } else {
+                imageDrawable = null;
+            }
+        } else if(customSpinner.getSelectedItem() != null && customSpinner.getVisibility() != View.GONE) {
+            imageName = customSpinner.getSelectedItem().toString();
+            if (!imageName.equals(NO_IMG)) {
+                imageDrawable = customBitmapDrawables.get(imageName);
+            }
+        }
         // text Size
         int textSize = 0;
         if (!textSizeString.isEmpty()) textSize = Integer.parseInt(textSizeString);
@@ -219,17 +284,30 @@ public class NewShape extends AppCompatActivity {
     // Gets the default dimensions of the image selected
     public void setDefaultDim(View view) {
         Spinner imageSpin = findViewById(R.id.imageNameSpin);
-        String image = imageSpin.getSelectedItem().toString();
-
-        if(!image.equals(NO_IMG)){
-            int imageID = getResources().getIdentifier(image,"drawable", getPackageName());
-            BitmapDrawable imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
-            float height = imageDrawable.getIntrinsicHeight();
-            float width = imageDrawable.getIntrinsicWidth();
-            EditText shapeHeight = findViewById(R.id.shapeHeight);
-            shapeHeight.setText(Float.toString(height));
-            EditText shapeWidth = findViewById(R.id.shapeWidth);
-            shapeWidth.setText(Float.toString(width));
+        Spinner customSpin = findViewById(R.id.customImageNameSpin);
+        if(imageSpin.getSelectedItem() != null && imageSpin.getVisibility() != View.GONE) {
+            String image = imageSpin.getSelectedItem().toString();
+            if (!image.equals(NO_IMG)) {
+                int imageID = getResources().getIdentifier(image, "drawable", getPackageName());
+                BitmapDrawable imageDrawable = (BitmapDrawable) getResources().getDrawable(imageID);
+                float height = imageDrawable.getIntrinsicHeight();
+                float width = imageDrawable.getIntrinsicWidth();
+                EditText shapeHeight = findViewById(R.id.shapeHeight);
+                shapeHeight.setText(Float.toString(height));
+                EditText shapeWidth = findViewById(R.id.shapeWidth);
+                shapeWidth.setText(Float.toString(width));
+            }
+        } else if(customSpin.getSelectedItem() != null && customSpin.getVisibility() != View.GONE) {
+            String image = customSpin.getSelectedItem().toString();
+            if (!image.equals(NO_IMG)) {
+                BitmapDrawable imageDrawable = customBitmapDrawables.get(image);
+                float height = imageDrawable.getIntrinsicHeight();
+                float width = imageDrawable.getIntrinsicWidth();
+                EditText shapeHeight = findViewById(R.id.shapeHeight);
+                shapeHeight.setText(Float.toString(height));
+                EditText shapeWidth = findViewById(R.id.shapeWidth);
+                shapeWidth.setText(Float.toString(width));
+            }
         }
     }
 

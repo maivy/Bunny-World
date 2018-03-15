@@ -8,6 +8,10 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
+//    public CustomImages customImages;
+//    public HashMap<String, Uri> uriMap;
+//    public HashMap<String, BitmapDrawable> bitmapDrawableMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void uploadCustom(View view) {
+        Intent intent = new Intent(this, CustomUploads.class);
+        startActivity(intent);
+    }
     /**
      * Uncomment to allow option to debug database
      */
