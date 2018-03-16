@@ -52,6 +52,7 @@ public class PlaceScreen extends View {
         super(context, attrs);
         allShapes = AllShapes.getInstance();
         shapes = allShapes.getAllShapes();
+        selectedShape = null;
         currPage = PlaceShape.page;
         inventoryPaint = new Paint();
         inventoryPaint.setColor(Color.GRAY);

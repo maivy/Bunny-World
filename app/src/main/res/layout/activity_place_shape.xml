@@ -22,21 +22,23 @@
             android:id="@+id/fontText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change font size: "/>
+            android:text="Inventory Zone"/>
 
         <EditText
             android:id="@+id/fontSize"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/setFontSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Set"
-            android:onClick="set"/>
+            android:onClick="set"
+            android:visibility="invisible"/>
 
     </LinearLayout>
 
