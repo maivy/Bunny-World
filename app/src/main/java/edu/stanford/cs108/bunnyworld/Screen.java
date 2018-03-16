@@ -215,7 +215,6 @@ public class Screen extends View {
             Shape toHide = AllShapes.getInstance().getAllShapes().get(shape_name);
             if (toHide == null) return;
             toHide.setHidden(true);
-            toHide.setMovable(false);
             System.out.printf("hide(%s) called\n",shape_name);
         }
 
@@ -227,7 +226,6 @@ public class Screen extends View {
             Shape toShow = AllShapes.getInstance().getAllShapes().get(shape_name);
             if (toShow == null) return;
             toShow.setHidden(false);
-            toShow.setMovable(false);
             System.out.printf("show(%s) called\n",shape_name);
         }
 
@@ -246,7 +244,7 @@ public class Screen extends View {
         //remove all shapes from possessions
         possessions.clear();
         inventoryPaint = new Paint();
-        inventoryPaint.setColor(Color.GRAY);
+        inventoryPaint.setColor(Color.rgb(181, 231, 255));
         inventoryTextPaint = new Paint();
         inventoryTextPaint.setTextSize(60);
 //        testMethod();
@@ -319,6 +317,7 @@ public class Screen extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.drawColor(Color.WHITE);
         drawShapes(canvas);
         drawInventory(canvas);
     }
@@ -358,7 +357,7 @@ public class Screen extends View {
                 }
             }
             if(x >= leftX && x <= rightX && y >= topY && y <= bottomY) {
-                if(!shape.isHidden() && shape.associatedPage.equals(currPage) || possessions.contains(shape)) {
+                if(!shape.isHidden() && (shape.associatedPage.equals(currPage) || possessions.contains(shape))) {
                     if(!dropEvent || shape != dragShape) {
                         result = shape;
                     }

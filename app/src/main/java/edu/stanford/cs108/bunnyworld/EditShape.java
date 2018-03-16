@@ -198,7 +198,7 @@ public class EditShape extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "SHAPE NAME ALREADY EXISTS", Toast.LENGTH_SHORT).show();
             return false;
         } else if (newName.contains(" ") && mode.equals(UPDATE)) {
-            Toast.makeText(getApplicationContext(), "MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "SHAPE NAME MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             EditText shapeWidth = findViewById(R.id.shapeWidthEdit);

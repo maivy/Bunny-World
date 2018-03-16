@@ -252,7 +252,7 @@ public class NewShape extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "MUST PROVIDE SHAPE NAME", Toast.LENGTH_SHORT).show();
             return false;
         } else if (shapeNameString.contains(" ") && mode.equals(CREATE)) {
-            Toast.makeText(getApplicationContext(), "MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "SHAPE NAME MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             EditText shapeWidth = findViewById(R.id.shapeWidth);
