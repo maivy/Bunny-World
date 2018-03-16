@@ -33,6 +33,9 @@ public class EditShape extends AppCompatActivity {
     private final ArrayList<String> allImages = new ArrayList<>(Arrays.asList(NO_IMG, "carrot", "carrot2", "death", "duck",
             "fire", "mystic"));
 
+    private AllPages allPages;
+    private HashMap<String, Page> pages;
+
     public CustomImages imageMap;
     public HashMap<String, BitmapDrawable> customBitmapDrawables;
     private ArrayList<String> customImagesNames;
@@ -76,8 +79,15 @@ public class EditShape extends AppCompatActivity {
 
         //Image
         String imgName = currShape.imageName;
-        Spinner imageSpinner = findViewById(R.id.imageNameSpinEdit);
-        imageSpinner.setSelection(allImages.indexOf(imgName));
+        Spinner imageSpin = findViewById(R.id.imageNameSpinEdit);
+        Spinner customSpin = findViewById(R.id.customImageNameSpin);
+        if(allImages.contains(imgName)) {
+            loadPreloadSpinner(null);
+            imageSpin.setSelection(allImages.indexOf(imgName));
+        } else if(customImagesNames.contains(imgName)) {
+            loadCustomSpinner(null);
+            customSpin.setSelection(customImagesNames.indexOf(imgName));
+        }
 
         // text
         EditText textInput = findViewById(R.id.textStringEdit);
@@ -91,6 +101,9 @@ public class EditShape extends AppCompatActivity {
 
 
     private void init () {
+        allPages = AllPages.getInstance();
+        pages = allPages.getAllPages();
+
         imageMap = CustomImages.getInstance();
         customBitmapDrawables = imageMap.getBitmapDrawables();
         customImagesNames = new ArrayList<>(customBitmapDrawables.keySet());
@@ -199,6 +212,9 @@ public class EditShape extends AppCompatActivity {
             return false;
         } else if (newName.contains(" ") && mode.equals(UPDATE)) {
             Toast.makeText(getApplicationContext(), "SHAPE NAME MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (pages.containsKey(newName) && mode.equals(UPDATE)) {
+            Toast.makeText(getApplicationContext(), "SHAPE NAME CANNOT BE SAME AS PAGE NAME", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             EditText shapeWidth = findViewById(R.id.shapeWidthEdit);

@@ -24,6 +24,8 @@ import static edu.stanford.cs108.bunnyworld.EditShape.NO_IMG;
 public class NewPage extends AppCompatActivity {
     private static final String MAIN_PAGE = "page1";
     private Page currPage;
+    private AllShapes allShapes;
+    private HashMap<String, Shape> shapes;
     public CustomImages imageMap;
     public HashMap<String, BitmapDrawable> customBitmapDrawables;
     private ArrayList<String> customImagesNames;
@@ -38,6 +40,9 @@ public class NewPage extends AppCompatActivity {
     private void initPage (Intent intent) {
         boolean isNewPage = intent.getBooleanExtra("NEW_PAGE", true);
         String currPageName;
+
+        allShapes = AllShapes.getInstance();
+        shapes = allShapes.getAllShapes();
 
         imageMap = CustomImages.getInstance();
         customBitmapDrawables = imageMap.getBitmapDrawables();
@@ -104,11 +109,13 @@ public class NewPage extends AppCompatActivity {
             HashMap<String, Page> pages = AllPages.getInstance().getAllPages();
 
             if ((newNameString.equals(MAIN_PAGE) || pages.containsKey(newNameString)) && !newNameString.equals(currPage.getPageName())) {
-                Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "PAGE NAME ALREADY IN USE", Toast.LENGTH_SHORT).show();
             } else if (newNameString.contains(" ")) {
                 Toast.makeText(getApplicationContext(), "MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
             } else if (newNameString.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
+            } else if (shapes.containsKey(newNameString)) {
+                Toast.makeText(getApplicationContext(), "PAGE NAME CANNOT BE SAME AS SHAPE NAME", Toast.LENGTH_SHORT).show();
             } else {
                 String pageName = currPage.getPageName();
 

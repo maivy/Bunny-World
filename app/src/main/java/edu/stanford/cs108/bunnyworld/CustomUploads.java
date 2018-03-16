@@ -38,7 +38,7 @@ public class CustomUploads extends AppCompatActivity {
 
     public void uploadImage(View view) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        String[] mimeTypes = {"image/jpg", "image/png", "image/gif"};
+        String[] mimeTypes = {"image/jpeg", "image/png", "image/gif"};
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         //https://medium.com/@louis993546/how-to-ask-system-to-open-intent-to-select-jpg-and-png-only-on-android-i-e-no-gif-e0491af240bf
         intent.setType("image/*");

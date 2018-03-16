@@ -46,6 +46,10 @@ public class NewShape extends AppCompatActivity {
             "fire", "mystic"));
 
     private String currPageName;
+
+    private AllPages allPages;
+    private HashMap<String, Page> pages;
+
     public CustomImages imageMap;
     public HashMap<String, Uri> customImages;
     private ArrayList<String> customImagesNames;
@@ -61,6 +65,8 @@ public class NewShape extends AppCompatActivity {
 
 
     private void init (Intent intent) {
+        allPages = AllPages.getInstance();
+        pages = allPages.getAllPages();
 
         if(AllShapes.getInstance().getCopiedShape() == null) {
             Button pasteButton = findViewById(R.id.pasteShapeButton);
@@ -254,6 +260,9 @@ public class NewShape extends AppCompatActivity {
         } else if (shapeNameString.contains(" ") && mode.equals(CREATE)) {
             Toast.makeText(getApplicationContext(), "SHAPE NAME MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
             return false;
+        } else if (pages.containsKey(shapeNameString) && mode.equals(CREATE)) {
+            Toast.makeText(getApplicationContext(), "SHAPE NAME CANNOT BE SAME AS PAGE NAME", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             EditText shapeWidth = findViewById(R.id.shapeWidth);
             String widthString = shapeWidth.getText().toString();
@@ -360,7 +369,14 @@ public class NewShape extends AppCompatActivity {
         //Image
         String imgName = currShape.imageName;
         Spinner imageSpinner = findViewById(R.id.imageNameSpin);
-        imageSpinner.setSelection(allImages.indexOf(imgName));
+        Spinner customSpinner = findViewById(R.id.customImageNameSpin);
+        if(allImages.contains(imgName)) {
+            loadPreloadSpinner(null);
+            imageSpinner.setSelection(allImages.indexOf(imgName));
+        } else if(customImagesNames.contains(imgName)) {
+            loadCustomSpinner(null);
+            customSpinner.setSelection(customImagesNames.indexOf(imgName));
+        }
 
         // text
         EditText textInput = findViewById(R.id.textString);
