@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -129,9 +130,9 @@ public class NewPage extends AppCompatActivity {
 
     /**
      * Deletes the page and all the shapes associated with it.
-     * @param view
+     * @param
      */
-    public void deleteCurrPage(View view) {
+    private void deleteCurrPage() {
         if (AllPages.getInstance().getAllPages().containsKey(currPage.getPageName())) {
             String pageName = currPage.getPageName();
 
@@ -177,5 +178,92 @@ public class NewPage extends AppCompatActivity {
     public void returnToMenu(View view) {
         Intent intent = new Intent(this, NewGame.class);
         startActivity(intent);
+    }
+
+
+    private void giveWarning () {
+        Button returnButton = findViewById(R.id.returnMenuButton);
+        returnButton.setVisibility(View.GONE);
+
+        Button shapesButton = findViewById(R.id.pagesShapesButton);
+        shapesButton.setVisibility(View.GONE);
+
+        Button addButton = findViewById(R.id.addShapeButton);
+        addButton.setVisibility(View.GONE);
+
+        Button deleteButton = findViewById(R.id.deleteB);
+        deleteButton.setVisibility(View.GONE);
+
+        LinearLayout rename = findViewById(R.id.nameLayout);
+        rename.setVisibility(View.GONE);
+
+        LinearLayout warning = findViewById(R.id.warningsLayout);
+        warning.setVisibility(View.VISIBLE);
+
+        LinearLayout options = findViewById(R.id.buttons);
+        options.setVisibility(View.VISIBLE);
+    }
+
+
+    public void checkCurrPage(View view) {
+        String pageName = currPage.getPageName();
+        if (AllPages.getInstance().getAllPages().containsKey(pageName)) {
+            final HashMap<String, Shape> allShapes = AllShapes.getInstance().getAllShapes();
+            Iterator<String> it = allShapes.keySet().iterator();
+
+            boolean shapeUsed = false;
+
+            ArrayList<String> shapesInPage = new ArrayList<>();
+            while (it.hasNext()) {
+                String currShapeName = it.next();
+                Shape currShape = allShapes.get(currShapeName);
+                String currScript  = currShape.getScript();
+                for (int i = 0; i < shapesInPage.size(); i++) {
+                    if (currScript.contains(shapesInPage.get(i)) && !currShape.getAssociatedPage().equals(pageName)) {
+                        giveWarning();
+                        shapeUsed = true;
+                        break;
+                    }
+                }
+
+                if (currScript.contains(pageName)) {
+                    giveWarning();
+                    shapeUsed = true;
+                    break;
+                }
+
+                if (currShape.getAssociatedPage().equals(pageName)) shapesInPage.add(currShape.getName());
+            }
+            if (!shapeUsed) deleteCurrPage();
+        } else {
+            Toast.makeText(getApplicationContext(), "PAGE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void cancelPageDelete(View view) {
+        Button returnButton = findViewById(R.id.returnMenuButton);
+        returnButton.setVisibility(View.VISIBLE);
+
+        Button shapesButton = findViewById(R.id.pagesShapesButton);
+        shapesButton.setVisibility(View.VISIBLE);
+
+        Button addButton = findViewById(R.id.addShapeButton);
+        addButton.setVisibility(View.VISIBLE);
+
+        Button deleteButton = findViewById(R.id.deleteB);
+        deleteButton.setVisibility(View.VISIBLE);
+
+        LinearLayout rename = findViewById(R.id.nameLayout);
+        rename.setVisibility(View.VISIBLE);
+
+        LinearLayout warning = findViewById(R.id.warningsLayout);
+        warning.setVisibility(View.GONE);
+
+        LinearLayout options = findViewById(R.id.buttons);
+        options.setVisibility(View.GONE);
+    }
+
+    public void deletePage(View view) {
+        deleteCurrPage();
     }
 }
