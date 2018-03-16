@@ -170,6 +170,11 @@
         android:text="Delete Command"
         android:onClick="deleteCommand"/>
     <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Whole Script"
+        android:onClick="deleteWholeScript"/>
+    <Button
         android:onClick="doneWithScript"
         android:text="DONE "
         android:layout_width="match_parent"
