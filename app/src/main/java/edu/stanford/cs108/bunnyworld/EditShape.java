@@ -333,6 +333,10 @@ public class EditShape extends AppCompatActivity {
                 updateAShape(currShape);
                 currShapes.remove(currShapeName);
                 currShapes.put(newName, currShape);
+
+                // rename shape name in all scripts
+                AllShapes.getInstance().renameObjectInScripts(currShapeName,newName);
+
                 currShapeName = newName;
 
                 Toast.makeText(getApplicationContext(), "SHAPE UPDATED", Toast.LENGTH_SHORT).show();

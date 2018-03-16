@@ -1,6 +1,8 @@
 package edu.stanford.cs108.bunnyworld;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class AllShapes {
     private static final AllShapes ourInstance = new AllShapes();
@@ -109,11 +111,22 @@ class AllShapes {
         }
     }
 
-    public void renameObjectInScripts(String objName) {
-//        for (Shape shape: currShapes.values()) {
-//            String script = shape.getScript();
-//            script = script
-//        }
+    /**
+     * Source:
+     * https://docs.oracle.com/javase/tutorial/essential/regex/matcher.html
+     * @param currName
+     * @param newName
+     */
+    public void renameObjectInScripts(String currName, String newName) {
+        for (Shape shape: currShapes.values()) {
+            String script = shape.getScript();
+            final String REGEX = "\\b" + currName + "\\b";
+            Pattern namePattern = Pattern.compile(REGEX);
+            Matcher nameMatches = namePattern.matcher(script);
+            String newScript = nameMatches.replaceAll(newName);
+            shape.setScript(newScript);
+            currShapes.put(shape.getName(),shape);
+        }
     }
 
 }
