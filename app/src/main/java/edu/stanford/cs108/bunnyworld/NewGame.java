@@ -35,6 +35,12 @@ public class NewGame extends AppCompatActivity {
         startActivity(intent);
     }
 
+//    public void deleteGame(View view) {
+//        BunnyWorldDB.getInstance().removeGame(AllPages.getInstance().getGameName());
+//        Intent intent = new Intent(this, GameToEdit.class);
+//        startActivity(intent);
+//    }
+
     /**
      * Goes to the activity that allows the user to see all the pages in the game and edit them.
      * @param view
