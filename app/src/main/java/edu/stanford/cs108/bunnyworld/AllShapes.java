@@ -125,6 +125,7 @@ class AllShapes {
             Matcher nameMatches = namePattern.matcher(script);
             String newScript = nameMatches.replaceAll(newName);
             shape.setScript(newScript);
+            currShapes.put(shape.getName(),shape);
         }
     }
 
