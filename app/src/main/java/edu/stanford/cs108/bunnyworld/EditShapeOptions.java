@@ -39,6 +39,10 @@ public class EditShapeOptions extends AppCompatActivity {
             HashMap<String, Shape> currShapes = AllShapes.getInstance().getAllShapes();
             Shape currShape = currShapes.get(shapeName);
             currShapes.remove(shapeName);
+
+            // remove shape from scripts
+            AllShapes.getInstance().removeObjectFromScripts(shapeName);
+
             Intent intent = new Intent(this, ViewAllShapes.class);
             intent.putExtra("Page", currShape.getAssociatedPage());
             startActivity(intent);

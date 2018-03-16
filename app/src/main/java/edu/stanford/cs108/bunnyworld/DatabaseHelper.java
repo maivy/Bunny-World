@@ -28,7 +28,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + DatabaseContract.Pages.TABLE_NAME + " (" +
                     "" + DatabaseContract.Pages.PAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "" + DatabaseContract.Pages.NAME + " TEXT, " +
-                    "" + DatabaseContract.Pages.GAME_ID + " INTEGER" +
+                    "" + DatabaseContract.Pages.GAME_ID + " INTEGER, " +
+                    "" + DatabaseContract.Pages.BACKGROUND_IMG + " TEXT" +
                     ");";
 
     private static final String SQL_CREATE_SHAPES =
@@ -43,13 +44,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "" + DatabaseContract.Shapes.FONT_SIZE + " INTEGER, " +
                     "" + DatabaseContract.Shapes.IS_HIDDEN + " BOOL, " +
                     "" + DatabaseContract.Shapes.IS_MOVABLE + " BOOL, " +
-                    "" + DatabaseContract.Shapes.IS_RECEIVING+ " BOOL, " +
                     "" + DatabaseContract.Shapes.X + " FLOAT, " +
                     "" + DatabaseContract.Shapes.Y + " FLOAT, " +
                     "" + DatabaseContract.Shapes.WIDTH + " FLOAT, " +
                     "" + DatabaseContract.Shapes.HEIGHT + " FLOAT" +
                     ");";
 
+    private static final String SQL_CREATE_IMAGES =
+            "CREATE TABLE " + DatabaseContract.Images.TABLE_NAME + " (" +
+                    "" + DatabaseContract.Images.IMG_NAME + " TEXT, " +
+                    "" + DatabaseContract.Images.IMG + " BLOB" +
+                    ");";
 
     private static final String PRELOAD_GAME = "INSERT INTO games VALUES(NULL,'preloadedBunnyWorld',6,22);";
 
@@ -88,6 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_GAMES);
         db.execSQL(SQL_CREATE_PAGES);
         db.execSQL(SQL_CREATE_SHAPES);
+        db.execSQL(SQL_CREATE_IMAGES);
         db.execSQL(PRELOAD_GAME);
         db.execSQL(PRELOAD_PAGES);
         db.execSQL(PRELOAD_SHAPES);
@@ -95,6 +101,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO update database
+        
     }
 }

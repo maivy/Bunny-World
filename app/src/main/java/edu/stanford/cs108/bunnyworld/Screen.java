@@ -27,6 +27,7 @@ public class Screen extends View {
     boolean dragging = false;
     Script script;
     private String currPage;
+    private Page currentPage;
     private String prevPage;
     private float x;
     private float y;
@@ -45,6 +46,9 @@ public class Screen extends View {
     private HashSet<Shape> possessions;
     Paint inventoryPaint;
     Paint inventoryTextPaint;
+
+    public CustomImages imageMap;
+    public HashMap<String, BitmapDrawable> customBitmapDrawables;
 
     public class Script {
         // ACTION KEYWORDS
@@ -181,6 +185,7 @@ public class Screen extends View {
             if (page == null) return;
             prevPage = currPage;
             currPage = page_name;
+            currentPage = pages.get(currPage);
             if(!prevPage.equals(currPage)){
                 enteredPage(currPage);
             }
@@ -239,6 +244,8 @@ public class Screen extends View {
         allShapes = AllShapes.getInstance();
         shapes = allShapes.getAllShapes();
         allPages = AllPages.getInstance();
+        pages = allPages.getAllPages();
+        currentPage = pages.get(currPage);
         Possessions allPossessions = Possessions.getInstance();
         possessions = allPossessions.getAllPossessions();
         //remove all shapes from possessions
@@ -248,6 +255,9 @@ public class Screen extends View {
         inventoryTextPaint = new Paint();
         inventoryTextPaint.setTextSize(60);
 //        testMethod();
+
+        imageMap = CustomImages.getInstance();
+        customBitmapDrawables = imageMap.getBitmapDrawables();
     }
 
     public void drawShapes(Canvas canvas) {
@@ -317,9 +327,19 @@ public class Screen extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.WHITE);
+        drawBackground(canvas);
         drawShapes(canvas);
         drawInventory(canvas);
+    }
+
+    private void drawBackground(Canvas canvas) {
+        if(currentPage.getBackgroundImageName().equals("")) {
+            canvas.drawColor(Color.WHITE);
+        } else {
+            BitmapDrawable background = customBitmapDrawables.get(currentPage.getBackgroundImageName());
+            RectF rect = new RectF(0, 0, viewWidth, viewHeight * 0.75f);
+            canvas.drawBitmap(background.getBitmap(), null, rect, null);
+        }
     }
 
     //returns a shape at a point if it's not hidden
