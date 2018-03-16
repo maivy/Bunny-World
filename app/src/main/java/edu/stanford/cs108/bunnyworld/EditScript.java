@@ -313,6 +313,15 @@ public class EditScript extends AppCompatActivity {
         currSpinner.setAdapter(adapter);
     }
 
+    public void deleteWholeScript(View view) {
+        if (AllShapes.getInstance().getAllShapes().containsKey(currShape.getName())) {
+            currShape.setScript("");
+            currScript.setText("");
+        } else {
+            Toast.makeText(getApplicationContext(), "SHAPE NO LONGER EXISTS", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     /**
      * Deletes the current script.
