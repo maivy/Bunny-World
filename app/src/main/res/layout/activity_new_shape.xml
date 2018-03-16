@@ -52,14 +52,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Image Name : "/>
-        <Spinner
-            android:layout_gravity="center_vertical"
+        <Button
+            android:id="@+id/customButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Custom Image"
+            android:onClick="loadCustomSpinner"/>
+        <Button
+            android:id="@+id/regularImages"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Preloaded Image"
+            android:textSize="13sp"
+            android:onClick="loadPreloadSpinner"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/spinnerType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <Spinner
+            android:layout_gravity="center_horizontal"
             android:id="@+id/imageNameSpin"
             android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
         </Spinner>
-    </LinearLayout>
+        <Spinner
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/customImageNameSpin"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+        </Spinner>
 
     // All Shape Geometry
     <LinearLayout

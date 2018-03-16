@@ -30,7 +30,8 @@
         <activity android:name=".GameToEdit" />
         <activity android:name=".GameToPlay" />
         <activity android:name=".DatabaseDebug" />
-        <activity android:name=".PlaceShape"></activity>
+        <activity android:name=".PlaceShape" />
+        <activity android:name=".CustomUploads"></activity>
     </application>
 
 </manifest>

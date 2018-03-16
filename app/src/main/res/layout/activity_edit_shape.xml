@@ -61,13 +61,44 @@
                 android:text="Image Name : "
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/imageNameSpinEdit"
+            <Button
+                android:id="@+id/customButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"></Spinner>
+                android:text="Custom Image"
+                android:onClick="loadCustomSpinner"/>
+            <Button
+                android:id="@+id/regularImages"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Preloaded Image"
+                android:textSize="13sp"
+                android:onClick="loadPreloadSpinner"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/spinnerType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <Spinner
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/imageNameSpinEdit"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+        </Spinner>
+        <Spinner
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/customImageNameSpin"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+        </Spinner>
+
 
         // All Image Geometry
 
@@ -337,6 +368,3 @@
             android:text="Edit Placement/Size" />
     </LinearLayout>
 </LinearLayout>
-
-
-
