@@ -109,5 +109,11 @@ class AllShapes {
         }
     }
 
-    // TODO: remove page from scripts as well
+    public void renameObjectInScripts(String objName) {
+//        for (Shape shape: currShapes.values()) {
+//            String script = shape.getScript();
+//            script = script
+//        }
+    }
+
 }
