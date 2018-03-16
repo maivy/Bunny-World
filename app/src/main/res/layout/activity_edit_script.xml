@@ -99,13 +99,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"></Spinner>
 
-                <Spinner
-                    android:id="@+id/scriptFourthEdit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="invisible"></Spinner>
-
-
             </LinearLayout>
         <Button
             android:id="@+id/addClause"
@@ -176,6 +169,11 @@
         android:layout_height="wrap_content"
         android:text="Delete Command"
         android:onClick="deleteCommand"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Whole Script"
+        android:onClick="deleteWholeScript"/>
     <Button
         android:onClick="doneWithScript"
         android:text="DONE "

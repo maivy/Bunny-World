@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class NameNewGame extends AppCompatActivity {
 
@@ -18,9 +21,15 @@ public class NameNewGame extends AppCompatActivity {
         // saves the Game Name given by the user to the singleton for future use
         EditText newGameName = findViewById(R.id.newGameName);
         String gameNameString = newGameName.getText().toString();
-        AllPages.getInstance().nameGame(gameNameString);
-
-        Intent intent = new Intent(this, NewGame.class);
-        startActivity(intent);
+        ArrayList<String> gameNames = BunnyWorldDB.getInstance().getGameNames();
+        if (gameNames.contains(gameNameString)) {
+            Toast.makeText(getApplicationContext(), "GAME ALREADY EXISTS", Toast.LENGTH_SHORT).show();
+        } else if (gameNameString.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
+        } else {
+            AllPages.getInstance().nameGame(gameNameString);
+            Intent intent = new Intent(this, NewGame.class);
+            startActivity(intent);
+        }
     }
 }
