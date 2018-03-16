@@ -46,11 +46,6 @@ public class CustomUploads extends AppCompatActivity {
         startActivityForResult(intent, IMAGE_REQUEST_CODE);
     }
 
-
-    public void uploadSound(View view) {
-
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
 
@@ -77,6 +72,16 @@ public class CustomUploads extends AppCompatActivity {
 
             EditText name = findViewById(R.id.imageName);
             String imageName = name.getText().toString();
+            if(imageName.contains(" ")) {
+                Toast toast = Toast.makeText(getApplicationContext(),"Image name cannot contain a space",Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+            if(imageName.equals("")) {
+                Toast toast = Toast.makeText(getApplicationContext(),"Image name must have at least one character",Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
             bitmapDrawables.put(imageName, imageDrawable);
 
             // add image to database

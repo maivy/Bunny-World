@@ -50,12 +50,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-        <ListView
-            android:id="@+id/pageShapes"
+
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"></ListView>
+            android:onClick="openImageHolder"
+            android:text="Set Background Image for Page" />
+        <LinearLayout
+            android:id="@+id/imageHolder"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Image: "/>
+
+            <Spinner
+                android:id="@+id/imageSpinner"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+            </Spinner>
+
+            <Button
+                android:id="@+id/setButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set"
+                android:onClick="setImage" />
+
+        </LinearLayout>
     </LinearLayout>
+
 
     <Button
         android:onClick="returnToMenu"

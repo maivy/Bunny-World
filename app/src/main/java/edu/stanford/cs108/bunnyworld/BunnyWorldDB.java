@@ -221,7 +221,6 @@ public class BunnyWorldDB {
         while(cursor.moveToNext()) {
             String pageName = cursor.getString(PAGE_NAME_COL);
             String backgroundImageName = cursor.getString(PAGE_BACKGROUND_IMG_COL);
-            // TODO: if constructor changes, this code will change
             Page page = new Page(pageName);
             page.setBackgroundImageName(backgroundImageName);
             pages.put(pageName,page);

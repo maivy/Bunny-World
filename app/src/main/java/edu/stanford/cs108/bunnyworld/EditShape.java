@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 public class EditShape extends AppCompatActivity {
     private String currShapeName;
-    private static final String NO_IMG = "No Image";
+    public static final String NO_IMG = "No Image";
     private static final String COPY = "copy";
     private static final String UPDATE = "update";
 

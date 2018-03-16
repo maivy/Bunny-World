@@ -1,26 +1,32 @@
 package edu.stanford.cs108.bunnyworld;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.function.Predicate;
+
+import static edu.stanford.cs108.bunnyworld.EditShape.NO_IMG;
 
 public class NewPage extends AppCompatActivity {
     private static final String MAIN_PAGE = "page1";
     private Page currPage;
+    public CustomImages imageMap;
+    public HashMap<String, BitmapDrawable> customBitmapDrawables;
+    private ArrayList<String> customImagesNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,11 @@ public class NewPage extends AppCompatActivity {
     private void initPage (Intent intent) {
         boolean isNewPage = intent.getBooleanExtra("NEW_PAGE", true);
         String currPageName;
+
+        imageMap = CustomImages.getInstance();
+        customBitmapDrawables = imageMap.getBitmapDrawables();
+        customImagesNames = new ArrayList<>(customBitmapDrawables.keySet());
+        customImagesNames.add(0, NO_IMG);
 
         Button seeShapes = findViewById(R.id.pagesShapesButton);
         if (isNewPage) {
@@ -55,9 +66,9 @@ public class NewPage extends AppCompatActivity {
 
         if (currPageName.equals(MAIN_PAGE)) {
             Button renameButton = findViewById(R.id.renameButton);
-            renameButton.setVisibility(View.INVISIBLE);
+            renameButton.setVisibility(View.GONE);
             EditText nameEditBox = findViewById(R.id.pageNameByUser);
-            nameEditBox.setVisibility(View.INVISIBLE);
+            nameEditBox.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "THIS IS THE MAIN PAGE", Toast.LENGTH_SHORT).show();
             Button deleteButton = findViewById(R.id.deleteB);
             deleteButton.setVisibility(View.GONE);
@@ -142,6 +153,7 @@ public class NewPage extends AppCompatActivity {
             while (it.hasNext()) {
                 String shapeName = it.next();
                 if (allShapes.get(shapeName).getAssociatedPage().equals(pageName)) {
+                    AllShapes.getInstance().removeObjectFromScripts(shapeName);
                     it.remove();
                 }
             }
@@ -179,5 +191,44 @@ public class NewPage extends AppCompatActivity {
     public void returnToMenu(View view) {
         Intent intent = new Intent(this, NewGame.class);
         startActivity(intent);
+    }
+
+    public void openImageHolder(View view) {
+        LinearLayout holder = findViewById(R.id.imageHolder);
+        holder.setVisibility(View.VISIBLE);
+        setUpImageSpinner();
+    }
+
+    private void setUpImageSpinner() {
+        final Spinner imageSpinner = findViewById(R.id.imageSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_spinner_item, customImagesNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        imageSpinner.setAdapter(adapter);
+        imageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                return;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
+    }
+
+    public void setImage(View view) {
+        Spinner imageSpinner = findViewById(R.id.imageSpinner);
+        String imageName = imageSpinner.getSelectedItem().toString();
+        if(imageName.equals(NO_IMG)) {
+            currPage.setBackgroundImageName("");
+        } else {
+            currPage.setBackgroundImageName(imageSpinner.getSelectedItem().toString());
+        }
+        LinearLayout holder = findViewById(R.id.imageHolder);
+        holder.setVisibility(View.GONE);
+        Toast.makeText(getApplicationContext(), "Background Image Set", Toast.LENGTH_SHORT).show();
     }
 }
