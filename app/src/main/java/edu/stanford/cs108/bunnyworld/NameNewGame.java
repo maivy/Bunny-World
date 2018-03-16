@@ -24,6 +24,8 @@ public class NameNewGame extends AppCompatActivity {
         ArrayList<String> gameNames = BunnyWorldDB.getInstance().getGameNames();
         if (gameNames.contains(gameNameString)) {
             Toast.makeText(getApplicationContext(), "GAME ALREADY EXISTS", Toast.LENGTH_SHORT).show();
+        } else if (gameNameString.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
         } else {
             AllPages.getInstance().nameGame(gameNameString);
             Intent intent = new Intent(this, NewGame.class);
