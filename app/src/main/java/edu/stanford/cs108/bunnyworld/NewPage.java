@@ -107,6 +107,8 @@ public class NewPage extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
             } else if (newNameString.contains(" ")) {
                 Toast.makeText(getApplicationContext(), "MUST NOT CONTAIN ANY SPACES", Toast.LENGTH_SHORT).show();
+            } else if (newNameString.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "INVALID PAGE NAME", Toast.LENGTH_SHORT).show();
             } else {
                 String pageName = currPage.getPageName();
 
