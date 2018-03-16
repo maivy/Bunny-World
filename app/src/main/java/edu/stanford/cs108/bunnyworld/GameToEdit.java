@@ -27,9 +27,11 @@ public class GameToEdit extends AppCompatActivity {
     }
 
     public void openGame(View view) {
+        if (imageSpinner.getSelectedItem() == null) return;
         String gameName = imageSpinner.getSelectedItem().toString();
         BUNNY_WORLD_DB.loadGame(gameName);
         Intent intent = new Intent(this, NewGame.class);
         startActivity(intent);
+        finish();
     }
 }

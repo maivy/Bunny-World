@@ -72,6 +72,7 @@ public class NewPage extends AppCompatActivity {
      * @param view
      */
     public void addNewShape(View view) {
+        if (currPage == null) return;
         if (AllPages.getInstance().getAllPages().containsKey(currPage.getPageName())) {
             Intent intent = new Intent(this, NewShape.class);
             intent.putExtra("Page", currPage.getPageName());
@@ -87,6 +88,7 @@ public class NewPage extends AppCompatActivity {
      * @param view
      */
     public void renamePage(View view) {
+        if (currPage == null) return;
         if (AllPages.getInstance().getAllPages().containsKey(currPage.getPageName())) {
             EditText newName = findViewById(R.id.pageNameByUser);
             String newNameString = newName.getText().toString().toLowerCase();
@@ -133,6 +135,7 @@ public class NewPage extends AppCompatActivity {
      * @param view
      */
     public void deleteCurrPage(View view) {
+        if (currPage == null) return;
         if (AllPages.getInstance().getAllPages().containsKey(currPage.getPageName())) {
             String pageName = currPage.getPageName();
 

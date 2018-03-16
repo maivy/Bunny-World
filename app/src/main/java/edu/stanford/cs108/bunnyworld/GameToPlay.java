@@ -26,6 +26,7 @@ public class GameToPlay extends AppCompatActivity {
     }
 
     public void playThisGame(View view) {
+        if (imageSpinner.getSelectedItem() == null) return;
         String gameName = imageSpinner.getSelectedItem().toString();
         BUNNY_WORLD_DB.loadGame(gameName);
         Intent intent = new Intent(this, PlayGame.class);
