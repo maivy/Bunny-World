@@ -112,6 +112,9 @@ public class NewPage extends AppCompatActivity {
 
                 pages.remove(pageName);
 
+                // rename pages in scripts
+                AllShapes.getInstance().renameObjectInScripts(pageName,newNameString);
+
                 currPage.setPageName(newNameString);
                 pages.put(newNameString, currPage);
 
