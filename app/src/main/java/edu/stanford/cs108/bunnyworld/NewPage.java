@@ -146,7 +146,8 @@ public class NewPage extends AppCompatActivity {
                 }
             }
 
-            // TODO: delete page from scripts
+            // remove all pages from scripts
+            AllShapes.getInstance().removeObjectFromScripts(pageName);
 
             Intent intent = new Intent(this, NewGame.class);
             startActivity(intent);

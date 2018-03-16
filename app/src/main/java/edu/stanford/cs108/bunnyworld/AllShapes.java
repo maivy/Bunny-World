@@ -94,16 +94,17 @@ class AllShapes {
                 while (script.contains(objName)) {
                     int semicolon = script.indexOf(";");
                     String clause = script.substring(0, semicolon).trim();
-
+                    System.out.println("Clause: "+clause);
                     String newClause = clause + " ; ";
                     if (clause.contains(objName)) {
+                        System.out.println("The clause contains "+objName+"!");
                         newClause = removeObjectFromClause(clause, objName);
                     }
-
+                    System.out.println("New Clause: "+newClause);
                     newScript = newScript.concat(newClause);
                     script = script.substring(semicolon + 1);
                 }
-                shape.setScript(newScript);
+                shape.setScript(newScript+script);
             }
         }
     }
