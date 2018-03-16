@@ -23,23 +23,63 @@
            android:layout_height="wrap_content" />
    </LinearLayout>
     <Button
+        android:id="@+id/editShapeButton"
         android:text="Edit Shape"
         android:onClick="editTheShape"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
+        android:id="@+id/editScriptButton"
         android:onClick="deleteOrAddToScript"
         android:text="DELETE/ADD SCRIPT LINE"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
-        android:onClick="deleteShape"
+        android:id="@+id/deleteShapeButton"
+        android:onClick="checkIfShapeUsed"
         android:text="Delete Shape"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
+        android:id="@+id/returnButton"
         android:onClick="returnToAllShapes"
         android:text="RETURN TO PAGE'S SHAPES "
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/warningText"
+        android:gravity="center_horizontal"
+        android:text="The current shape is called in another shape's script."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/questionText"
+        android:gravity="center_horizontal"
+        android:text="Are you sure you want to delete the shape?"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:onClick="continueToDelete"
+            android:visibility="gone"
+            android:id="@+id/yesButton"
+            android:text="YES"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:onClick="cancelDelete"
+            android:visibility="gone"
+            android:id="@+id/noButton"
+            android:text="NO"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>
