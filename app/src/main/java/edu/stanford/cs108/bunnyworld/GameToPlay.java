@@ -31,5 +31,6 @@ public class GameToPlay extends AppCompatActivity {
         BUNNY_WORLD_DB.loadGame(gameName);
         Intent intent = new Intent(this, PlayGame.class);
         startActivity(intent);
+        finish();
     }
 }

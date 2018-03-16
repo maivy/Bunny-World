@@ -30,8 +30,6 @@ public class BunnyWorldDB {
         database = databaseHelper.getWritableDatabase();
     }
 
-
-
     // Returns id of object in specified table
     private int getId(String tableName, String objName) {
         String getObjectQuery = "SELECT * FROM " + tableName + " WHERE name = '" + objName + "';";
