@@ -58,7 +58,9 @@ class AllShapes {
             int start = 2;
             String event = words[0] + " " + words[1];
             if (event.equals("on drop")) {
-                event = event.concat(" " + words[2]);
+                String dropped = words[2];
+                if(dropped.equals(objName)) return "";
+                event = event.concat(" " + dropped);
                 start = 3;
             }
             newClause = event + " ";
@@ -87,21 +89,22 @@ class AllShapes {
     public void removeObjectFromScripts(String objName) {
         for (Shape shape: currShapes.values()) {
             String script = shape.getScript();
-            if (!script.contains(objName)) break;
-            String newScript = "";
-            while (script.contains(objName)) {
-                int semicolon = script.indexOf(";");
-                String clause = script.substring(0,semicolon).trim();
+            if (script.contains(objName)) {
+                String newScript = "";
+                while (script.contains(objName)) {
+                    int semicolon = script.indexOf(";");
+                    String clause = script.substring(0, semicolon).trim();
 
-                String newClause  = clause + " ; ";
-                if (clause.contains(objName)) {
-                    newClause = removeObjectFromClause(clause,objName);
+                    String newClause = clause + " ; ";
+                    if (clause.contains(objName)) {
+                        newClause = removeObjectFromClause(clause, objName);
+                    }
+
+                    newScript = newScript.concat(newClause);
+                    script = script.substring(semicolon + 1);
                 }
-
-                newScript = newScript.concat(newClause);
-                script = script.substring(semicolon+1);
+                shape.setScript(newScript);
             }
-            shape.setScript(newScript);
         }
     }
 
